@@ -1,0 +1,231 @@
+---
+const groups = [
+  {
+    icon: '⬡',
+    label: 'Arquitectura',
+    featured: true,
+    items: ['Hexagonal Architecture', 'Domain-Driven Design', 'CQRS + Event Sourcing', 'Event-Driven (RabbitMQ)', 'Diseño RESTful'],
+  },
+  {
+    icon: '✦',
+    label: 'IA & Automatización',
+    featured: true,
+    items: ['RAG · pgvector', 'LangChain', 'Ollama · OpenAI API', 'Claude Code + MCP', 'Whisper STT · Piper TTS'],
+  },
+  {
+    icon: '◈',
+    label: 'Backend',
+    featured: false,
+    items: ['PHP · Laravel', 'Node.js · Express', 'TypeScript', 'FastAPI · Python', 'REST APIs'],
+  },
+  {
+    icon: '◉',
+    label: 'Bases de datos',
+    featured: false,
+    items: ['PostgreSQL · pgvector', 'MySQL', 'TypeORM', 'PostGIS', 'Redis'],
+  },
+  {
+    icon: '◎',
+    label: 'Testing',
+    featured: false,
+    items: ['Jest · Cucumber BDD', 'Vitest', 'Playwright (E2E)', 'TDD', 'Tests de integración'],
+  },
+  {
+    icon: '◇',
+    label: 'Infra & DevOps',
+    featured: false,
+    items: ['Docker', 'Nginx', 'Azure DevOps', 'AWS ECS · ECR', 'CI/CD Pipelines'],
+  },
+];
+---
+
+<section class="skills-section" id="skills">
+  <div class="container">
+    <p class="section-label">// tecnologías</p>
+    <h2 class="section-title">Stack & Habilidades</h2>
+    <p class="section-subtitle">
+      Herramientas aplicadas en producción. Las marcadas como <em>core</em> son las que más me diferencian.
+    </p>
+  </div>
+
+  <div class="skills-scroll-outer">
+    <div class="container">
+    <div class="skills-grid">
+      {
+        groups.map((group) => (
+          <div class={`skill-card${group.featured ? ' featured' : ''}`}>
+            <div class="skill-header">
+              <span class="skill-icon">{group.icon}</span>
+              <h3>{group.label}</h3>
+              {group.featured && <span class="core-tag">core</span>}
+            </div>
+            <ul class="skill-list">
+              {group.items.map((item) => (
+                <li>
+                  <span class="dot" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills-section {
+    padding: 6rem 0;
+    background: var(--bg-secondary);
+  }
+
+  .skills-section .container {
+    padding: 0 1.5rem;
+  }
+
+  .skills-section .section-subtitle em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .skills-scroll-outer {
+    margin-top: 2.5rem;
+  }
+
+  .skills-scroll-outer .container {
+    padding: 0 1.5rem;
+  }
+
+  /* Desktop: grilla 3 columnas */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .skill-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.375rem;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .skill-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .skill-card.featured {
+    border-color: rgba(85, 88, 227, 0.25);
+    background: rgba(85, 88, 227, 0.03);
+  }
+
+  .skill-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.125rem;
+    padding-bottom: 0.875rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-icon {
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .skill-header h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .core-tag {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    background: rgba(85, 88, 227, 0.1);
+    border: 1px solid rgba(85, 88, 227, 0.2);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .skill-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.845rem;
+    color: var(--text-secondary);
+    transition: color 0.15s;
+  }
+  .skill-list li:hover { color: var(--text-primary); }
+
+  .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    flex-shrink: 0;
+  }
+
+  /* Tablet: 2 columnas */
+  @media (max-width: 900px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Mobile: slider horizontal */
+  @media (max-width: 580px) {
+    .skills-section {
+      padding: 4.5rem 0;
+    }
+
+    .skills-scroll-outer {
+      margin-top: 2rem;
+      overflow: hidden;
+    }
+
+    .skills-scroll-outer .container {
+      padding: 0;
+      max-width: 100%;
+    }
+
+    .skills-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 1.25rem;
+      gap: 0.875rem;
+      padding: 0.25rem 1.25rem 1.25rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .skills-grid::-webkit-scrollbar { display: none; }
+
+    .skill-card {
+      min-width: 78vw;
+      max-width: 78vw;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      transform: none !important;
+    }
+  }
+</style>

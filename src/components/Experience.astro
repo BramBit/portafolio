@@ -1,0 +1,318 @@
+---
+const jobs = [
+  {
+    role: 'Back-End Developer',
+    company: 'Belvi Digital SAS',
+    location: 'Bogotá, Colombia',
+    period: 'Dic 2023 – May 2026',
+    duration: '2 años 5 meses',
+    type: 'Tiempo completo',
+    summary:
+      'Desarrollé y mantuve dos sistemas en producción: <em>Zeus</em>, plataforma de gestión de dispositivos médicos IoT, y <em>Plei</em>, una plataforma e-learning con búsqueda semántica basada en IA.',
+    achievements: [
+      'Implementé la arquitectura backend de <strong>Zeus DDD</strong> con <strong>Hexagonal Architecture + DDD</strong>, TypeScript/Express, CQRS y event bus con <strong>RabbitMQ</strong>.',
+      'Construí el módulo <strong>SmartSearch / RAG</strong> en Laravel para Plei: embeddings con pgvector, patrón Strategy para intercambiar <strong>Ollama y OpenAI</strong> como backends de IA.',
+      'Diseñé pipelines de embedding con <strong>LangChain</strong> en PHP — generación automática al crear/actualizar modelos via jobs asíncronos y Redis cache.',
+      'Gestioné esquemas con <strong>TypeORM + PostgreSQL</strong> en producción: migraciones, queries complejas y optimización.',
+      'Automaticé flujo de desarrollo con <strong>Claude Code + MCP Azure DevOps</strong>: spec-driven development, apertura automática de PRs y actualización de work items.',
+      'Colaboré en el frontend de Zeus (<strong>Next.js 14 + RTK Query</strong>) y en el panel admin de Plei (<strong>React + Vite</strong>).',
+    ],
+    stack: ['TypeScript', 'Node.js', 'Express', 'PHP', 'Laravel', 'PostgreSQL', 'MySQL', 'TypeORM', 'RabbitMQ', 'Redis', 'pgvector', 'Docker', 'Azure DevOps', 'Next.js', 'React'],
+  },
+  {
+    role: 'Fullstack Developer',
+    company: 'Alaska Tech',
+    location: 'Remoto',
+    period: '2024 – Presente',
+    duration: 'Startup · Freelance',
+    type: 'Proyectos para clientes',
+    summary:
+      'Desarrollador fullstack en <em>Alaska Tech</em>, startup donde construimos productos digitales para clientes externos. He trabajado en una plataforma marketplace, un sistema de IA conversacional y una landing para el cliente <em>Maleua</em>.',
+    achievements: [
+      'Desarrollé el backend de <strong>VeciApp</strong> — marketplace multi-rol con chat en tiempo real (Socket.IO), pagos (Stripe / Mercado Pago), notificaciones push (Firebase) y búsqueda geoespacial (PostGIS).',
+      'Implementé el sistema de <strong>avatar inteligente</strong> con pipeline WebSocket → Whisper STT → Ollama LLM → Piper TTS y máquina de estados XState.',
+      'Construí la landing de <strong>Maleua</strong> con Astro optimizando para rendimiento y SEO.',
+      'Trabajé en la app móvil con <strong>React Native + Expo</strong> y panel web con <strong>Next.js 15</strong>.',
+    ],
+    stack: ['Node.js', 'TypeScript', 'Express', 'PostgreSQL', 'Socket.IO', 'Stripe', 'Firebase', 'PostGIS', 'React Native', 'Next.js', 'Astro', 'FastAPI', 'Python'],
+  },
+];
+---
+
+<section class="exp-section" id="experience">
+  <div class="container">
+    <p class="section-label">// experiencia</p>
+    <h2 class="section-title">Trayectoria Profesional</h2>
+
+    <div class="timeline">
+      {
+        jobs.map((job, i) => (
+          <div class="tl-item">
+            <div class="tl-marker">
+              <div class="tl-dot" />
+              {i < jobs.length - 1 && <div class="tl-line" />}
+            </div>
+
+            <div class="tl-card">
+              <div class="exp-header">
+                <div class="exp-title-block">
+                  <h3 class="exp-role">{job.role}</h3>
+                  <span class="exp-company">{job.company} — {job.location}</span>
+                </div>
+                <div class="exp-meta">
+                  <span class="exp-period">{job.period}</span>
+                  <div class="exp-badges">
+                    <span class="badge">{job.duration}</span>
+                    <span class="type-badge">{job.type}</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="exp-summary" set:html={job.summary} />
+
+              <div class="exp-achievements">
+                <h4 class="ach-title">Logros y responsabilidades</h4>
+                <ul>
+                  {job.achievements.map((item) => (
+                    <li>
+                      <span class="li-bullet" />
+                      <span class="li-text" set:html={item} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="exp-stack">
+                {job.stack.map((t) => <span class="badge">{t}</span>)}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+
+<style>
+
+
+  .exp-section {
+    padding: 6rem 1.5rem;
+  }
+
+  .timeline {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tl-item {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .tl-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0.6rem;
+  }
+
+  .tl-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-primary);
+    box-shadow: 0 0 0 3px rgba(85, 88, 227, 0.18), 0 0 12px rgba(85, 88, 227, 0.15);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .tl-line {
+    width: 2px;
+    flex: 1;
+    min-height: 2rem;
+    background: linear-gradient(to bottom, var(--accent-dim), var(--border));
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  .tl-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.875rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .tl-card:hover { box-shadow: var(--shadow-md); }
+
+  .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 1.125rem;
+    flex-wrap: wrap;
+  }
+
+  .exp-role {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .exp-company {
+    font-size: 0.875rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .exp-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .exp-period {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .exp-badges {
+    display: flex;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .type-badge {
+    display: inline-flex;
+    padding: 0.2rem 0.55rem;
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.67rem;
+    color: var(--green);
+    white-space: nowrap;
+  }
+
+  .exp-summary {
+    color: var(--text-secondary);
+    line-height: 1.78;
+    font-size: 0.9rem;
+    margin-bottom: 1.375rem;
+  }
+  .exp-summary :global(em) {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .exp-achievements { margin-bottom: 1.375rem; }
+
+  .ach-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.875rem;
+  }
+
+  .exp-achievements ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .exp-achievements li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+
+  .li-bullet {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.55em;
+  }
+
+  .li-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .exp-achievements :global(strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  .exp-achievements :global(em) {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .exp-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  @media (max-width: 640px) {
+    .exp-section { padding: 4.5rem 0; }
+    .exp-section .container { padding: 0 1.25rem; }
+
+    /* Slider horizontal en mobile */
+    .timeline {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 1.25rem;
+      gap: 1rem;
+      padding: 0.25rem 1.25rem 1.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      margin-top: 2rem;
+    }
+    .timeline::-webkit-scrollbar { display: none; }
+
+    .tl-item {
+      display: block;
+      min-width: 82vw;
+      max-width: 82vw;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+
+    /* Ocultar marcador de línea en slider */
+    .tl-marker { display: none; }
+
+    .tl-card {
+      padding: 1.375rem;
+      margin-bottom: 0;
+      height: 100%;
+    }
+
+    .exp-header { flex-direction: column; gap: 0.75rem; }
+    .exp-meta { align-items: flex-start; }
+    .exp-badges { justify-content: flex-start; }
+  }
+</style>

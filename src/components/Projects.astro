@@ -1,0 +1,298 @@
+---
+const projects = [
+  {
+    num: '01',
+    tag: 'IoT Platform · Belvi Digital',
+    name: 'Zeus',
+    featured: true,
+    description:
+      'Sistema backend para gestión de dispositivos médicos IoT. Arquitectura Hexagonal + DDD completa: bounded contexts, value objects, domain events, CQRS y event bus asíncrono con RabbitMQ.',
+    highlights: [
+      'Arquitectura Hexagonal + DDD con TypeScript/Express — dominio desacoplado de infraestructura',
+      'Event bus con RabbitMQ: domain events publicados por aggregates y suscritos entre módulos',
+      'CQRS con CommandBus y QueryBus; repositorios TypeORM con PostgreSQL',
+      'DI container con YAML, testing con Jest + Cucumber BDD',
+      'CI/CD en Azure DevOps con deploy a AWS ECS via Docker + ECR',
+    ],
+    stack: ['TypeScript', 'Node.js', 'Express', 'TypeORM', 'PostgreSQL', 'RabbitMQ', 'Docker', 'Azure DevOps', 'Jest', 'Cucumber'],
+  },
+  {
+    num: '02',
+    tag: 'E-Learning API · Belvi Digital',
+    name: 'Plei API',
+    featured: false,
+    description:
+      'Backend de plataforma e-learning con búsqueda semántica basada en IA. Pipeline RAG completo con embeddings, pgvector y estrategia intercambiable entre Ollama y OpenAI.',
+    highlights: [
+      'SmartSearch / RAG: embeddings con pgvector, nearest-neighbor + respuesta con LLM',
+      'Patrón Strategy para intercambiar Ollama (llama3.1) y OpenAI (gpt-4o-mini) como backend de IA',
+      'Embedding automático al crear/actualizar modelos via jobs asíncronos',
+      'Dual DB: MySQL para aplicación, PostgreSQL + pgvector para embeddings',
+      'Caché Redis con tags; Laravel Sanctum; OCR para ingestión de PDFs',
+    ],
+    stack: ['PHP', 'Laravel', 'MySQL', 'PostgreSQL', 'pgvector', 'Redis', 'Ollama', 'OpenAI', 'LangChain', 'Docker'],
+  },
+  {
+    num: '03',
+    tag: 'Marketplace · Alaska Tech',
+    name: 'VeciApp',
+    featured: false,
+    description:
+      'Plataforma marketplace con app móvil (React Native/Expo), panel web (Next.js) y backend API. Tres roles de usuario, chat en tiempo real y búsqueda geolocalizada.',
+    highlights: [
+      'Backend REST con Express + TypeScript, capas diferenciadas (routes → services → repositories)',
+      'Chat en tiempo real vendedor–cliente con Socket.IO y persistencia',
+      'Integración dual de pagos: Stripe y Mercado Pago con webhooks',
+      'Búsqueda geoespacial con PostGIS y notificaciones push con Firebase Admin',
+    ],
+    stack: ['Node.js', 'TypeScript', 'Express', 'TypeORM', 'PostgreSQL', 'Socket.IO', 'Stripe', 'Firebase', 'PostGIS', 'React Native', 'Next.js'],
+  },
+  {
+    num: '04',
+    tag: 'AI System · Alaska Tech',
+    name: 'Avatar Interview',
+    featured: false,
+    description:
+      'Sistema de entrevistas simuladas con avatar inteligente. Reconocimiento de voz, LLM local y síntesis de texto a voz con sincronización labial en tiempo real vía WebSocket.',
+    highlights: [
+      'Pipeline de audio: WebSocket → Whisper STT → Ollama LLM → Piper TTS → avatar',
+      'Arquitectura de 5 microservicios coordinados por FastAPI',
+      'Estado gestionado con XState (mirrored en backend Python y frontend React)',
+      'VAD (Voice Activity Detection) con umbral de silencio via Web Audio API',
+    ],
+    stack: ['FastAPI', 'Python', 'React', 'Vite', 'WebSocket', 'Whisper', 'Ollama', 'XState', 'Docker'],
+  },
+];
+---
+
+<section class="projects-section" id="projects">
+  <div class="container">
+    <p class="section-label">// proyectos</p>
+    <h2 class="section-title">Proyectos Destacados</h2>
+    <p class="section-subtitle">
+      Sistemas en producción — dos en Belvi Digital y dos en Alaska Tech.
+    </p>
+  </div>
+
+  <div class="projects-scroll-outer">
+    <div class="container">
+      <div class="projects-list">
+        {
+          projects.map((p) => (
+            <article class={`project-card${p.featured ? ' featured' : ''}`}>
+              <div class="project-aside">
+                <span class="project-num">{p.num}</span>
+                <span class="project-tag">{p.tag}</span>
+                {p.featured && <span class="featured-badge">⭐ Destacado</span>}
+              </div>
+              <div class="project-body">
+                <h3 class="project-name">{p.name}</h3>
+                <p class="project-desc">{p.description}</p>
+                <ul class="project-highlights">
+                  {p.highlights.map((h) => (
+                    <li>
+                      <span class="arrow">→</span>
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div class="project-stack">
+                  {p.stack.map((t) => <span class="badge">{t}</span>)}
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<style>
+  .projects-section {
+    padding: 6rem 0 0;
+    background: var(--bg-secondary);
+  }
+
+  .projects-section .container {
+    padding: 0 1.5rem;
+  }
+
+  .projects-scroll-outer {
+    margin-top: 2.5rem;
+    padding-bottom: 6rem;
+  }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+  }
+
+  .project-card {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .project-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .project-card.featured {
+    border-color: rgba(85, 88, 227, 0.3);
+  }
+  .project-card.featured .project-aside {
+    background: rgba(85, 88, 227, 0.05);
+  }
+
+  .project-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 1.75rem 1.125rem;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    gap: 0.625rem;
+  }
+
+  .project-num {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .project-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    line-height: 1.5;
+  }
+
+  .featured-badge {
+    font-size: 0.62rem;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    background: rgba(85, 88, 227, 0.1);
+    border: 1px solid rgba(85, 88, 227, 0.2);
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .project-body {
+    padding: 1.75rem;
+  }
+
+  .project-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.625rem;
+    letter-spacing: -0.02em;
+  }
+
+  .project-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.125rem;
+  }
+
+  .project-highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.375rem;
+  }
+
+  .project-highlights li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    color: var(--text-secondary);
+    font-size: 0.855rem;
+    line-height: 1.6;
+  }
+  .project-highlights li span:last-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .arrow {
+    color: var(--accent);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 0.22em;
+    font-family: var(--font-mono);
+  }
+
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+
+  /* Mobile: slider horizontal */
+  @media (max-width: 700px) {
+    .projects-section {
+      padding-bottom: 0;
+    }
+
+    .projects-scroll-outer {
+      padding-bottom: 0;
+    }
+
+    .projects-list {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 1.25rem;
+      gap: 1rem;
+      padding: 0.25rem 1.25rem 1.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .projects-list::-webkit-scrollbar { display: none; }
+
+    .project-card {
+      min-width: 82vw;
+      max-width: 82vw;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      grid-template-columns: 1fr;
+      transform: none !important;
+    }
+
+    .project-aside {
+      flex-direction: row;
+      align-items: center;
+      padding: 0.875rem 1.25rem;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      gap: 0.75rem;
+    }
+
+    .project-num { font-size: 1.5rem; }
+
+    .projects-section .container {
+      padding: 0 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,234 @@
+---
+---
+
+<section class="about-section" id="about">
+  <div class="container about-grid">
+    <div class="about-text">
+      <p class="section-label">// sobre mí</p>
+      <h2 class="section-title">Ingeniero backend enfocado en calidad y arquitectura</h2>
+      <div class="bio">
+        <p>
+          Soy <strong>Brayan Mercado San Martín</strong>, desarrollador backend con 2.5 años de
+          experiencia construyendo sistemas de producción. En <strong>Belvi Digital</strong>
+          trabajé en plataformas de gestión IoT y e-learning con miles de usuarios reales,
+          aplicando arquitectura hexagonal, DDD y patrones de IA generativa.
+        </p>
+        <p>
+          Me especializo en diseñar APIs REST escalables con <strong>Arquitectura Hexagonal
+          combinada con DDD</strong> — estructurando el código en capas de dominio, aplicación
+          e infraestructura para mantenerlo desacoplado, testeable y fácil de evolucionar.
+          Trabajo con fluidez en ecosistemas PHP/Laravel y Node.js/TypeScript.
+        </p>
+        <p>
+          Paralelamente soy parte de <strong>Alaska Tech</strong>, una startup donde aporto como
+          desarrollador fullstack en proyectos para clientes reales. Uso <strong>Claude Code con
+          MCP servers</strong> integrado a Azure DevOps para automatizar flujos repetitivos y
+          multiplicar la productividad del equipo.
+        </p>
+      </div>
+    </div>
+
+    <aside class="about-aside">
+      <div class="profile-card">
+        <div class="avatar-wrapper">
+          <img src="/bram-profile.png" alt="Brayan Mercado" class="avatar" />
+          <div class="avatar-glow"></div>
+        </div>
+        <div class="profile-info">
+          <span class="profile-name">Brayan Mercado</span>
+          <span class="profile-role">Back-End Developer</span>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">2.5<span>años</span></div>
+          <div class="stat-desc">Experiencia profesional</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4+</div>
+          <div class="stat-desc">Proyectos en producción</div>
+        </div>
+        <div class="stat-card accent-card">
+          <div class="hexagon">⬡</div>
+          <div class="arch-label">Hexagonal Arch<br />+ DDD</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">12+</div>
+          <div class="stat-desc">Tecnologías aplicadas</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: 7rem 1.5rem;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .bio {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .bio p {
+    color: var(--text-secondary);
+    line-height: 1.82;
+    font-size: 0.9375rem;
+  }
+
+  .bio strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .about-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 5.5rem;
+  }
+
+  /* Profile card */
+  .profile-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-hover);
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+    filter: blur(8px);
+    z-index: 0;
+  }
+
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .profile-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .profile-role {
+    font-size: 0.8125rem;
+    color: var(--accent-light);
+    font-family: var(--font-mono);
+  }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.875rem;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover {
+    border-color: var(--border-hover);
+  }
+
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.04em;
+  }
+  .stat-num span {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-left: 0.2rem;
+  }
+
+  .stat-desc {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .accent-card {
+    background: rgba(99, 102, 241, 0.05);
+    border-color: rgba(99, 102, 241, 0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .hexagon {
+    font-size: 1.75rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .arch-label {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .about-aside {
+      position: static;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about-section {
+      padding: 4.5rem 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,255 @@
+---
+---
+
+<section class="contact-section" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-left">
+      <p class="section-label">// contacto</p>
+      <h2 class="section-title">¿Trabajamos juntos?</h2>
+      <p class="contact-intro">
+        Estoy abierto a nuevas oportunidades como desarrollador backend — en un equipo
+        consolidado o un proyecto desafiante. Si encaja con mi perfil, hablemos.
+      </p>
+
+      <div class="contact-links">
+        <a href="mailto:brayan.msanmartin@gmail.com" class="contact-link">
+          <div class="link-icon">✉</div>
+          <div>
+            <span class="link-label">Email</span>
+            <span class="link-value">brayan.msanmartin@gmail.com</span>
+          </div>
+        </a>
+        <a href="tel:+573013702999" class="contact-link">
+          <div class="link-icon">☎</div>
+          <div>
+            <span class="link-label">Teléfono / WhatsApp</span>
+            <span class="link-value">+57 301 370 2999</span>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/brayan-mercado-sanmartin" target="_blank" rel="noopener" class="contact-link">
+          <div class="link-icon">in</div>
+          <div>
+            <span class="link-label">LinkedIn</span>
+            <span class="link-value">brayan-mercado-sanmartin</span>
+          </div>
+        </a>
+        <a href="https://github.com/BramBit" target="_blank" rel="noopener" class="contact-link">
+          <div class="link-icon">gh</div>
+          <div>
+            <span class="link-label">GitHub</span>
+            <span class="link-value">github.com/BramBit</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="available-tag">
+        <span class="pulse-dot"></span>
+        Disponible ahora
+      </div>
+
+      <div class="profile-rows">
+        <div class="profile-row">
+          <span class="row-key">Nombre</span>
+          <span class="row-val">Brayan Mercado</span>
+        </div>
+        <div class="profile-row">
+          <span class="row-key">Rol</span>
+          <span class="row-val">Back-End Developer</span>
+        </div>
+        <div class="profile-row">
+          <span class="row-key">Experiencia</span>
+          <span class="row-val">2.5 años</span>
+        </div>
+        <div class="profile-row">
+          <span class="row-key">Disponibilidad</span>
+          <span class="row-val">Inmediata</span>
+        </div>
+        <div class="profile-row">
+          <span class="row-key">Modalidad</span>
+          <span class="row-val">Remoto / Híbrido</span>
+        </div>
+        <div class="profile-row">
+          <span class="row-key">Ubicación</span>
+          <span class="row-val">Colombia</span>
+        </div>
+      </div>
+
+      <a href="mailto:brayan.msanmartin@gmail.com" class="btn btn-primary cta-btn">
+        Enviar mensaje
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span class="footer-brand">
+      <span class="bracket">[</span>bm<span class="bracket">]</span>
+    </span>
+    <span class="footer-name">Brayan Mercado San Martín · Backend Developer</span>
+    <span class="footer-built">Built with Astro</span>
+  </div>
+</footer>
+
+<style>
+  .contact-section {
+    padding: 6rem 1.5rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 4.5rem;
+    align-items: start;
+  }
+
+  .contact-intro {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 0.9375rem;
+    margin: 1.375rem 0 2.25rem;
+    max-width: 460px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1.125rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .contact-link:hover {
+    border-color: var(--accent-dim);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .link-icon {
+    width: 2.375rem;
+    height: 2.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(85, 88, 227, 0.07);
+    border: 1px solid rgba(85, 88, 227, 0.16);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+  }
+
+  .link-label {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.125rem;
+  }
+
+  .link-value {
+    font-size: 0.855rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* Card */
+  .contact-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.625rem;
+    position: sticky;
+    top: 5.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .available-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.875rem;
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--green);
+    margin-bottom: 1.375rem;
+    font-weight: 500;
+  }
+
+  .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .profile-rows { display: flex; flex-direction: column; margin-bottom: 1.625rem; }
+
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .profile-row:last-child { border-bottom: none; }
+
+  .row-key { font-size: 0.775rem; color: var(--text-muted); }
+  .row-val { font-size: 0.84rem; color: var(--text-primary); font-weight: 500; }
+
+  .cta-btn { width: 100%; }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 1.625rem 1.5rem;
+    background: var(--bg-primary);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .footer-brand { font-family: var(--font-mono); font-size: 1rem; font-weight: 600; }
+  .bracket { color: var(--accent); }
+  .footer-name { font-size: 0.8rem; color: var(--text-muted); }
+  .footer-built { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); }
+
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-card { position: static; }
+  }
+
+  @media (max-width: 480px) {
+    .contact-section { padding: 4.5rem 1.25rem; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
