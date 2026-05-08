@@ -2,7 +2,7 @@
 
 Personal portfolio built with **Astro** and pure **CSS**. Light cold theme, responsive, mobile-friendly with horizontal card sliders.
 
-🌐 **Live:** [tu-dominio.pages.dev](https://tu-dominio.pages.dev)
+🌐 **Live:** [tu-dominio](https://portafolio-ten-wine-57.vercel.app/)
 
 ---
 
