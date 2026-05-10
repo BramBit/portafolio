@@ -13,7 +13,7 @@ Personal portfolio built with **Astro** and pure **CSS**. Light cold theme, resp
 - Google Fonts — Inter + JetBrains Mono
 
 ---
-
+adjustment dates
 ## Getting started
 
 ```bash
