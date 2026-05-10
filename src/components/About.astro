@@ -1,4 +1,20 @@
 ---
+const codeHtml = `<span class="c">// domain/device/commands</span>
+<span class="k">export class</span> <span class="t">CreateDeviceCommand</span> &#123;
+  <span class="k">constructor</span>(
+    <span class="k">private readonly</span> repo<span class="p">:</span> <span class="t">DeviceRepository</span>,
+    <span class="k">private readonly</span> bus<span class="p">:</span> <span class="t">EventBus</span>,
+  ) &#123;&#125;
+
+  <span class="k">async</span> execute(dto<span class="p">:</span> <span class="t">CreateDeviceDTO</span>) &#123;
+    <span class="k">const</span> device <span class="p">=</span> <span class="t">Device</span>.create(dto);
+    <span class="k">await</span> <span class="v">this</span>.repo.save(device);
+    <span class="k">await</span> <span class="v">this</span>.bus.publish(
+      device.pullDomainEvents()
+    );
+    <span class="k">return</span> device.id;
+  &#125;
+&#125;`;
 ---
 
 <section class="about-section" id="about">
@@ -29,33 +45,17 @@
     </div>
 
     <aside class="about-aside">
-      <div class="profile-card">
-        <div class="avatar-wrapper">
-          <img src="/bram-profile.png" alt="Brayan Mercado" class="avatar" />
-          <div class="avatar-glow"></div>
+      <div class="code-card">
+        <div class="code-titlebar">
+          <div class="dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="filename">CreateDeviceCommand.ts</span>
         </div>
-        <div class="profile-info">
-          <span class="profile-name">Brayan Mercado</span>
-          <span class="profile-role">Back-End Developer</span>
-        </div>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-num">2.5<span>años</span></div>
-          <div class="stat-desc">Experiencia profesional</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">4+</div>
-          <div class="stat-desc">Proyectos en producción</div>
-        </div>
-        <div class="stat-card accent-card">
-          <div class="hexagon">⬡</div>
-          <div class="arch-label">Hexagonal Arch<br />+ DDD</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">12+</div>
-          <div class="stat-desc">Tecnologías aplicadas</div>
+        <div class="code-body">
+          <pre><code set:html={codeHtml} /></pre>
         </div>
       </div>
     </aside>
@@ -64,7 +64,8 @@
 
 <style>
   .about-section {
-    padding: 7rem 1.5rem;
+    padding: 6rem 1.5rem;
+    background: var(--bg-primary);
   }
 
   .about-grid {
@@ -100,121 +101,70 @@
     top: 5.5rem;
   }
 
-  /* Profile card */
-  .profile-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
+  /* Code editor card */
+  .code-card {
+    background: #13142a;
+    border: 1px solid rgba(85, 88, 227, 0.25);
     border-radius: 16px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
   }
 
-  .avatar-wrapper {
-    position: relative;
+  .code-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .dots {
+    display: flex;
+    gap: 5px;
     flex-shrink: 0;
   }
 
-  .avatar {
-    width: 72px;
-    height: 72px;
+  .dot {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--border-hover);
-    position: relative;
-    z-index: 1;
   }
+  .dot-red    { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green  { background: #28c840; }
 
-  .avatar-glow {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
-    filter: blur(8px);
-    z-index: 0;
-  }
-
-  .profile-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .profile-name {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-
-  .profile-role {
-    font-size: 0.8125rem;
-    color: var(--accent-light);
+  .filename {
     font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.02em;
   }
 
-  /* Stats */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.875rem;
+  .code-body {
+    padding: 1.25rem 1.25rem 1.375rem;
+    overflow-x: auto;
   }
 
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    transition: border-color 0.2s;
-  }
-  .stat-card:hover {
-    border-color: var(--border-hover);
+  .code-body pre {
+    margin: 0;
   }
 
-  .stat-num {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.04em;
-  }
-  .stat-num span {
+  .code-body code {
+    font-family: var(--font-mono);
     font-size: 0.78rem;
-    font-weight: 400;
-    color: var(--text-muted);
-    margin-left: 0.2rem;
+    line-height: 1.75;
+    color: #cdd6f4;
+    display: block;
+    white-space: pre;
   }
 
-  .stat-desc {
-    font-size: 0.76rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-  }
-
-  .accent-card {
-    background: rgba(99, 102, 241, 0.05);
-    border-color: rgba(99, 102, 241, 0.18);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 0.5rem;
-  }
-
-  .hexagon {
-    font-size: 1.75rem;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  .arch-label {
-    font-size: 0.75rem;
-    color: var(--accent-light);
-    font-weight: 600;
-    line-height: 1.5;
-  }
+  /* Syntax colors */
+  .c  { color: #6c7086; }                  /* comments */
+  .k  { color: #cba6f7; }                  /* keywords */
+  .t  { color: #89dceb; }                  /* types */
+  .v  { color: #cba6f7; }                  /* this */
+  .p  { color: #89b4fa; }                  /* punctuation / operators */
 
   @media (max-width: 900px) {
     .about-grid {

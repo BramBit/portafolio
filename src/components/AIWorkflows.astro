@@ -1,0 +1,232 @@
+---
+const workflows = [
+  {
+    icon: '⚡',
+    title: 'Spec-Driven Dev con Claude Code + MCP',
+    category: 'DevOps Automation',
+    problem: 'Los ciclos manuales de desarrollo (spec → código → PR → work item) consumían tiempo repetitivo y eran propensos a errores de sincronización.',
+    solution: 'Claude Code como CLI de desarrollo integrado con MCP servers conectados a Azure DevOps. El flujo: leo la spec, genero el código, abro el PR y actualizo el work item — todo desde la terminal.',
+    impact: 'Flujos que tomaban horas pasan a minutos. El foco va a decisiones de arquitectura, no a operaciones manuales.',
+    tags: ['Claude Code', 'MCP', 'Azure DevOps', 'CI/CD', 'Automatización'],
+  },
+  {
+    icon: '◈',
+    title: 'SmartSearch — RAG Pipeline en Producción',
+    category: 'AI Engineering',
+    problem: 'La búsqueda tradicional por keywords no capturaba el significado semántico del contenido educativo, generando resultados irrelevantes.',
+    solution: 'Pipeline RAG completo: embedding automático al crear/actualizar contenido → pgvector para nearest-neighbor → LLM para respuesta generada. Patrón Strategy permite cambiar entre Ollama (local) y OpenAI en runtime.',
+    impact: 'Búsqueda semántica sin cambiar la infraestructura existente. LLM intercambiable según costo/calidad del contexto.',
+    tags: ['RAG', 'pgvector', 'LangChain', 'Strategy Pattern', 'Ollama', 'OpenAI'],
+  },
+  {
+    icon: '◉',
+    title: 'Avatar Conversacional — Pipeline IA en Tiempo Real',
+    category: 'AI Systems',
+    problem: 'Sistema de entrevistas simuladas necesitaba IA conversacional con baja latencia, estado consistente y pipeline de audio end-to-end.',
+    solution: 'Arquitectura de 5 microservicios orquestados por FastAPI: WebSocket → Whisper STT → Ollama LLM → Piper TTS → lip-sync. XState como máquina de estados mirrored en backend Python y frontend React.',
+    impact: 'Latencia controlada por VAD (silencio 1500ms). Estado consistente entre cliente y servidor elimina condiciones de carrera.',
+    tags: ['FastAPI', 'WebSocket', 'Whisper', 'Ollama', 'XState', 'Pipeline', 'Docker'],
+  },
+];
+---
+
+<section class="ai-section" id="ai-workflows">
+  <div class="container">
+    <p class="section-label">// ia & automatización</p>
+    <h2 class="section-title">AI & Automatización</h2>
+    <p class="section-subtitle">
+      Uso IA no solo para construir features — la integro en mi propio flujo de trabajo.
+      Automatización real, sistemas reales, impacto medible.
+    </p>
+
+    <div class="workflows-list">
+      {workflows.map((w) => (
+        <div class="workflow-card">
+          <div class="wf-header">
+            <div class="wf-icon-wrap">
+              <span class="wf-icon">{w.icon}</span>
+            </div>
+            <div>
+              <span class="wf-category">{w.category}</span>
+              <h3 class="wf-title">{w.title}</h3>
+            </div>
+          </div>
+
+          <div class="wf-body">
+            <div class="wf-block">
+              <span class="wf-block-label">Problema</span>
+              <p>{w.problem}</p>
+            </div>
+            <div class="wf-block">
+              <span class="wf-block-label">Solución</span>
+              <p>{w.solution}</p>
+            </div>
+            <div class="wf-block impact-block">
+              <span class="wf-block-label">Impacto</span>
+              <p>{w.impact}</p>
+            </div>
+          </div>
+
+          <div class="wf-tags">
+            {w.tags.map((t) => <span class="badge">{t}</span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai-section {
+    padding: 6rem 1.5rem;
+    background: var(--bg-primary);
+  }
+
+  .workflows-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .workflow-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .workflow-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+  }
+
+  .workflow-card:first-child {
+    border-color: rgba(85, 88, 227, 0.3);
+    background: rgba(85, 88, 227, 0.02);
+  }
+
+  .wf-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wf-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(85, 88, 227, 0.08);
+    border: 1px solid rgba(85, 88, 227, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wf-icon {
+    font-size: 1.1rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .wf-category {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
+  }
+
+  .wf-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .wf-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .wf-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .wf-block-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .wf-block p {
+    font-size: 0.845rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .impact-block .wf-block-label {
+    color: var(--green);
+  }
+
+  .impact-block p {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.845rem;
+  }
+
+  .wf-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  /* Tablet */
+  @media (max-width: 900px) {
+    .wf-body {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  /* Mobile slider */
+  @media (max-width: 640px) {
+    .ai-section { padding: 4.5rem 0; }
+    .ai-section .container { padding: 0 1.25rem; }
+
+    .workflows-list {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1rem;
+      padding: 0.25rem 1.25rem 1.5rem;
+      margin-top: 2rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .workflows-list::-webkit-scrollbar { display: none; }
+
+    .workflow-card {
+      min-width: 84vw;
+      max-width: 84vw;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+  }
+</style>

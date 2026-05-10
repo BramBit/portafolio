@@ -2,7 +2,7 @@
 
 Personal portfolio built with **Astro** and pure **CSS**. Light cold theme, responsive, mobile-friendly with horizontal card sliders.
 
-🌐 **Live:** [tu-dominio.pages.dev](https://tu-dominio.pages.dev)
+🌐 **Live:** [Brayan Mercado](https://tu-dominio.pages.dev)
 
 ---
 
