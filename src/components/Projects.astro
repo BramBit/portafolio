@@ -2,33 +2,33 @@
 const projects = [
   {
     num: '01',
-    tag: 'IoT Platform · Belvi Digital',
+    tag: 'AI Integration · Belvi Digital',
     name: 'Zeus',
     featured: true,
     description:
-      'Sistema backend para gestión de dispositivos médicos IoT. Arquitectura Hexagonal + DDD completa: bounded contexts, value objects, domain events, CQRS y event bus asíncrono con RabbitMQ.',
+      'Plataforma IoT de gestión de dispositivos médicos en alquiler. Me incorporé como mantenedor de su backend Hexagonal/DDD e implementé inteligencia artificial generativa para automatizar reportes financieros y estrategias comerciales personalizadas.',
     highlights: [
-      'Arquitectura Hexagonal + DDD con TypeScript/Express — dominio desacoplado de infraestructura',
-      'Event bus con RabbitMQ: domain events publicados por aggregates y suscritos entre módulos',
-      'CQRS con CommandBus y QueryBus; repositorios TypeORM con PostgreSQL',
-      'DI container con YAML, testing con Jest + Cucumber BDD',
+      'Implementé generación de consejos de venta personalizados con Ollama/OpenAI: 3 tips por cliente/mes basados en historial de facturación',
+      'Integré IA en reportes financieros mensuales: análisis narrativo generado por LLM sobre los datos del período',
+      'Mantuve y extendí la arquitectura Hexagonal + DDD: bounded contexts, domain events y event bus con RabbitMQ',
+      'Módulo de wallets digitales: crédito/débito automático al completar tratamientos vía domain events',
       'CI/CD en Azure DevOps con deploy a AWS ECS via Docker + ECR',
     ],
-    stack: ['TypeScript', 'Node.js', 'Express', 'TypeORM', 'PostgreSQL', 'RabbitMQ', 'Docker', 'Azure DevOps', 'Jest', 'Cucumber'],
+    stack: ['TypeScript', 'Node.js', 'Express', 'TypeORM', 'PostgreSQL', 'RabbitMQ', 'Ollama', 'OpenAI', 'Docker', 'Azure DevOps'],
   },
   {
     num: '02',
-    tag: 'E-Learning API · Belvi Digital',
-    name: 'Plei API',
+    tag: 'AI Integration · Belvi Digital',
+    name: 'Plei — SmartSearch',
     featured: false,
     description:
-      'Backend de plataforma e-learning con búsqueda semántica basada en IA. Pipeline RAG completo con embeddings, pgvector y estrategia intercambiable entre Ollama y OpenAI.',
+      'Módulo de búsqueda semántica con IA que diseñé e implementé desde cero sobre el backend Laravel de Plei, una plataforma e-learning en producción. Pipeline RAG completo con embeddings, pgvector y proveedores de IA intercambiables.',
     highlights: [
-      'SmartSearch / RAG: embeddings con pgvector, nearest-neighbor + respuesta con LLM',
-      'Patrón Strategy para intercambiar Ollama (llama3.1) y OpenAI (gpt-4o-mini) como backend de IA',
-      'Embedding automático al crear/actualizar modelos via jobs asíncronos',
-      'Dual DB: MySQL para aplicación, PostgreSQL + pgvector para embeddings',
-      'Caché Redis con tags; Laravel Sanctum; OCR para ingestión de PDFs',
+      'Diseñé e implementé SmartSearch / RAG de cero: pipeline completo de embeddings con pgvector + respuesta por LLM',
+      'Patrón Strategy para intercambiar Ollama (llama3.1) y OpenAI (gpt-4o-mini) sin modificar la lógica de negocio',
+      'Embedding automático al crear/actualizar modelos via jobs asíncronos con Redis cache y tags',
+      'Dual DB: MySQL para la aplicación, PostgreSQL + pgvector para la búsqueda semántica',
+      'OCR para ingestión de PDFs e indexación de documentos en el vector store',
     ],
     stack: ['PHP', 'Laravel', 'MySQL', 'PostgreSQL', 'pgvector', 'Redis', 'Ollama', 'OpenAI', 'LangChain', 'Docker'],
   },
@@ -46,6 +46,7 @@ const projects = [
       'Búsqueda geoespacial con PostGIS y notificaciones push con Firebase Admin',
     ],
     stack: ['Node.js', 'TypeScript', 'Express', 'TypeORM', 'PostgreSQL', 'Socket.IO', 'Stripe', 'Firebase', 'PostGIS', 'React Native', 'Next.js'],
+    link: { label: 'Ver en Play Store', href: 'https://play.google.com/store/apps/details?id=com.alaskatech.veciapp' },
   },
   {
     num: '04',
@@ -70,7 +71,7 @@ const projects = [
     <p class="section-label">// proyectos</p>
     <h2 class="section-title">Proyectos Destacados</h2>
     <p class="section-subtitle">
-      Sistemas en producción — dos en Belvi Digital y dos en Alaska Tech.
+      Sistemas en producción — integraciones de IA en Belvi Digital, backend y plataformas propias en Alaska Tech.
     </p>
   </div>
 
@@ -96,8 +97,15 @@ const projects = [
                     </li>
                   ))}
                 </ul>
-                <div class="project-stack">
-                  {p.stack.map((t) => <span class="badge">{t}</span>)}
+                <div class="project-footer">
+                  <div class="project-stack">
+                    {p.stack.map((t) => <span class="badge">{t}</span>)}
+                  </div>
+                  {'link' in p && p.link && (
+                    <a href={p.link.href} target="_blank" rel="noopener" class="project-link">
+                      {p.link.label} ↗
+                    </a>
+                  )}
                 </div>
               </div>
             </article>
@@ -240,10 +248,34 @@ const projects = [
     font-family: var(--font-mono);
   }
 
+  .project-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
   .project-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+  }
+
+  .project-link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    border: 1px solid rgba(85, 88, 227, 0.3);
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .project-link:hover {
+    background: rgba(85, 88, 227, 0.08);
+    border-color: var(--accent);
   }
 
 
