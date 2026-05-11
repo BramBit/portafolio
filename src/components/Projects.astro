@@ -11,10 +11,11 @@ const projects = [
       'Implementé generación de consejos de venta personalizados con Ollama/OpenAI: 3 tips por cliente/mes basados en historial de facturación',
       'Integré IA en reportes financieros mensuales: análisis narrativo generado por LLM sobre los datos del período',
       'Mantuve y extendí la arquitectura Hexagonal + DDD: bounded contexts, domain events y event bus con RabbitMQ',
-      'Módulo de wallets digitales: crédito/débito automático al completar tratamientos vía domain events',
+      'Módulo de wallets digitales: crédito/débito automático disparado por domain events al completar tratamientos, garantizando consistencia eventual entre bounded contexts',
       'CI/CD en Azure DevOps con deploy a AWS ECS via Docker + ECR',
     ],
-    stack: ['TypeScript', 'Node.js', 'Express', 'TypeORM', 'PostgreSQL', 'RabbitMQ', 'Ollama', 'OpenAI', 'Docker', 'Azure DevOps'],
+    stack: ['TypeScript', 'Node.js', 'Express', 'TypeORM', 'PostgreSQL', 'RabbitMQ', 'LangChain', 'Ollama', 'OpenAI', 'Docker', 'Azure DevOps'],
+    note: 'Código propietario — disponible para discusión técnica en entrevista',
   },
   {
     num: '02',
@@ -24,13 +25,14 @@ const projects = [
     description:
       'Módulo de búsqueda semántica con IA que diseñé e implementé desde cero sobre el backend Laravel de Plei, una plataforma e-learning en producción. Pipeline RAG completo con embeddings, pgvector y proveedores de IA intercambiables.',
     highlights: [
-      'Diseñé e implementé SmartSearch / RAG de cero: pipeline completo de embeddings con pgvector + respuesta por LLM',
+      'Diseñé e implementé SmartSearch / RAG de cero: pipeline completo a bajo nivel sin frameworks de orquestación — control directo sobre embeddings, búsqueda nearest-neighbor en pgvector y prompting al LLM',
       'Patrón Strategy para intercambiar Ollama (llama3.1) y OpenAI (gpt-4o-mini) sin modificar la lógica de negocio',
       'Embedding automático al crear/actualizar modelos via jobs asíncronos con Redis cache y tags',
       'Dual DB: MySQL para la aplicación, PostgreSQL + pgvector para la búsqueda semántica',
-      'OCR para ingestión de PDFs e indexación de documentos en el vector store',
+      'Pipeline de ingestión de PDFs con OCR: extracción de texto, chunking, generación de embeddings y persistencia en pgvector para búsqueda semántica posterior',
     ],
-    stack: ['PHP', 'Laravel', 'MySQL', 'PostgreSQL', 'pgvector', 'Redis', 'Ollama', 'OpenAI', 'LangChain', 'Docker'],
+    stack: ['PHP', 'Laravel', 'MySQL', 'PostgreSQL', 'pgvector', 'Redis', 'Ollama', 'OpenAI', 'Docker'],
+    note: 'Código propietario — disponible para discusión técnica en entrevista',
   },
   {
     num: '03',
@@ -97,6 +99,9 @@ const projects = [
                     </li>
                   ))}
                 </ul>
+                {'note' in p && p.note && (
+                  <p class="project-note">🔒 {p.note}</p>
+                )}
                 <div class="project-footer">
                   <div class="project-stack">
                     {p.stack.map((t) => <span class="badge">{t}</span>)}
@@ -260,6 +265,13 @@ const projects = [
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+  }
+
+  .project-note {
+    font-size: 0.775rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 0.875rem;
   }
 
   .project-link {
