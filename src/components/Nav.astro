@@ -2,9 +2,9 @@
 const links = [
   { href: '#intro', label: 'Inicio' },
   { href: '#about', label: 'Sobre mí' },
+  { href: '#experience', label: 'Experiencia' },
   { href: '#skills', label: 'Skills' },
   { href: '#ai-workflows', label: 'AI & Auto' },
-  { href: '#experience', label: 'Experiencia' },
   { href: '#projects', label: 'Proyectos' },
   { href: '#contact', label: 'Contacto' },
 ];
@@ -120,6 +120,11 @@ const links = [
   .nav-links a:hover {
     color: var(--accent);
     background: rgba(85, 88, 227, 0.06);
+  }
+
+  /* Ocultar el último link (Contacto) en desktop porque ya está el botón */
+  .nav-links li:last-child {
+    display: none;
   }
 
   .nav-cta {

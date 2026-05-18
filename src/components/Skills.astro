@@ -36,6 +36,13 @@ const groups = [
     featured: false,
     items: ['Docker', 'Nginx', 'Azure DevOps', 'AWS ECS · ECR', 'CI/CD Pipelines'],
   },
+  {
+    icon: '⬒',
+    label: 'Frontend',
+    featured: false,
+    tag: 'Complementario',
+    items: ['Next.js', 'React / React Native', 'Astro', 'Vite'],
+  },
 ];
 ---
 
@@ -44,7 +51,7 @@ const groups = [
     <p class="section-label">// tecnologías</p>
     <h2 class="section-title">Stack & Habilidades</h2>
     <p class="section-subtitle">
-      Herramientas aplicadas en producción. Las marcadas como <em>core</em> son las que más me diferencian.
+      Herramientas, lenguajes y arquitecturas aplicadas en mi entorno de trabajo, llevadas hasta entornos productivos reales. Las marcadas como <em>core</em> son las más afines a mi nivel de experticia.
     </p>
   </div>
 
@@ -58,6 +65,7 @@ const groups = [
               <span class="skill-icon">{group.icon}</span>
               <h3>{group.label}</h3>
               {group.featured && <span class="core-tag">core</span>}
+              {group.tag && <span class="complement-tag">{group.tag}</span>}
             </div>
             <ul class="skill-list">
               {group.items.map((item) => (
@@ -157,6 +165,20 @@ const groups = [
     border: 1px solid rgba(85, 88, 227, 0.2);
     padding: 0.15rem 0.4rem;
     border-radius: 3px;
+  }
+
+  .complement-tag {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    opacity: 0.8;
   }
 
   .skill-list {
