@@ -1,23 +1,22 @@
 ---
 const jobs = [
   {
-    role: 'Backend Developer',
+    role: 'Backend Engineer',
     company: 'Belvi Digital SAS',
     location: 'Bogotá, Colombia',
     period: '2023 – 2026',
     duration: '3 años',
     type: 'Tiempo completo',
     summary:
-      'Mantuve y evolucioné dos sistemas en producción — <em>Zeus</em> (IoT médico) y <em>Plei</em> (e-learning) — integrando inteligencia artificial generativa en ambos para automatizar flujos de negocio y añadir capacidades de búsqueda semántica.',
+      'Responsable de la evolución de sistemas core en producción — <em>Zeus</em> (IoT médico) y <em>Plei</em> (e-learning) — especializándome en arquitecturas limpias e integración de IA generativa.',
     achievements: [
-      'Integré <strong>IA generativa en Zeus</strong>: consejos de venta personalizados por cliente con Ollama/OpenAI y reportes financieros mensuales con análisis narrativo generado por LLM.',
-      'Diseñé y construí el módulo <strong>SmartSearch / RAG</strong> de Plei desde cero: pipeline de embeddings con pgvector, patrón Strategy para intercambiar <strong>Ollama y OpenAI</strong> sin tocar lógica de negocio.',
-      'Diseñé pipelines de embedding en PHP — generación automática al crear/actualizar modelos via jobs asíncronos, cache Redis con tags y OCR para ingestión de PDFs.',
-      'Mantuve y extendí la arquitectura <strong>Hexagonal + DDD</strong> de Zeus: bounded contexts, domain events, event bus RabbitMQ y módulo de wallets con débito/crédito automático por tratamiento.',
-      'Automaticé el flujo de desarrollo con <strong>Claude Code + MCP Azure DevOps</strong>: spec-driven development, apertura automática de PRs y actualización de work items.',
-      'Contribuí en el frontend de Zeus (<strong>Next.js 14 + RTK Query</strong>) y en el panel admin de Plei (<strong>React + Vite</strong>).',
+      'Evolucioné y mantuve el Core de Zeus bajo <strong>Arquitectura Hexagonal y DDD</strong>, extendiendo la lógica de negocio en múltiples Bounded Contexts.',
+      'Desarrollé nuevas funcionalidades y reportes financieros complejos utilizando <strong>CQRS y buses de eventos/comandos</strong>.',
+      'Lideré el diseño e integración del motor de búsqueda semántica (RAG) en Zeus y Plei mediante el Patrón Strategy.',
+      'Adopté y promoví la metodología <strong>Spec-Driven Development</strong> para optimizar el ciclo de vida de los nuevos requerimientos.',
+      'Garanticé la estabilidad de las entregas mediante la implementación sistemática de <strong>Cucumber BDD y Jest</strong>.',
     ],
-    stack: ['TypeScript', 'Node.js', 'Express', 'PHP', 'Laravel', 'PostgreSQL', 'MySQL', 'TypeORM', 'RabbitMQ', 'Redis', 'pgvector', 'Docker', 'Azure DevOps', 'Next.js', 'React'],
+    stack: ['TypeScript', 'Node.js', 'Express', 'PHP', 'Laravel', 'PostgreSQL', 'MySQL', 'RabbitMQ', 'Redis', 'pgvector', 'Docker', 'Azure DevOps'],
   },
   {
     role: 'Fullstack Developer',
@@ -27,14 +26,14 @@ const jobs = [
     duration: 'Startup · Freelance',
     type: 'Proyectos para clientes',
     summary:
-      'Desarrollador fullstack en <em>Alaska Tech</em>, startup donde construimos productos digitales para clientes externos. He trabajado en una plataforma marketplace, un sistema de IA conversacional y una landing para el cliente <em>Maleua</em>.',
+      'Enfocado en el diseño de arquitecturas backend escalables y APIs para startups, garantizando sistemas robustos desde la concepción hasta el despliegue.',
     achievements: [
-      'Desarrollé el backend de <strong>VeciApp</strong> — marketplace multi-rol con chat en tiempo real (Socket.IO), pagos (Stripe / Mercado Pago), notificaciones push (Firebase) y búsqueda geoespacial (PostGIS).',
-      'Implementé el sistema de <strong>avatar inteligente</strong> con pipeline WebSocket → Whisper STT → Ollama LLM → Piper TTS y máquina de estados XState.',
-      'Construí la landing de <strong>Maleua</strong> con Astro optimizando para rendimiento y SEO.',
-      'Contribuí activamente en el panel web con <strong>Next.js 15</strong> y en la app móvil con <strong>React Native + Expo</strong>.',
+      'Desarrollo exclusivo del Core Backend y base de datos para <strong>VeciApp</strong>, incluyendo el dashboard administrativo web.',
+      'Implementación de sistemas de autenticación, integración de pasarela de pagos con <strong>Wompi</strong> y lógica geoespacial compleja.',
+      'Construcción de landings de alto rendimiento con Astro, enfocadas en optimización técnica y SEO.',
+      'Asesoría técnica en la transición de sistemas legacy a arquitecturas modernas orientadas a microservicios o modular monoliths.',
     ],
-    stack: ['Node.js', 'TypeScript', 'Express', 'PostgreSQL', 'Socket.IO', 'Stripe', 'Firebase', 'PostGIS', 'React Native', 'Next.js', 'Astro', 'FastAPI', 'Python'],
+    stack: ['Node.js', 'TypeScript', 'Express', 'PostgreSQL', 'Socket.IO', 'Wompi', 'Firebase', 'PostGIS', 'Astro', 'Docker'],
   },
 ];
 ---

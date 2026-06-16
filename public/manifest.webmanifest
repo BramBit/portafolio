@@ -1,7 +1,7 @@
 {
-  "name": "Brayan Mercado — Backend Developer",
-  "short_name": "BM",
-  "description": "Portfolio de Brayan Mercado, Backend Developer especializado en Arquitectura Hexagonal, DDD y pipelines de IA en producción.",
+  "name": "Brayan Mercado — Backend Engineer",
+  "short_name": "Brayan Mercado",
+  "description": "Portfolio de Brayan Mercado, Backend Engineer especializado en Arquitectura Hexagonal, DDD y pipelines de IA en producción.",
 
   "start_url": "/",
   "display": "minimal-ui",
