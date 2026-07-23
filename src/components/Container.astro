@@ -1,0 +1,22 @@
+---
+import styles from './Container.module.css';
+
+interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const containerClasses = [
+  styles.container,
+  className
+].filter(Boolean).join(' ');
+---
+
+<div class={containerClasses} {...rest}>
+  <slot />
+</div>

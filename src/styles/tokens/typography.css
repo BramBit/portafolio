@@ -1,0 +1,13 @@
+:root {
+  --font-family-sans: 'Space Grotesk', sans-serif;
+  
+  --font-size-hero: 72px;
+  --font-size-h1: 56px;
+  --font-size-h2: 40px;
+  --font-size-h3: 32px;
+  --font-size-h4: 24px;
+  --font-size-body-lg: 20px;
+  --font-size-body: 18px;
+  --font-size-small: 16px;
+  --font-size-caption: 14px;
+}

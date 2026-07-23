@@ -1,0 +1,28 @@
+---
+import styles from './Heading.module.css';
+
+interface Props {
+  level?: 1 | 2 | 3 | 4;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  level = 2,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const Tag = `h${level}` as keyof HTMLElementTagNameMap;
+const levelKey = `h${level}` as keyof typeof styles;
+
+const headingClasses = [
+  styles.heading,
+  styles[levelKey],
+  className
+].filter(Boolean).join(' ');
+---
+
+<Tag class={headingClasses} {...rest}>
+  <slot />
+</Tag>

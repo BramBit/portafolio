@@ -1,0 +1,27 @@
+---
+import styles from './Card.module.css';
+
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  interactive?: boolean;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  as: Component = 'div',
+  interactive = false,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const cardClasses = [
+  styles.card,
+  interactive ? styles.interactive : '',
+  className
+].filter(Boolean).join(' ');
+---
+
+<Component class={cardClasses} {...rest}>
+  <slot />
+</Component>

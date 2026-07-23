@@ -1,0 +1,24 @@
+---
+import styles from './Section.module.css';
+
+interface Props {
+  id?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  id,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const sectionClasses = [
+  styles.section,
+  className
+].filter(Boolean).join(' ');
+---
+
+<section id={id} class={sectionClasses} {...rest}>
+  <slot />
+</section>
