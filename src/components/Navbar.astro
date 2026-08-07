@@ -1,0 +1,61 @@
+---
+import Container from './Container.astro';
+import Button from './Button.astro';
+import MobileMenu from './MobileMenu.astro';
+import styles from './Navbar.module.css';
+
+interface Props {
+  currentPath?: string;
+  class?: string;
+}
+
+const { currentPath = Astro.url.pathname, class: className = '' } = Astro.props;
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Engineering', href: '/engineering' },
+  { label: 'Products', href: '/products' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const isActive = (href: string) => {
+  if (href === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(href);
+};
+---
+
+<header class:list={[styles.header, className]}>
+  <Container class={styles.navContainer}>
+    <a href="/" class={styles.logo} aria-label="Brayan Mercado - Home">
+      <span class={styles.logoBadge}>BM</span>
+    </a>
+
+    <nav class={styles.nav} aria-label="Main Navigation">
+      <ul class={styles.navLinks}>
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={[
+                  styles.navLink,
+                  { [styles.active]: isActive(item.href) }
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <MobileMenu currentPath={currentPath} />
+  </Container>
+</header>
+

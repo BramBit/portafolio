@@ -1,0 +1,47 @@
+.serviceCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.title {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-16) 0;
+  line-height: 1.2;
+}
+
+.description {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-24) 0;
+  flex-grow: 1;
+}
+
+.techFooter {
+  margin-top: auto;
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-surface-elevated);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.techLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.techList {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}

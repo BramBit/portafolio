@@ -1,0 +1,56 @@
+---
+import Card from './Card.astro';
+import Badge from './Badge.astro';
+import styles from './ProductCard.module.css';
+
+interface Props {
+  title: string;
+  tagline: string;
+  status: 'live' | 'coming-soon';
+  link?: string;
+  class?: string;
+}
+
+const {
+  title,
+  tagline,
+  status,
+  link,
+  class: className = '',
+} = Astro.props;
+
+const isLive = status === 'live';
+const badgeVariant = isLive ? 'accent' : 'default';
+const badgeText = isLive ? 'Live' : 'Coming Soon';
+---
+
+<Card interactive={Boolean(link)} class:list={[styles.productCard, className]}>
+  <div class={styles.header}>
+    <h3 class={styles.title}>{title}</h3>
+    <Badge variant={badgeVariant}>{badgeText}</Badge>
+  </div>
+
+  <p class={styles.tagline}>{tagline}</p>
+
+  {
+    link && (
+      <div class={styles.footer}>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={styles.link}
+        >
+          <span>Visit Website</span>
+          <svg class={styles.linkIcon} viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"
+            />
+          </svg>
+        </a>
+      </div>
+    )
+  }
+</Card>

@@ -1,0 +1,218 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import Tag from '../../components/Tag.astro';
+import CTASection from '../../components/CTASection.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('engineering');
+  return articles.map((article) => ({
+    params: { slug: article.data.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+
+const formattedDate = new Date(article.data.publishedAt).toLocaleDateString('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout
+  title={`${article.data.title} — Engineering | Brayan Mercado`}
+  description={article.data.excerpt}
+>
+  <!-- Article Header -->
+  <Section class="header-section">
+    <Container>
+      <div class="breadcrumb">
+        <a href="/engineering" class="back-link">
+          <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="back-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Volver a Artículos de Ingeniería
+        </a>
+      </div>
+
+      <div class="meta-info">
+        <span class="date">{formattedDate}</span>
+        <span class="separator">•</span>
+        <span class="reading-time">{article.data.readingTime}</span>
+      </div>
+
+      <Heading level={1} class="title">{article.data.title}</Heading>
+
+      <p class="excerpt">{article.data.excerpt}</p>
+
+      {
+        article.data.tags && article.data.tags.length > 0 && (
+          <div class="tags-container">
+            {article.data.tags.map((tag) => (
+              <Tag>{tag}</Tag>
+            ))}
+          </div>
+        )
+      }
+    </Container>
+  </Section>
+
+  <!-- Full Article Content -->
+  <Section class="content-section">
+    <Container>
+      <article class="markdown-body">
+        <Content />
+      </article>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Quieres implementar estas prácticas en tu equipo o producto?"
+    description="Escríbeme para conversar sobre arquitectura de software, IA e infraestructura técnica."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+    border-bottom: 1px solid var(--color-surface-elevated);
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small, 16px);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-primary);
+  }
+
+  .back-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .meta-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption, 14px);
+    margin-bottom: var(--space-3, 12px);
+  }
+
+  .title {
+    margin-bottom: var(--space-4, 16px);
+    max-width: 900px;
+  }
+
+  .excerpt {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    line-height: 1.6;
+    max-width: 820px;
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 8px);
+  }
+
+  .content-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-16, 64px);
+  }
+
+  /* Full Markdown rendering styles */
+  .markdown-body {
+    max-width: 860px;
+    margin: 0 auto;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body, 18px);
+    line-height: 1.75;
+  }
+
+  .markdown-body :global(h2) {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h2, 40px);
+    font-weight: 700;
+    margin-top: var(--space-16, 64px);
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .markdown-body :global(h3) {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h4, 24px);
+    font-weight: 600;
+    margin-top: var(--space-8, 32px);
+    margin-bottom: var(--space-3, 12px);
+  }
+
+  .markdown-body :global(p) {
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  .markdown-body :global(hr) {
+    border: 0;
+    height: 1px;
+    background: var(--color-surface-elevated);
+    margin: var(--space-12, 48px) 0;
+  }
+
+  .markdown-body :global(ul),
+  .markdown-body :global(ol) {
+    margin-bottom: var(--space-6, 24px);
+    padding-left: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(li) {
+    margin-bottom: var(--space-2, 8px);
+  }
+
+  .markdown-body :global(code) {
+    font-family: monospace;
+    background-color: var(--color-surface-elevated);
+    color: var(--color-accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .markdown-body :global(pre) {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 8px;
+    padding: var(--space-4, 16px);
+    overflow-x: auto;
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(pre code) {
+    background-color: transparent;
+    color: var(--color-text-primary);
+    padding: 0;
+  }
+</style>

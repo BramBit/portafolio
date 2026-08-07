@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import CTASection from '../../components/CTASection.astro';
+
+const articles = await getCollection('engineering');
+
+// Sort articles by publishedAt descending
+const sortedArticles = articles.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+---
+
+<Layout
+  title="Engineering — Brayan Mercado"
+  description="Artículos técnicos y profundizaciones sobre arquitectura de software, IA aplicada y desarrollo de sistemas escalables."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Engineering Articles & Insights</Heading>
+      <p class="page-subtitle">
+        Desgloses técnicos detallados sobre patrones de diseño, integración de IA, optimización de sistemas y arquitectura de software.
+      </p>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container>
+      <div class="articles-grid">
+        {
+          sortedArticles.map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              excerpt={article.data.excerpt}
+              readingTime={article.data.readingTime}
+              tags={article.data.tags}
+              slug={article.data.slug}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Quieres profundizar en algún tema de arquitectura o IA?"
+    description="Conversemos sobre los retos de ingeniería de tu producto y cómo abordarlos con patrones de diseño probados."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .articles-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .articles-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .articles-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

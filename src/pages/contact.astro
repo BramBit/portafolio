@@ -1,0 +1,177 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Heading from '../components/Heading.astro';
+import ContactSection from '../components/ContactSection.astro';
+import Button from '../components/Button.astro';
+import { siteConfig } from '../data/site';
+
+const email = 'brayanmercadodev@gmail.com';
+---
+
+<Layout
+  title="Contacto — Brayan Mercado | Software Engineer"
+  description="Have a project in mind? Let's build it together. Hablemos sobre tu proyecto o necesidades de arquitectura."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Contacto</Heading>
+      <p class="page-subtitle">
+        ¿Tienes una propuesta laboral, proyecto en mente o necesitas consultoría técnica? Estaré encantado de conversar.
+      </p>
+    </Container>
+  </Section>
+
+  <!-- Main Contact Callout -->
+  <ContactSection
+    title="Have a project in mind? Let's build it together."
+    description="Ya sea que necesites diseñar un producto completo desde cero, escalar una plataforma existente o integrar IA aplicada a tu negocio."
+    buttonText="Let's Talk"
+    contactHref={`mailto:${email}`}
+  />
+
+  <!-- Links and Additional Resources -->
+  <Section class="links-section">
+    <Container>
+      <div class="contact-cards-grid">
+        <!-- Direct Email Card -->
+        <div class="info-card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h3 class="card-title">Correo Electrónico</h3>
+          <p class="card-desc">Escríbeme directamente a mi dirección principal.</p>
+          <a href={`mailto:${email}`} class="card-link">{email}</a>
+        </div>
+
+        <!-- Social Profiles Card -->
+        <div class="info-card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </div>
+          <h3 class="card-title">Redes & Profesional</h3>
+          <p class="card-desc">Conecta conmigo en mis perfiles técnicos y profesionales.</p>
+          <div class="social-actions">
+            <Button variant="secondary" href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </Button>
+            <Button variant="secondary" href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">
+              GitHub
+            </Button>
+          </div>
+        </div>
+
+        <!-- CV Download Card -->
+        <div class="info-card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3 class="card-title">Curriculum Vitae</h3>
+          <p class="card-desc">Descarga mi documento de experiencia profesional en formato PDF.</p>
+          <div class="card-action">
+            <Button variant="secondary" href="/cv-brayan-mercado.pdf" target="_blank" rel="noopener noreferrer">
+              Descargar CV (PDF)
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .links-section {
+    padding-bottom: var(--space-16, 64px);
+  }
+
+  .contact-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .contact-cards-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .info-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 12px;
+    padding: var(--space-8, 32px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .card-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-title {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h4, 24px);
+    font-weight: 600;
+    margin-bottom: var(--space-2, 8px);
+  }
+
+  .card-desc {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small, 16px);
+    line-height: 1.5;
+    margin-bottom: var(--space-6, 24px);
+    flex: 1;
+  }
+
+  .card-link {
+    color: var(--color-accent);
+    font-size: var(--font-size-body, 18px);
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .card-link:hover {
+    opacity: 0.8;
+  }
+
+  .social-actions {
+    display: flex;
+    gap: var(--space-3, 12px);
+    flex-wrap: wrap;
+  }
+
+  .card-action {
+    display: flex;
+  }
+</style>

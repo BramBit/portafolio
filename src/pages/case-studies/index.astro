@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import CTASection from '../../components/CTASection.astro';
+
+const caseStudies = await getCollection('case-studies');
+
+// Sort case studies by publishedAt date descending
+const sortedCaseStudies = caseStudies.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+---
+
+<Layout
+  title="Case Studies — Brayan Mercado"
+  description="Casos de estudio detallados sobre arquitectura de software, plataformas empresariales y soluciones de ingeniería."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Case Studies</Heading>
+      <p class="page-subtitle">
+        Análisis detallados de proyectos de ingeniería: desde los problemas de negocio y los retos técnicos hasta la arquitectura y los resultados obtenidos.
+      </p>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container>
+      <div class="case-studies-grid">
+        {
+          sortedCaseStudies.map((study) => (
+            <CaseStudyCard
+              title={study.data.title}
+              summary={study.data.summary}
+              technologies={study.data.technologies}
+              slug={study.data.slug}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Quieres discutir cómo aplicar este tipo de arquitectura a tu producto?"
+    description="Hablemos sobre las necesidades de tu sistema y diseñemos la solución técnica adecuada."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .case-studies-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .case-studies-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .case-studies-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,39 @@
+---
+import Section from './Section.astro';
+import Container from './Container.astro';
+import Button from './Button.astro';
+import styles from './ContactSection.module.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  contactHref?: string;
+  class?: string;
+}
+
+const {
+  title = 'Ready to build something scalable?',
+  description = "Whether you have a product in mind, need software architecture advisory, or want to integrate applied AI into your existing platform, let's talk.",
+  buttonText = "Let's Talk",
+  contactHref = '/contact',
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={className}>
+  <Container>
+    <div class={styles.wrapper}>
+      <div class={styles.glow} aria-hidden="true" />
+      <div class={styles.content}>
+        <h2 class={styles.title}>{title}</h2>
+        <p class={styles.description}>{description}</p>
+        <div class={styles.action}>
+          <Button variant="primary" href={contactHref}>
+            {buttonText}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

@@ -1,0 +1,65 @@
+---
+import Card from './Card.astro';
+import Tag from './Tag.astro';
+import styles from './ArticleCard.module.css';
+
+interface Props {
+  title: string;
+  excerpt: string;
+  readingTime: string;
+  tags?: string[];
+  slug: string;
+  class?: string;
+}
+
+const {
+  title,
+  excerpt,
+  readingTime,
+  tags = [],
+  slug,
+  class: className = '',
+} = Astro.props;
+
+const href = `/engineering/${slug}`;
+---
+
+<a href={href} class={styles.cardLink}>
+  <Card interactive={true} class:list={[styles.articleCard, className]}>
+    <div class={styles.header}>
+      <span class={styles.readingTime}>
+        <svg class={styles.clockIcon} viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        {readingTime}
+      </span>
+    </div>
+
+    <h3 class={styles.title}>{title}</h3>
+
+    <p class={styles.excerpt}>{excerpt}</p>
+
+    <div class={styles.footer}>
+      {
+        tags.length > 0 && (
+          <div class={styles.tagsContainer}>
+            {tags.map((tag) => (
+              <Tag>{tag}</Tag>
+            ))}
+          </div>
+        )
+      }
+      <span class={styles.readMore}>
+        Read Article
+        <svg class={styles.arrowIcon} viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M5 12h14M12 5l7 7-7 7"
+          />
+        </svg>
+      </span>
+    </div>
+  </Card>
+</a>

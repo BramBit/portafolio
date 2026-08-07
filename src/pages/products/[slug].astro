@@ -1,0 +1,240 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import CTASection from '../../components/CTASection.astro';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((product) => ({
+    params: { slug: product.data.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+
+const isLive = product.data.status === 'live';
+---
+
+<Layout
+  title={`${product.data.title} — Producto | Brayan Mercado`}
+  description={product.data.tagline}
+>
+  <!-- Header Section -->
+  <Section class="header-section">
+    <Container>
+      <div class="breadcrumb">
+        <a href="/products" class="back-link">
+          <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="back-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Volver a Productos
+        </a>
+      </div>
+
+      <div class="header-top">
+        <Heading level={1} class="title">{product.data.title}</Heading>
+        <Badge variant={isLive ? 'accent' : 'default'}>
+          {isLive ? 'Live' : 'Coming Soon'}
+        </Badge>
+      </div>
+
+      <p class="tagline">{product.data.tagline}</p>
+
+      {
+        isLive && product.data.website && (
+          <div class="action-bar">
+            <Button
+              variant="primary"
+              href={product.data.website}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit Website
+              <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+              </svg>
+            </Button>
+          </div>
+        )
+      }
+    </Container>
+  </Section>
+
+  <!-- Problem / Solution Overview Cards -->
+  <Section class="overview-section">
+    <Container>
+      <div class="overview-grid">
+        <div class="info-card">
+          <Heading level={3} class="card-title">El Problema</Heading>
+          <p class="card-text">{product.data.problem}</p>
+        </div>
+
+        <div class="info-card highlight-card">
+          <Heading level={3} class="card-title">La Solución</Heading>
+          <p class="card-text">{product.data.solution}</p>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Full Markdown Detail Content -->
+  <Section class="content-section">
+    <Container>
+      <div class="markdown-body">
+        <Content />
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Quieres conocer más detalles sobre este producto?"
+    description="Contáctame para solicitar una demostración, información técnica o evaluar posibilidades de integración."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+    border-bottom: 1px solid var(--color-surface-elevated);
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small, 16px);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-primary);
+  }
+
+  .back-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4, 16px);
+    margin-bottom: var(--space-2, 8px);
+  }
+
+  .title {
+    margin: 0;
+  }
+
+  .tagline {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    line-height: 1.6;
+    max-width: 800px;
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .action-bar {
+    display: flex;
+    gap: var(--space-4, 16px);
+  }
+
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: var(--space-2, 8px);
+  }
+
+  .overview-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .overview-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .info-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 12px;
+    padding: var(--space-8, 32px);
+  }
+
+  .highlight-card {
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .card-title {
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .card-text {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body, 18px);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .content-section {
+    padding-top: var(--space-8, 32px);
+    padding-bottom: var(--space-16, 64px);
+  }
+
+  .markdown-body {
+    max-width: 860px;
+    margin: 0 auto;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body, 18px);
+    line-height: 1.7;
+  }
+
+  .markdown-body :global(h2) {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h3, 32px);
+    font-weight: 700;
+    margin-top: var(--space-12, 48px);
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .markdown-body :global(p) {
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  .markdown-body :global(ul),
+  .markdown-body :global(ol) {
+    margin-bottom: var(--space-6, 24px);
+    padding-left: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(li) {
+    margin-bottom: var(--space-2, 8px);
+  }
+</style>

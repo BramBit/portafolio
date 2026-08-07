@@ -1,0 +1,111 @@
+---
+import styles from './MobileMenu.module.css';
+
+interface Props {
+  currentPath?: string;
+  class?: string;
+}
+
+const { currentPath = Astro.url.pathname, class: className = '' } = Astro.props;
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Case Studies', href: '/case-studies' },
+  { label: 'Engineering', href: '/engineering' },
+  { label: 'Products', href: '/products' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const isActive = (href: string) => {
+  if (href === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(href);
+};
+---
+
+<div class:list={[styles.mobileMenuWrapper, className]}>
+  <button
+    id="mobile-menu-toggle"
+    class={styles.menuToggle}
+    aria-label="Toggle Navigation Menu"
+    aria-expanded="false"
+    aria-controls="mobile-menu-overlay"
+  >
+    <svg class={styles.icon} viewBox="0 0 24 24" stroke="currentColor">
+      <path
+        class="icon-hamburger"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+      <path
+        class="icon-close"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M6 18L18 6M6 6l12 12"
+        style="display: none;"></path>
+    </svg>
+  </button>
+
+  <div id="mobile-menu-overlay" class={styles.overlay} aria-hidden="true">
+    <ul class={styles.navList}>
+      {
+        navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                styles.navLink,
+                { [styles.active]: isActive(item.href) }
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script>
+  function setupMobileMenu() {
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const hamburgerIcon = toggleBtn?.querySelector('.icon-hamburger') as HTMLElement | null;
+    const closeIcon = toggleBtn?.querySelector('.icon-close') as HTMLElement | null;
+
+    if (!toggleBtn || !overlay) return;
+
+    function toggleMenu(open?: boolean) {
+      const isOpen = open !== undefined ? open : !overlay.classList.contains('open');
+      
+      overlay.classList.toggle(styles.open, isOpen);
+      toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      overlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+
+      if (hamburgerIcon && closeIcon) {
+        hamburgerIcon.style.display = isOpen ? 'none' : 'block';
+        closeIcon.style.display = isOpen ? 'block' : 'none';
+      }
+
+      if (isOpen) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+
+    toggleBtn.addEventListener('click', () => toggleMenu());
+
+    // Close on link click
+    overlay.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => toggleMenu(false));
+    });
+  }
+
+  setupMobileMenu();
+  document.addEventListener('astro:after-swap', setupMobileMenu);
+</script>

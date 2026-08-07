@@ -1,0 +1,49 @@
+---
+import Card from './Card.astro';
+import Tag from './Tag.astro';
+import styles from './CaseStudyCard.module.css';
+
+interface Props {
+  title: string;
+  summary: string;
+  technologies?: string[];
+  slug: string;
+  class?: string;
+}
+
+const {
+  title,
+  summary,
+  technologies = [],
+  slug,
+  class: className = '',
+} = Astro.props;
+
+const href = `/case-studies/${slug}`;
+---
+
+<a href={href} class={styles.cardLink}>
+  <Card interactive={true} class:list={[styles.caseStudyCard, className]}>
+    <div class={styles.header}>
+      <h3 class={styles.title}>{title}</h3>
+      <svg class={styles.arrowIcon} viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 12h14M12 5l7 7-7 7"></path>
+      </svg>
+    </div>
+
+    <p class={styles.summary}>{summary}</p>
+
+    {
+      technologies.length > 0 && (
+        <div class={styles.techContainer}>
+          {technologies.map((tech) => (
+            <Tag>{tech}</Tag>
+          ))}
+        </div>
+      )
+    }
+  </Card>
+</a>

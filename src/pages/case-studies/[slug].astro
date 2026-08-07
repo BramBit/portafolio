@@ -1,0 +1,192 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import Tag from '../../components/Tag.astro';
+import Button from '../../components/Button.astro';
+import CTASection from '../../components/CTASection.astro';
+
+export async function getStaticPaths() {
+  const caseStudies = await getCollection('case-studies');
+  return caseStudies.map((study) => ({
+    params: { slug: study.data.slug },
+    props: { study },
+  }));
+}
+
+const { study } = Astro.props;
+const { Content } = await render(study);
+---
+
+<Layout
+  title={`${study.data.title} — Case Study | Brayan Mercado`}
+  description={study.data.summary}
+>
+  <!-- Header Section -->
+  <Section class="header-section">
+    <Container>
+      <div class="breadcrumb">
+        <a href="/case-studies" class="back-link">
+          <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="back-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Volver a Case Studies
+        </a>
+      </div>
+
+      <Heading level={1} class="title">{study.data.title}</Heading>
+
+      <p class="summary">{study.data.summary}</p>
+
+      {
+        study.data.technologies && study.data.technologies.length > 0 && (
+          <div class="tech-stack">
+            <span class="tech-label">Technologies & Architecture:</span>
+            <div class="tags-container">
+              {study.data.technologies.map((tech) => (
+                <Tag>{tech}</Tag>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </Container>
+  </Section>
+
+  <!-- Markdown Content Section -->
+  <Section class="content-section">
+    <Container>
+      <div class="markdown-body">
+        <Content />
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Footer Navigation & CTA -->
+  <CTASection
+    title="¿Quieres implementar una arquitectura o solución similar?"
+    description="Hablemos de tus necesidades de desarrollo, diseño de sistemas e integración de soluciones escalables."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+    border-bottom: 1px solid var(--color-surface-elevated);
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small, 16px);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-primary);
+  }
+
+  .back-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .title {
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .summary {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    line-height: 1.6;
+    max-width: 800px;
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 12px);
+  }
+
+  .tech-label {
+    font-size: var(--font-size-caption, 14px);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 8px);
+  }
+
+  .content-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-16, 64px);
+  }
+
+  /* Spacing and styles for rendered Markdown headings and elements */
+  .markdown-body {
+    max-width: 860px;
+    margin: 0 auto;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body, 18px);
+    line-height: 1.7;
+  }
+
+  /* Spacing between main sections (H2 elements) - Token spacing 96px */
+  .markdown-body :global(h2) {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h2, 40px);
+    font-weight: 700;
+    margin-top: var(--space-24, 96px);
+    margin-bottom: var(--space-6, 24px);
+    padding-top: var(--space-8, 32px);
+    border-top: 1px solid var(--color-surface-elevated);
+  }
+
+  .markdown-body :global(h2:first-of-type) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .markdown-body :global(h3) {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h4, 24px);
+    font-weight: 600;
+    margin-top: var(--space-8, 32px);
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .markdown-body :global(p) {
+    margin-bottom: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  .markdown-body :global(ul),
+  .markdown-body :global(ol) {
+    margin-bottom: var(--space-6, 24px);
+    padding-left: var(--space-6, 24px);
+  }
+
+  .markdown-body :global(li) {
+    margin-bottom: var(--space-2, 8px);
+  }
+</style>

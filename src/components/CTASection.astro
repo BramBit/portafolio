@@ -1,0 +1,50 @@
+---
+import Section from './Section.astro';
+import Container from './Container.astro';
+import Button from './Button.astro';
+import styles from './CTASection.module.css';
+
+interface ButtonConfig {
+  label: string;
+  href?: string;
+  variant?: 'primary' | 'secondary';
+  [key: string]: any;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  button: ButtonConfig;
+  showGlow?: boolean;
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  button,
+  showGlow = true,
+  class: className = '',
+} = Astro.props;
+---
+
+<Section class={className}>
+  <Container>
+    <div class={styles.ctaContainer}>
+      {showGlow && <div class={styles.glow} aria-hidden="true" />}
+      <div class={styles.content}>
+        <h2 class={styles.title}>{title}</h2>
+        {description && <p class={styles.description}>{description}</p>}
+        <div class={styles.action}>
+          <Button
+            variant={button.variant || 'primary'}
+            href={button.href}
+            {...button}
+          >
+            {button.label}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

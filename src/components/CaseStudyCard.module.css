@@ -1,0 +1,66 @@
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.caseStudyCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-bottom: var(--space-16);
+}
+
+.title {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin: 0;
+  transition: color 150ms ease;
+}
+
+.cardLink:hover .title {
+  color: var(--color-primary);
+}
+
+.arrowIcon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-text-muted);
+  stroke-width: 1.5;
+  fill: none;
+  flex-shrink: 0;
+  margin-top: 4px;
+  transition: transform 150ms ease, stroke 150ms ease;
+}
+
+.cardLink:hover .arrowIcon {
+  transform: translateX(4px);
+  stroke: var(--color-primary);
+}
+
+.summary {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-24) 0;
+  flex-grow: 1;
+}
+
+.techContainer {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}

@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Heading from '../components/Heading.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CTASection from '../components/CTASection.astro';
+
+const services = [
+  {
+    title: 'Backend Development',
+    description: 'Diseño y desarrollo de sistemas backend escalables, capaces de soportar el crecimiento de tu negocio sin reescrituras costosas.',
+    technologies: ['Node.js', 'TypeScript', 'Laravel']
+  },
+  {
+    title: 'Full Stack Development',
+    description: 'Construcción de productos completos, de la base de datos a la interfaz, con una sola visión de arquitectura de punta a punta.',
+    technologies: ['Astro', 'Node.js', 'TypeScript']
+  },
+  {
+    title: 'AI Integration',
+    description: 'Integración de inteligencia artificial en procesos reales de negocio: asistentes inteligentes, búsqueda semántica y automatización de tareas repetitivas.',
+    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI']
+  },
+  {
+    title: 'API Development',
+    description: 'Diseño de APIs REST claras, documentadas y preparadas para que otros equipos o aplicaciones se integren sin fricción.',
+    technologies: ['REST', 'Node.js']
+  },
+  {
+    title: 'Software Architecture',
+    description: 'Decisiones de arquitectura pensadas para que el sistema siga siendo mantenible cuando el equipo y el producto crezcan.',
+    technologies: ['DDD', 'Arquitectura Hexagonal', 'CQRS', 'Event-Driven']
+  },
+  {
+    title: 'Technical Consulting',
+    description: 'Acompañamiento en decisiones técnicas críticas, para que la arquitectura correcta se elija antes de escribir la primera línea de código, no después.',
+    technologies: []
+  }
+];
+---
+
+<Layout
+  title="Servicios — Brayan Mercado"
+  description="Capacidades de ingeniería, arquitectura de software e integración de inteligencia artificial para productos escalables."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Servicios & Capacidades de Ingeniería</Heading>
+      <p class="page-subtitle">
+        Soluciones integrales de desarrollo, arquitectura e inteligencia artificial para construir y escalar productos tecnológicos.
+      </p>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container>
+      <div class="services-grid">
+        {
+          services.map((service) => (
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              technologies={service.technologies}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Necesitas asesoría técnica o construir tu próximo producto?"
+    description="Analicemos los requerimientos de tu sistema para encontrar la mejor arquitectura y estrategia de desarrollo."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,231 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Heading from '../components/Heading.astro';
+import CTASection from '../components/CTASection.astro';
+import Button from '../components/Button.astro';
+---
+
+<Layout
+  title="Sobre mí — Brayan Mercado | Software Engineer"
+  description="Trayectoria, evolución profesional y visión de ingeniería de software orientada a producto y sistemas escalables."
+>
+  <!-- Header Section -->
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Sobre mí & Filosofía de Ingeniería</Heading>
+      <p class="page-subtitle">
+        Software Engineer con foco en la arquitectura de sistemas, integración de inteligencia artificial y desarrollo de productos digitales sostenibles.
+      </p>
+    </Container>
+  </Section>
+
+  <!-- Narrative Section -->
+  <Section>
+    <Container>
+      <div class="story-container">
+        <!-- Part 1: Enfoque Profesional -->
+        <div class="story-block">
+          <Heading level={2}>Enfoque Profesional & Visión de Producto</Heading>
+          <p>
+            Concibo el desarrollo de software como una disciplina de ingeniería cuyo objetivo principal es resolver problemas complejos de negocio mediante soluciones sostenibles, escalables y desacopladas. Para mí, el test fundamental detrás de cada decisión técnica o de interfaz es simple: <em>"¿Esto ayuda a transformar las necesidades del producto en un sistema confiable y eficiente?"</em>
+          </p>
+          <p>
+            Mi trabajo se centra en el ecosistema TypeScript, donde he asumido la responsabilidad end-to-end de plataformas en producción: desde la concepción de modelos de dominio y APIs resilientes en Backend, hasta la implementación de interfaces de usuario optimizadas y mantenibles en Frontend.
+          </p>
+        </div>
+
+        <!-- Part 2: Evolución Profesional -->
+        <div class="story-block">
+          <Heading level={2}>De la Ingeniería Tradicional a la Arquitectura de Software</Heading>
+          <p>
+            Mi trayectoria profesional cuenta con una base singular: obtuve el título universitario de <strong>Ingeniero de Alimentos</strong> antes de volcarme por completo al desarrollo de software y avanzar formalmente en la <strong>Tecnología en Desarrollo de Software</strong>.
+          </p>
+          <p>
+            Esta primera formación en ingeniería proporcionó cimientos en pensamiento analítico, modelado de procesos rigurosos, control de calidad y resolución estructurada de problemas. Al trasladar esa metodología al ecosistema digital, mi evolución técnica ha sido una progresión natural y constante:
+          </p>
+
+          <div class="evolution-path">
+            <div class="step">
+              <span class="step-num">01</span>
+              <span class="step-label">Desarrollo Frontend & UI</span>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <span class="step-num">02</span>
+              <span class="step-label">Desarrollo Backend & APIs</span>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <span class="step-num">03</span>
+              <span class="step-label">Arquitectura Hexagonal & DDD</span>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <span class="step-num">04</span>
+              <span class="step-label">Sistemas Distribuidos & Event-Driven</span>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <span class="step-num">05</span>
+              <span class="step-label">Inteligencia Artificial Aplicada (RAG)</span>
+            </div>
+          </div>
+
+          <p>
+            Esta evolución me ha llevado a pasar de construir componentes funcionales aislados a diseñar la arquitectura completa de plataformas como <strong>Zeus</strong> (telemetría IoT y RAG para equipos médicos), <strong>PLEI</strong> (plataforma e-learning y búsqueda híbrida) y <strong>VeciApp</strong> (marketplace de comercio local y billetera digital).
+          </p>
+        </div>
+
+        <!-- Part 3: Principios de Ingeniería -->
+        <div class="story-block">
+          <Heading level={2}>Principios & IA Aplicada</Heading>
+          <p>
+            No me defino por lenguajes o frameworks específicos, sino por los principios que garantizan la longevidad del código: <strong>Domain-Driven Design (DDD)</strong>, <strong>Arquitectura Hexagonal (Ports & Adapters)</strong>, segregación de responsabilidades y desacoplamiento estricto de la infraestructura.
+          </p>
+          <p>
+            En el ámbito de la <strong>Inteligencia Artificial</strong>, me especializo en llevar modelos de lenguaje y sistemas RAG fuera de los prototipos y hacia entornos productivos reales: construyendo pipelines nativos de vectorización con <code>pgvector</code>, caching inteligente en Redis para reducir costos de tokens, y aplicando el patrón Strategy para abstraer proveedores de IA evitando el bloqueo de proveedor.
+          </p>
+        </div>
+
+        <!-- Download CV Action -->
+        <div class="cv-action-box">
+          <div>
+            <h3 class="cv-title">¿Deseas revisar mi trayectoria detallada?</h3>
+            <p class="cv-subtitle">Puedes descargar la versión en PDF de mi hoja de vida actualizada.</p>
+          </div>
+          <Button variant="secondary" href="/cv-brayan-mercado.pdf" target="_blank" rel="noopener noreferrer">
+            Descargar CV (PDF)
+          </Button>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Final CTA -->
+  <CTASection
+    title="¿Buscas un Software Engineer para construir o escalar tu producto?"
+    description="Analicemos tus objetivos y retos técnicos para diseñar juntos la mejor arquitectura."
+    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+    border-bottom: 1px solid var(--color-surface-elevated);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .story-container {
+    max-width: 840px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16, 64px);
+    padding: var(--space-8, 32px) 0;
+  }
+
+  .story-block p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body, 18px);
+    line-height: 1.75;
+    margin-top: var(--space-4, 16px);
+  }
+
+  .story-block em {
+    color: var(--color-text-primary);
+    font-style: normal;
+  }
+
+  .evolution-path {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 12px);
+    margin: var(--space-8, 32px) 0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 12px;
+    padding: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .evolution-path {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3, 12px);
+  }
+
+  .step-num {
+    color: var(--color-primary);
+    font-family: var(--font-family-sans);
+    font-weight: 700;
+    font-size: var(--font-size-small, 16px);
+  }
+
+  .step-label {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-small, 16px);
+    font-weight: 500;
+  }
+
+  .step-arrow {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .step-arrow {
+      display: block;
+    }
+  }
+
+  .cv-action-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 12px;
+    padding: var(--space-8, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 16px);
+    margin-top: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .cv-action-box {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .cv-title {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h4, 24px);
+    font-weight: 600;
+  }
+
+  .cv-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small, 16px);
+    margin-top: 4px;
+  }
+</style>

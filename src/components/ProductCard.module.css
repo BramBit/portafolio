@@ -1,0 +1,64 @@
+.productCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+.title {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tagline {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-24) 0;
+  flex-grow: 1;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-surface-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity 150ms ease;
+}
+
+.link:hover {
+  opacity: 0.85;
+}
+
+.linkIcon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
