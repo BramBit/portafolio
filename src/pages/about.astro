@@ -4,110 +4,74 @@ import Section from '../components/Section.astro';
 import Container from '../components/Container.astro';
 import Heading from '../components/Heading.astro';
 import CTASection from '../components/CTASection.astro';
-import Button from '../components/Button.astro';
 ---
 
 <Layout
-  title="Sobre mí — Brayan Mercado | Software Engineer"
-  description="Trayectoria, evolución profesional y visión de ingeniería de software orientada a producto y sistemas escalables."
+  title="About Me — Brayan Mercado | Full Stack Software Engineer"
+  description="Full Stack Software Engineer focused on product development, software architecture, and applied AI."
 >
-  <!-- Header Section -->
   <Section class="page-header-section">
     <Container>
-      <Heading level={1}>Sobre mí & Filosofía de Ingeniería</Heading>
+      <Heading level={1}>About Me</Heading>
       <p class="page-subtitle">
-        Software Engineer con foco en la arquitectura de sistemas, integración de inteligencia artificial y desarrollo de productos digitales sostenibles.
+        Full Stack Software Engineer focused on product development, software architecture, and applied AI.
       </p>
     </Container>
   </Section>
 
-  <!-- Narrative Section -->
-  <Section>
+  <Section class="content-section">
     <Container>
-      <div class="story-container">
-        <!-- Part 1: Enfoque Profesional -->
-        <div class="story-block">
-          <Heading level={2}>Enfoque Profesional & Visión de Producto</Heading>
+      <div class="about-grid">
+        <article class="about-prose">
           <p>
-            Concibo el desarrollo de software como una disciplina de ingeniería cuyo objetivo principal es resolver problemas complejos de negocio mediante soluciones sostenibles, escalables y desacopladas. Para mí, el test fundamental detrás de cada decisión técnica o de interfaz es simple: <em>"¿Esto ayuda a transformar las necesidades del producto en un sistema confiable y eficiente?"</em>
-          </p>
-          <p>
-            Mi trabajo se centra en el ecosistema TypeScript, donde he asumido la responsabilidad end-to-end de plataformas en producción: desde la concepción de modelos de dominio y APIs resilientes en Backend, hasta la implementación de interfaces de usuario optimizadas y mantenibles en Frontend.
-          </p>
-        </div>
-
-        <!-- Part 2: Evolución Profesional -->
-        <div class="story-block">
-          <Heading level={2}>De la Ingeniería Tradicional a la Arquitectura de Software</Heading>
-          <p>
-            Mi trayectoria profesional cuenta con una base singular: obtuve el título universitario de <strong>Ingeniero de Alimentos</strong> antes de volcarme por completo al desarrollo de software y avanzar formalmente en la <strong>Tecnología en Desarrollo de Software</strong>.
-          </p>
-          <p>
-            Esta primera formación en ingeniería proporcionó cimientos en pensamiento analítico, modelado de procesos rigurosos, control de calidad y resolución estructurada de problemas. Al trasladar esa metodología al ecosistema digital, mi evolución técnica ha sido una progresión natural y constante:
+            I didn't start out building software. I started as a food engineer, learning to model processes, control quality, and solve problems with structure and analysis — long before I touched a line of TypeScript.
           </p>
 
-          <div class="evolution-path">
-            <div class="step">
-              <span class="step-num">01</span>
-              <span class="step-label">Desarrollo Frontend & UI</span>
-            </div>
-            <div class="step-arrow">→</div>
-            <div class="step">
-              <span class="step-num">02</span>
-              <span class="step-label">Desarrollo Backend & APIs</span>
-            </div>
-            <div class="step-arrow">→</div>
-            <div class="step">
-              <span class="step-num">03</span>
-              <span class="step-label">Arquitectura Hexagonal & DDD</span>
-            </div>
-            <div class="step-arrow">→</div>
-            <div class="step">
-              <span class="step-num">04</span>
-              <span class="step-label">Sistemas Distribuidos & Event-Driven</span>
-            </div>
-            <div class="step-arrow">→</div>
-            <div class="step">
-              <span class="step-num">05</span>
-              <span class="step-label">Inteligencia Artificial Aplicada (RAG)</span>
-            </div>
+          <p>
+            That changed when I moved into software: first building interfaces, then backend systems, and eventually taking on architecture decisions end to end. At Belvi Digital I worked on Zeus, an IoT platform for medical aesthetic devices, and PLEI, an e-learning platform — starting on the frontend and growing into backend and full-stack responsibilities. At Alaska Tech, the company I co-founded, I designed the backend of VeciApp, a marketplace connecting local merchants with their community.
+          </p>
+
+          <blockquote class="pull-quote">
+            "I stopped treating AI as a plugin and started treating it as a system."
+          </blockquote>
+
+          <p>
+            The same principle now guides my work: understand the product and the problem first, then choose the architecture that fits it.
+          </p>
+        </article>
+
+        <aside class="quick-facts-panel">
+          <div class="profile-image-wrapper">
+            <img src="/bram-profile.webp" alt="Portrait of Brayan Mercado" class="profile-image" />
           </div>
-
-          <p>
-            Esta evolución me ha llevado a pasar de construir componentes funcionales aislados a diseñar la arquitectura completa de plataformas como <strong>Zeus</strong> (telemetría IoT y RAG para equipos médicos), <strong>PLEI</strong> (plataforma e-learning y búsqueda híbrida) y <strong>VeciApp</strong> (marketplace de comercio local y billetera digital).
-          </p>
-        </div>
-
-        <!-- Part 3: Principios de Ingeniería -->
-        <div class="story-block">
-          <Heading level={2}>Principios & IA Aplicada</Heading>
-          <p>
-            No me defino por lenguajes o frameworks específicos, sino por los principios que garantizan la longevidad del código: <strong>Domain-Driven Design (DDD)</strong>, <strong>Arquitectura Hexagonal (Ports & Adapters)</strong>, segregación de responsabilidades y desacoplamiento estricto de la infraestructura.
-          </p>
-          <p>
-            En el ámbito de la <strong>Inteligencia Artificial</strong>, me especializo en llevar modelos de lenguaje y sistemas RAG fuera de los prototipos y hacia entornos productivos reales: construyendo pipelines nativos de vectorización con <code>pgvector</code>, caching inteligente en Redis para reducir costos de tokens, y aplicando el patrón Strategy para abstraer proveedores de IA evitando el bloqueo de proveedor.
-          </p>
-        </div>
-
-        <!-- Download CV Action -->
-        <div class="cv-action-box">
-          <div>
-            <h3 class="cv-title">¿Deseas revisar mi trayectoria detallada?</h3>
-            <p class="cv-subtitle">Puedes descargar la versión en PDF de mi hoja de vida actualizada.</p>
-          </div>
-          <Button variant="secondary" href="/cv-brayan-mercado.pdf" target="_blank" rel="noopener noreferrer">
-            Descargar CV (PDF)
-          </Button>
-        </div>
+          <h3 class="facts-title">Quick facts</h3>
+          <dl class="facts-list">
+            <div class="fact-item">
+              <dt class="fact-label">Focus</dt>
+              <dd class="fact-value">Full Stack, Backend, Applied AI, Software Architecture</dd>
+            </div>
+            <div class="fact-item">
+              <dt class="fact-label">Ecosystem</dt>
+              <dd class="fact-value">TypeScript</dd>
+            </div>
+            <div class="fact-item">
+              <dt class="fact-label">Currently</dt>
+              <dd class="fact-value">Co-Founder & Full Stack Software Engineer at Alaska Tech</dd>
+            </div>
+            <div class="fact-item">
+              <dt class="fact-label">Background</dt>
+              <dd class="fact-value">Food Engineering → Software Engineering</dd>
+            </div>
+          </dl>
+        </aside>
       </div>
     </Container>
   </Section>
 
-  <!-- Final CTA -->
   <CTASection
-    title="¿Buscas un Software Engineer para construir o escalar tu producto?"
-    description="Analicemos tus objetivos y retos técnicos para diseñar juntos la mejor arquitectura."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 
@@ -126,106 +90,106 @@ import Button from '../components/Button.astro';
     line-height: 1.6;
   }
 
-  .story-container {
-    max-width: 840px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-16, 64px);
-    padding: var(--space-8, 32px) 0;
+  .content-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-16, 64px);
   }
 
-  .story-block p {
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12, 48px);
+  }
+
+  @media (min-width: 1024px) {
+    .about-grid {
+      grid-template-columns: 1fr 340px;
+      gap: var(--space-16, 64px);
+      align-items: start;
+    }
+  }
+
+  .about-prose {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-body, 18px);
+    font-size: var(--font-size-body-lg, 20px);
     line-height: 1.75;
-    margin-top: var(--space-4, 16px);
   }
 
-  .story-block em {
-    color: var(--color-text-primary);
-    font-style: normal;
+  .about-prose p {
+    margin-bottom: var(--space-8, 32px);
   }
 
-  .evolution-path {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3, 12px);
+  .about-prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  .pull-quote {
     margin: var(--space-8, 32px) 0;
+    padding: var(--space-6, 24px) var(--space-8, 32px);
+    border-left: 4px solid var(--color-primary);
+    background-color: var(--color-surface);
+    border-radius: 0 8px 8px 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h3, 28px);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .quick-facts-panel {
     background-color: var(--color-surface);
     border: 1px solid var(--color-surface-elevated);
     border-radius: 12px;
     padding: var(--space-6, 24px);
   }
 
-  @media (min-width: 768px) {
-    .evolution-path {
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-    }
+  .profile-image-wrapper {
+    margin-bottom: var(--space-6, 24px);
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
   }
 
-  .step {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3, 12px);
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .step-num {
-    color: var(--color-primary);
-    font-family: var(--font-family-sans);
-    font-weight: 700;
-    font-size: var(--font-size-small, 16px);
-  }
-
-  .step-label {
+  .facts-title {
     color: var(--color-text-primary);
-    font-size: var(--font-size-small, 16px);
-    font-weight: 500;
+    font-size: var(--font-size-h4, 20px);
+    font-weight: 600;
+    margin-bottom: var(--space-4, 16px);
+    padding-bottom: var(--space-3, 12px);
+    border-bottom: 1px solid var(--color-surface-elevated);
   }
 
-  .step-arrow {
-    color: var(--color-text-muted);
-    font-size: 14px;
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .step-arrow {
-      display: block;
-    }
-  }
-
-  .cv-action-box {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-surface-elevated);
-    border-radius: 12px;
-    padding: var(--space-8, 32px);
+  .facts-list {
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 16px);
-    margin-top: var(--space-6, 24px);
+    margin: 0;
   }
 
-  @media (min-width: 768px) {
-    .cv-action-box {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
+  .fact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
-  .cv-title {
+  .fact-label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption, 14px);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .fact-value {
     color: var(--color-text-primary);
-    font-size: var(--font-size-h4, 24px);
-    font-weight: 600;
-  }
-
-  .cv-subtitle {
-    color: var(--color-text-secondary);
     font-size: var(--font-size-small, 16px);
-    margin-top: 4px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
   }
 </style>

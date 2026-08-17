@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CTASection from '../../components/CTASection.astro';
+
+// Section 6 ES - 6 service cards from docs/00_COPY_MAESTRO_WEB_BILINGUE_V3.md
+const servicesES = [
+  {
+    title: 'Sistemas de Inteligencia Artificial',
+    description: 'Diseño e implementación de sistemas RAG, búsqueda semántica, chatbots especializados y procesamiento documental integrados a aplicaciones existentes.',
+    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
+  },
+  {
+    title: 'Desarrollo Backend',
+    description: 'Diseño e implementación de servicios Backend, lógica de negocio y persistencia para productos digitales.',
+    technologies: ['Node.js', 'TypeScript', 'Express', 'Laravel'],
+  },
+  {
+    title: 'Desarrollo Full Stack',
+    description: 'Desarrollo de funcionalidades completas desde el modelo de datos y la lógica de negocio hasta las APIs y la interfaz.',
+    technologies: ['TypeScript', 'Node.js', 'React', 'Next.js'],
+  },
+  {
+    title: 'APIs e Integraciones',
+    description: 'Diseño e implementación de APIs REST e integraciones entre aplicaciones y servicios externos.',
+    technologies: ['REST', 'Node.js', 'PostgreSQL', 'Webhooks'],
+  },
+  {
+    title: 'Arquitectura de Software',
+    description: 'Diseño y evolución de estructuras de software aplicando patrones y principios de arquitectura según las necesidades reales del producto.',
+    technologies: ['DDD', 'Arquitectura Hexagonal', 'Event-Driven'],
+  },
+  {
+    title: 'Revisión Técnica',
+    description: 'Revisión de arquitectura, decisiones de implementación y problemas estructurales antes de avanzar con una solución.',
+    technologies: ['Arquitectura', 'Backend', 'APIs', 'Diseño de software'],
+  },
+];
+---
+
+<Layout
+  title="Servicios de Ingeniería de Software — Brayan Mercado"
+  description="Desarrollo Full Stack, ingeniería Backend, arquitectura e integración de inteligencia artificial para productos digitales."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Servicios de Ingeniería de Software</Heading>
+      <p class="page-subtitle">
+        Desarrollo Full Stack, ingeniería Backend, arquitectura e integración de inteligencia artificial para productos digitales.
+      </p>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container>
+      <div class="services-grid horizontal-scroll-mobile">
+        {
+          servicesES.map((service) => (
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              technologies={service.technologies}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Tienes un proyecto en desarrollo?"
+    description="Cuéntame qué estás construyendo y revisamos dónde puedo aportar."
+    button={{ label: 'Hablemos', href: '/es/contacto', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8, 32px);
+    }
+  }
+</style>

@@ -2,6 +2,7 @@
 import Card from './Card.astro';
 import Badge from './Badge.astro';
 import styles from './ProductCard.module.css';
+import { getLangFromUrl, useTranslations } from '../i18n';
 
 interface Props {
   title: string;
@@ -19,9 +20,13 @@ const {
   class: className = '',
 } = Astro.props;
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
 const isLive = status === 'live';
 const badgeVariant = isLive ? 'accent' : 'default';
-const badgeText = isLive ? 'Live' : 'Coming Soon';
+const badgeText = isLive ? t('badge.live') : t('badge.comingSoon');
+const linkText = t('cta.viewProduct');
 ---
 
 <Card interactive={Boolean(link)} class:list={[styles.productCard, className]}>
@@ -41,7 +46,7 @@ const badgeText = isLive ? 'Live' : 'Coming Soon';
           rel="noopener noreferrer"
           class={styles.link}
         >
-          <span>Visit Website</span>
+          <span>{linkText}</span>
           <svg class={styles.linkIcon} viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"

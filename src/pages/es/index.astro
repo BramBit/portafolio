@@ -1,0 +1,296 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import CTASection from '../../components/CTASection.astro';
+import Button from '../../components/Button.astro';
+
+// Fetch content collections for ES
+const caseStudies = await getCollection('case-studies');
+const esCaseStudies = caseStudies
+  .filter((c) => c.id.startsWith('es/'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
+
+// Impact summaries map for ES case studies (Section 11 ES)
+const impactSummaries: Record<string, string> = {
+  zeus: 'Desarrollé capacidades Full Stack y Backend para una plataforma IoT que cubre uso de dispositivos, reportes financieros, soporte e IA aplicada.',
+  plei: 'Reemplacé Algolia por un motor de búsqueda híbrido construido a la medida y desarrollé capacidades reutilizables de RAG y soporte con IA para la plataforma.',
+  veciapp: 'Diseñé y construí el backend de un marketplace multirrol que conecta comerciantes locales con sus clientes.',
+  maleua: 'Construí un sitio institucional estático con una estructura de contenido diseñada para facilitar su mantenimiento.',
+};
+
+const engineeringArticles = await getCollection('engineering');
+const esEngineering = engineeringArticles
+  .filter((e) => e.id.startsWith('es/'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
+
+const products = await getCollection('products');
+const esProducts = products
+  .filter((p) => p.id.startsWith('es/'))
+  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+
+// Services in exact order from Section 5 ES
+const servicesES = [
+  {
+    title: 'Sistemas de IA',
+    description: 'Sistemas RAG, búsqueda semántica, chatbots especializados y procesamiento documental integrados a aplicaciones existentes.',
+    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
+  },
+  {
+    title: 'Desarrollo Backend',
+    description: 'Servicios Backend, lógica de negocio, modelado de datos y persistencia para productos digitales.',
+    technologies: ['Node.js', 'TypeScript', 'Express', 'Laravel'],
+  },
+  {
+    title: 'Desarrollo Full Stack',
+    description: 'Funcionalidades de punta a punta, desde el modelo de datos y la lógica de negocio hasta las APIs y la interfaz.',
+    technologies: ['TypeScript', 'Node.js', 'React', 'Next.js'],
+  },
+  {
+    title: 'APIs e Integraciones',
+    description: 'APIs REST e integraciones entre aplicaciones y servicios externos.',
+    technologies: ['REST', 'Node.js', 'PostgreSQL', 'Webhooks'],
+  },
+  {
+    title: 'Arquitectura de Software',
+    description: 'Diseño y evolución de estructuras de software según las necesidades reales del producto.',
+    technologies: ['DDD', 'Arquitectura Hexagonal', 'Event-Driven'],
+  },
+  {
+    title: 'Revisión Técnica',
+    description: 'Revisión de arquitectura, decisiones de implementación y problemas estructurales antes de avanzar con una solución.',
+    technologies: ['Arquitectura', 'Backend', 'APIs', 'Diseño de software'],
+  },
+];
+---
+
+<Layout
+  title="Brayan Mercado — Ingeniero de Software Full Stack"
+  description="Diseño y construyo funcionalidades Full Stack, sistemas Backend y capacidades de IA aplicada para productos reales."
+>
+  <!-- Hero Section (Section 4 ES) -->
+  <Hero
+    title="Construyo software de punta a punta: interfaces, APIs, arquitectura e IA aplicada."
+    subtitle="Brayan Mercado — Ingeniero de Software Full Stack"
+    description="Desarrollo funcionalidades Full Stack y sistemas de backend, integrando interfaz, APIs, datos e IA dentro de una misma solución."
+    primaryButton={{ label: 'Ver el trabajo', href: '/es/casos-de-exito' }}
+    secondaryButton={{ label: 'Hablemos de tu proyecto', href: '/es/contacto' }}
+  />
+
+  <!-- Services Preview Section (Section 5 ES) -->
+  <Section id="services">
+    <Container>
+      <div class="section-header">
+        <Heading level={2}>Servicios</Heading>
+      </div>
+
+      <div class="grid-two-cols horizontal-scroll-mobile">
+        {
+          servicesES.map((service) => (
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              technologies={service.technologies}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Featured Experience Section (Section 8 ES) -->
+  <Section id="case-studies">
+    <Container>
+      <div class="section-header-flex">
+        <div>
+          <Heading level={2}>Experiencia</Heading>
+        </div>
+        <Button variant="secondary" href="/es/casos-de-exito">Ver toda la experiencia</Button>
+      </div>
+
+      <div class="grid-cards horizontal-scroll-mobile">
+        {
+          esCaseStudies.map((study) => (
+            <CaseStudyCard
+              title={study.data.title}
+              summary={impactSummaries[study.data.slug] || study.data.summary}
+              technologies={study.data.technologies}
+              slug={study.data.slug}
+              href={`/es/casos-de-exito/${study.data.slug}`}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Engineering Highlights Section (Section 13 ES) -->
+  <Section id="engineering">
+    <Container>
+      <div class="section-header-flex">
+        <div>
+          <Heading level={2}>Ingeniería</Heading>
+        </div>
+        <Button variant="secondary" href="/es/ingenieria">Ver todos los artículos</Button>
+      </div>
+
+      <div class="grid-cards horizontal-scroll-mobile">
+        {
+          esEngineering.map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              excerpt={article.data.excerpt}
+              readingTime={article.data.readingTime}
+              tags={article.data.tags}
+              slug={article.data.slug}
+              href={`/es/ingenieria/${article.data.slug}`}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Featured Products Section (Section 18 ES) -->
+  <Section id="products">
+    <Container>
+      <div class="section-header-flex">
+        <div>
+          <Heading level={2}>Productos</Heading>
+        </div>
+        <Button variant="secondary" href="/es/productos">Ver todos los productos</Button>
+      </div>
+
+      <div class="grid-two-cols horizontal-scroll-mobile">
+        {
+          esProducts.map((product) => (
+            <ProductCard
+              title={product.data.title}
+              tagline={product.data.tagline}
+              status={product.data.status}
+              link={product.data.website}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <!-- About Preview Section (Section 16 ES) -->
+  <Section id="about-preview">
+    <Container>
+      <div class="about-box">
+        <div class="about-content">
+          <Heading level={2}>Sobre mí</Heading>
+          <p class="about-text">
+            No empecé construyendo software. Empecé como ingeniero de alimentos, aprendiendo a modelar procesos, controlar calidad y resolver problemas con análisis y estructura — mucho antes de tocar una línea de TypeScript.
+          </p>
+          <p class="about-text">
+            Eso cambió cuando entré al desarrollo de software: primero construyendo interfaces, después sistemas backend, y con el tiempo asumiendo decisiones de arquitectura de punta a punta...
+          </p>
+          <div class="about-action">
+            <Button variant="secondary" href="/es/sobre-mi">Leer más →</Button>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Final CTA Section (Section 7 ES) -->
+  <CTASection
+    title="¿Tienes un proyecto en desarrollo?"
+    description="Cuéntame qué estás construyendo y revisamos dónde puedo aportar."
+    button={{ label: 'Hablemos', href: '/es/contacto', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .section-header {
+    margin-bottom: var(--space-8, 32px);
+  }
+
+  .section-header-flex {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 16px);
+    margin-bottom: var(--space-8, 32px);
+  }
+
+  @media (min-width: 768px) {
+    .section-header-flex {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .section-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-2, 8px);
+    max-width: 640px;
+  }
+
+  .grid-two-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .grid-two-cols {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .grid-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .grid-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .about-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 12px;
+    padding: var(--space-8, 32px);
+  }
+
+  .about-content {
+    max-width: 800px;
+  }
+
+  .about-text {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    line-height: 1.6;
+    margin-top: var(--space-4, 16px);
+    margin-bottom: var(--space-4, 16px);
+  }
+
+  .about-action {
+    display: flex;
+    margin-top: var(--space-6, 24px);
+  }
+</style>

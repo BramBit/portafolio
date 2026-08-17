@@ -1,0 +1,195 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import CTASection from '../../components/CTASection.astro';
+---
+
+<Layout
+  title="Sobre mí — Brayan Mercado | Ingeniero de Software Full Stack"
+  description="Ingeniero de Software Full Stack enfocado en desarrollo de producto, arquitectura de software e IA aplicada."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Sobre mí</Heading>
+      <p class="page-subtitle">
+        Ingeniero de Software Full Stack enfocado en desarrollo de producto, arquitectura de software e IA aplicada.
+      </p>
+    </Container>
+  </Section>
+
+  <Section class="content-section">
+    <Container>
+      <div class="about-grid">
+        <article class="about-prose">
+          <p>
+            No empecé construyendo software. Empecé como ingeniero de alimentos, aprendiendo a modelar procesos, controlar calidad y resolver problemas con análisis y estructura — mucho antes de tocar una línea de TypeScript.
+          </p>
+
+          <p>
+            Eso cambió cuando entré al desarrollo de software: primero construyendo interfaces, después sistemas backend, y con el tiempo asumiendo decisiones de arquitectura de punta a punta. En Belvi Digital trabajé en Zeus, una plataforma IoT para dispositivos médicos estéticos, y PLEI, una plataforma e-learning — empecé en frontend y fui asumiendo responsabilidades backend y full stack. En Alaska Tech, la empresa que cofundé, diseñé el backend de VeciApp, un marketplace que conecta comerciantes locales con su comunidad.
+          </p>
+
+          <blockquote class="pull-quote">
+            "Dejé de tratar la IA como un plugin y empecé a tratarla como un sistema."
+          </blockquote>
+
+          <p>
+            Ese mismo principio guía mi trabajo: entender primero el producto y el problema, y después elegir la arquitectura que realmente encaja con él.
+          </p>
+        </article>
+
+        <aside class="quick-facts-panel">
+          <div class="profile-image-wrapper">
+            <img src="/bram-profile.webp" alt="Retrato de Brayan Mercado" class="profile-image" />
+          </div>
+          <h3 class="facts-title">Datos rápidos</h3>
+          <dl class="facts-list">
+            <div class="fact-item">
+              <dt class="fact-label">Foco</dt>
+              <dd class="fact-value">Full Stack, Backend, IA Aplicada, Arquitectura de Software</dd>
+            </div>
+            <div class="fact-item">
+              <dt class="fact-label">Ecosistema</dt>
+              <dd class="fact-value">TypeScript</dd>
+            </div>
+            <div class="fact-item">
+              <dt class="fact-label">Actualmente</dt>
+              <dd class="fact-value">Co-fundador y Full Stack Software Engineer en Alaska Tech</dd>
+            </div>
+            <div class="fact-item">
+              <dt class="fact-label">Formación previa</dt>
+              <dd class="fact-value">Ingeniería de Alimentos → Ingeniería de Software</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Tienes un proyecto en desarrollo?"
+    description="Cuéntame qué estás construyendo y revisamos dónde puedo aportar."
+    button={{ label: 'Hablemos', href: '/es/contacto', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+    border-bottom: 1px solid var(--color-surface-elevated);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .content-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-16, 64px);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12, 48px);
+  }
+
+  @media (min-width: 1024px) {
+    .about-grid {
+      grid-template-columns: 1fr 340px;
+      gap: var(--space-16, 64px);
+      align-items: start;
+    }
+  }
+
+  .about-prose {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    line-height: 1.75;
+  }
+
+  .about-prose p {
+    margin-bottom: var(--space-8, 32px);
+  }
+
+  .about-prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  .pull-quote {
+    margin: var(--space-8, 32px) 0;
+    padding: var(--space-6, 24px) var(--space-8, 32px);
+    border-left: 4px solid var(--color-primary);
+    background-color: var(--color-surface);
+    border-radius: 0 8px 8px 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h3, 28px);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .quick-facts-panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 12px;
+    padding: var(--space-6, 24px);
+  }
+
+  .profile-image-wrapper {
+    margin-bottom: var(--space-6, 24px);
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+  }
+
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .facts-title {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-h4, 20px);
+    font-weight: 600;
+    margin-bottom: var(--space-4, 16px);
+    padding-bottom: var(--space-3, 12px);
+    border-bottom: 1px solid var(--color-surface-elevated);
+  }
+
+  .facts-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 16px);
+    margin: 0;
+  }
+
+  .fact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .fact-label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption, 14px);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .fact-value {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-small, 16px);
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
+  }
+</style>

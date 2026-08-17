@@ -1,36 +1,62 @@
 {
-  "name": "Brayan Mercado — Backend Engineer",
+  "name": "Brayan Mercado — Software Engineer",
   "short_name": "Brayan Mercado",
-  "description": "Portfolio de Brayan Mercado, Backend Engineer especializado en Arquitectura Hexagonal, DDD y pipelines de IA en producción.",
-
+  "description": "Portfolio profesional de Brayan Mercado, Software Engineer especializado en backend, desarrollo full stack, arquitectura de software e IA aplicada.",
   "start_url": "/",
-  "display": "minimal-ui",
-  "theme_color": "#5558e3",
-  "background_color": "#f5f6ff",
+  "display": "standalone",
+  "theme_color": "#111318",
+  "background_color": "#111318",
   "lang": "es",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
       "name": "Ver Proyectos",
+      "short_name": "Proyectos",
       "url": "/#projects",
-      "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Experiencia",
+      "short_name": "Experiencia",
       "url": "/#experience",
-      "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Contacto",
+      "short_name": "Contacto",
       "url": "/#contact",
-      "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }

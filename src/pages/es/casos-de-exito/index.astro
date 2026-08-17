@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import Container from '../../../components/Container.astro';
+import Heading from '../../../components/Heading.astro';
+import CaseStudyCard from '../../../components/CaseStudyCard.astro';
+import CTASection from '../../../components/CTASection.astro';
+
+const caseStudies = await getCollection('case-studies');
+
+// Filter case studies for ES
+const esCaseStudies = caseStudies
+  .filter((c) => c.id.startsWith('es/') || c.filePath?.includes('/es/'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<Layout
+  title="Experiencia — Brayan Mercado | Software Engineer"
+  description="Proyectos en los que he participado y sistemas de software que desarrollé a través de frontend, backend e IA aplicada."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Experiencia</Heading>
+      <p class="page-subtitle">
+        Proyectos en los que he participado y sistemas de software que desarrollé a través de frontend, backend e IA aplicada.
+      </p>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container>
+      <div class="case-studies-grid horizontal-scroll-mobile">
+        {
+          esCaseStudies.map((study) => (
+            <CaseStudyCard
+              title={study.data.title}
+              summary={study.data.impactSummary || study.data.summary}
+              technologies={study.data.technologies}
+              slug={study.data.slug}
+              href={`/es/casos-de-exito/${study.data.slug}`}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Tienes un proyecto en desarrollo?"
+    description="Cuéntame qué estás construyendo y revisamos dónde puedo aportar."
+    button={{ label: 'Hablemos', href: '/es/contacto', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .case-studies-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .case-studies-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .case-studies-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

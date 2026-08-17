@@ -9,28 +9,30 @@ import CTASection from '../../components/CTASection.astro';
 
 const products = await getCollection('products');
 
-// Sort products: featured first
-const sortedProducts = products.sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+// Filter products for EN
+const enProducts = products
+  .filter((p) => p.id.startsWith('en/'))
+  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
 ---
 
 <Layout
-  title="Productos — Brayan Mercado"
-  description="Plataformas y soluciones de software creadas e impulsadas por tecnología e inteligencia artificial."
+  title="Products — Brayan Mercado | Software Engineer"
+  description="Products and software projects developed around specific problems."
 >
   <Section class="page-header-section">
     <Container>
-      <Heading level={1}>Productos Propios</Heading>
+      <Heading level={1}>Products</Heading>
       <p class="page-subtitle">
-        Plataformas SaaS e iniciativas tecnológicas desarrolladas para resolver problemas concretos de industria mediante arquitectura moderna e Inteligencia Artificial.
+        Products and software projects developed around specific problems.
       </p>
     </Container>
   </Section>
 
   <Section>
     <Container>
-      <div class="products-grid">
+      <div class="products-grid horizontal-scroll-mobile">
         {
-          sortedProducts.map((product) => (
+          enProducts.map((product) => (
             <a href={`/products/${product.data.slug}`} class="product-link">
               <ProductCard
                 title={product.data.title}
@@ -46,9 +48,9 @@ const sortedProducts = products.sort((a, b) => (b.data.featured ? 1 : 0) - (a.da
   </Section>
 
   <CTASection
-    title="¿Te interesa colaborar o conocer más sobre nuestros productos?"
-    description="Hablemos sobre alianzas estratégicas, demos o integración de soluciones."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 

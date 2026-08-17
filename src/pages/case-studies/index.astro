@@ -9,35 +9,36 @@ import CTASection from '../../components/CTASection.astro';
 
 const caseStudies = await getCollection('case-studies');
 
-// Sort case studies by publishedAt date descending
-const sortedCaseStudies = caseStudies.sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
-);
+// Filter case studies for EN
+const enCaseStudies = caseStudies
+  .filter((c) => c.id.startsWith('en/') || !c.id.startsWith('es/'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 ---
 
 <Layout
-  title="Case Studies — Brayan Mercado"
-  description="Casos de estudio detallados sobre arquitectura de software, plataformas empresariales y soluciones de ingeniería."
+  title="Experience — Brayan Mercado | Software Engineer"
+  description="Projects I've worked on and the software systems I helped build across frontend, backend, and applied AI."
 >
   <Section class="page-header-section">
     <Container>
-      <Heading level={1}>Case Studies</Heading>
+      <Heading level={1}>Experience</Heading>
       <p class="page-subtitle">
-        Análisis detallados de proyectos de ingeniería: desde los problemas de negocio y los retos técnicos hasta la arquitectura y los resultados obtenidos.
+        Projects I've worked on and the software systems I helped build across frontend, backend, and applied AI.
       </p>
     </Container>
   </Section>
 
   <Section>
     <Container>
-      <div class="case-studies-grid">
+      <div class="case-studies-grid horizontal-scroll-mobile">
         {
-          sortedCaseStudies.map((study) => (
+          enCaseStudies.map((study) => (
             <CaseStudyCard
               title={study.data.title}
-              summary={study.data.summary}
+              summary={study.data.impactSummary || study.data.summary}
               technologies={study.data.technologies}
               slug={study.data.slug}
+              href={`/case-studies/${study.data.slug}`}
             />
           ))
         }
@@ -46,9 +47,9 @@ const sortedCaseStudies = caseStudies.sort(
   </Section>
 
   <CTASection
-    title="¿Quieres discutir cómo aplicar este tipo de arquitectura a tu producto?"
-    description="Hablemos sobre las necesidades de tu sistema y diseñemos la solución técnica adecuada."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 

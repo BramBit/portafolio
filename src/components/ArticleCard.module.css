@@ -96,3 +96,15 @@
   stroke-width: 1.5;
   fill: none;
 }
+
+@media (max-width: 768px) {
+  .title {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    margin-bottom: var(--space-12, 12px);
+  }
+
+  .excerpt {
+    font-size: var(--font-size-small, 16px);
+    margin-bottom: var(--space-16, 16px);
+  }
+}

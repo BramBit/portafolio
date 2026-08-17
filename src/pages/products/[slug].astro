@@ -10,7 +10,8 @@ import CTASection from '../../components/CTASection.astro';
 
 export async function getStaticPaths() {
   const products = await getCollection('products');
-  return products.map((product) => ({
+  const enProducts = products.filter((product) => product.id.startsWith('en/'));
+  return enProducts.map((product) => ({
     params: { slug: product.data.slug },
     props: { product },
   }));
@@ -23,7 +24,7 @@ const isLive = product.data.status === 'live';
 ---
 
 <Layout
-  title={`${product.data.title} — Producto | Brayan Mercado`}
+  title={`${product.data.title} — Product | Brayan Mercado`}
   description={product.data.tagline}
 >
   <!-- Header Section -->
@@ -34,7 +35,7 @@ const isLive = product.data.status === 'live';
           <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="back-icon">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
-          Volver a Productos
+          Back to Products
         </a>
       </div>
 
@@ -68,21 +69,29 @@ const isLive = product.data.status === 'live';
   </Section>
 
   <!-- Problem / Solution Overview Cards -->
-  <Section class="overview-section">
-    <Container>
-      <div class="overview-grid">
-        <div class="info-card">
-          <Heading level={3} class="card-title">El Problema</Heading>
-          <p class="card-text">{product.data.problem}</p>
-        </div>
+  {
+    (product.data.problem || product.data.solution) && (
+      <Section class="overview-section">
+        <Container>
+          <div class="overview-grid">
+            {product.data.problem && (
+              <div class="info-card">
+                <Heading level={3} class="card-title">The Problem</Heading>
+                <p class="card-text">{product.data.problem}</p>
+              </div>
+            )}
 
-        <div class="info-card highlight-card">
-          <Heading level={3} class="card-title">La Solución</Heading>
-          <p class="card-text">{product.data.solution}</p>
-        </div>
-      </div>
-    </Container>
-  </Section>
+            {product.data.solution && (
+              <div class="info-card highlight-card">
+                <Heading level={3} class="card-title">The Solution</Heading>
+                <p class="card-text">{product.data.solution}</p>
+              </div>
+            )}
+          </div>
+        </Container>
+      </Section>
+    )
+  }
 
   <!-- Full Markdown Detail Content -->
   <Section class="content-section">
@@ -94,9 +103,9 @@ const isLive = product.data.status === 'live';
   </Section>
 
   <CTASection
-    title="¿Quieres conocer más detalles sobre este producto?"
-    description="Contáctame para solicitar una demostración, información técnica o evaluar posibilidades de integración."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project that needs to actually ship?"
+    description="Tell me about the problem you're trying to solve — not the tech stack you think you need. We'll figure out the second part together."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 
@@ -236,5 +245,62 @@ const isLive = product.data.status === 'live';
 
   .markdown-body :global(li) {
     margin-bottom: var(--space-2, 8px);
+  }
+
+  @media (max-width: 768px) {
+    .header-section {
+      padding-top: var(--space-8, 32px);
+      padding-bottom: var(--space-6, 24px);
+    }
+
+    .header-top {
+      flex-wrap: wrap;
+      gap: var(--space-2, 8px);
+    }
+
+    .tagline {
+      font-size: var(--font-size-small, 16px);
+      line-height: 1.5;
+      margin-bottom: var(--space-4, 16px);
+    }
+
+    .overview-section {
+      padding-top: var(--space-6, 24px);
+      padding-bottom: var(--space-6, 24px);
+    }
+
+    .info-card {
+      padding: var(--space-5, 20px) var(--space-4, 16px);
+    }
+
+    .card-text {
+      font-size: var(--font-size-small, 16px);
+    }
+
+    .content-section {
+      padding-top: var(--space-6, 24px);
+      padding-bottom: var(--space-12, 48px);
+    }
+
+    .markdown-body {
+      font-size: var(--font-size-small, 16px);
+      line-height: 1.65;
+    }
+
+    .markdown-body :global(h2) {
+      font-size: clamp(1.3rem, 5vw, 1.6rem);
+      margin-top: var(--space-6, 24px);
+      margin-bottom: var(--space-3, 12px);
+    }
+
+    .markdown-body :global(p) {
+      margin-bottom: var(--space-4, 16px);
+    }
+
+    .markdown-body :global(ul),
+    .markdown-body :global(ol) {
+      margin-bottom: var(--space-4, 16px);
+      padding-left: var(--space-4, 16px);
+    }
   }
 </style>

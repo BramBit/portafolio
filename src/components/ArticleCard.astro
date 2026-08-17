@@ -2,6 +2,7 @@
 import Card from './Card.astro';
 import Tag from './Tag.astro';
 import styles from './ArticleCard.module.css';
+import { getLangFromUrl, useTranslations } from '../i18n';
 
 interface Props {
   title: string;
@@ -9,6 +10,7 @@ interface Props {
   readingTime: string;
   tags?: string[];
   slug: string;
+  href?: string;
   class?: string;
 }
 
@@ -18,10 +20,12 @@ const {
   readingTime,
   tags = [],
   slug,
+  href = `/engineering/${slug}`,
   class: className = '',
 } = Astro.props;
 
-const href = `/engineering/${slug}`;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <a href={href} class={styles.cardLink}>
@@ -51,7 +55,7 @@ const href = `/engineering/${slug}`;
         )
       }
       <span class={styles.readMore}>
-        Read Article
+        {t('nav.readMore')}
         <svg class={styles.arrowIcon} viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"

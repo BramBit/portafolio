@@ -12,70 +12,90 @@ import ProductCard from '../components/ProductCard.astro';
 import CTASection from '../components/CTASection.astro';
 import Button from '../components/Button.astro';
 
-// Fetch content collections
+// Fetch content collections for EN
 const caseStudies = await getCollection('case-studies');
-const featuredCaseStudies = caseStudies
+const enCaseStudies = caseStudies
+  .filter((c) => c.id.startsWith('en/'))
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
   .slice(0, 3);
 
+// Impact summaries map for EN case studies (Section 11 EN)
+const impactSummaries: Record<string, string> = {
+  zeus: 'Developed full-stack and backend capabilities for an IoT platform covering device usage, financial reporting, support, and applied AI.',
+  plei: 'Replaced Algolia with a custom hybrid search engine and built reusable RAG and AI support capabilities for the platform.',
+  veciapp: 'Designed and built the backend for a multi-role marketplace connecting local merchants with their customers.',
+  maleua: 'Built a static institutional website with a content structure designed for simple maintenance.',
+};
+
 const engineeringArticles = await getCollection('engineering');
-const featuredEngineering = engineeringArticles
+const enEngineering = engineeringArticles
+  .filter((e) => e.id.startsWith('en/'))
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
   .slice(0, 3);
 
 const products = await getCollection('products');
-const featuredProducts = products.sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+const enProducts = products
+  .filter((p) => p.id.startsWith('en/'))
+  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
 
-const servicesSample = [
+// Services in exact order from Section 5 EN
+const servicesEN = [
   {
-    title: 'Arquitectura de Sistemas & Escalabilidad',
-    description: 'Diseño y desarrollo de arquitecturas resilientes capaces de soportar alto tráfico y operaciones críticas de negocio.',
-    technologies: ['Distributed Systems', 'Microservices', 'Cloud Architecture']
+    title: 'AI Systems',
+    description: 'RAG systems, semantic search, specialized chatbots, and document processing integrated into existing applications.',
+    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
   },
   {
-    title: 'Desarrollo de Plataformas Empresariales',
-    description: 'Construcción de aplicaciones web completas end-to-end enfocadas en rendimiento, mantenibilidad y valor estratégico.',
-    technologies: ['Full Stack', 'Astro', 'TypeScript', 'Node.js']
+    title: 'Backend Development',
+    description: 'Backend services, business logic, data modeling, and persistence for digital products.',
+    technologies: ['Node.js', 'TypeScript', 'Express', 'Laravel'],
   },
   {
-    title: 'IA Aplicada & Automatización',
-    description: 'Integración de modelos de lenguaje, sistemas RAG y pipelines de automatización inteligente para optimizar procesos.',
-    technologies: ['RAG Systems', 'LLM Integration', 'Vector Databases']
+    title: 'Full Stack Development',
+    description: 'End-to-end features from data models and business logic through APIs and interfaces.',
+    technologies: ['TypeScript', 'Node.js', 'React', 'Next.js'],
   },
   {
-    title: 'Consultoría Técnica & Lead Engineering',
-    description: 'Acompañamiento estratégico en decisiones de software, auditoría de código, optimización de rendimiento y buenas prácticas.',
-    technologies: ['Code Audit', 'Performance Optimization', 'Technical Leadership']
-  }
+    title: 'APIs & Integrations',
+    description: 'REST APIs and integrations between applications and external services.',
+    technologies: ['REST', 'Node.js', 'PostgreSQL', 'Webhooks'],
+  },
+  {
+    title: 'Software Architecture',
+    description: 'Architecture and structural decisions applied according to the actual needs of the product.',
+    technologies: ['DDD', 'Hexagonal Architecture', 'Event-Driven'],
+  },
+  {
+    title: 'Technical Review',
+    description: 'Review of architecture, implementation decisions, and structural problems before more work is built on top of them.',
+    technologies: ['Architecture', 'Backend', 'APIs', 'Software Design'],
+  },
 ];
 ---
 
 <Layout
-  title="Brayan Mercado — Software Engineer"
-  description="Building scalable products, intelligent systems and AI-powered experiences."
+  title="Brayan Mercado — Full Stack Software Engineer"
+  description="I design and build full-stack features, backend systems, and applied AI capabilities for real products."
 >
-  <!-- Hero Section -->
+  <!-- Hero Section (Section 4 EN) -->
   <Hero
-    title="Brayan Mercado"
-    subtitle="Software Engineer"
-    description="Building scalable products, intelligent systems and AI-powered experiences."
-    primaryButton={{ label: 'Ver Case Studies', href: '/case-studies' }}
-    secondaryButton={{ label: 'Contacto', href: '/contact' }}
+    title="I build end-to-end software: interfaces, APIs, architecture, and applied AI."
+    subtitle="Brayan Mercado — Full Stack Software Engineer"
+    description="I develop Full Stack features and backend systems, integrating interfaces, APIs, data, and AI into a single solution."
+    primaryButton={{ label: 'See the work', href: '/case-studies' }}
+    secondaryButton={{ label: "Let's talk about your project", href: '/contact' }}
   />
 
-  <!-- Services Preview Section -->
+  <!-- Services Preview Section (Section 5 EN) -->
   <Section id="services">
     <Container>
       <div class="section-header">
-        <Heading level={2}>Capacidades & Servicios</Heading>
-        <p class="section-subtitle">
-          Soluciones de ingeniería orientadas a resolver problemas complejos y escalar productos.
-        </p>
+        <Heading level={2}>Services</Heading>
       </div>
 
-      <div class="grid-two-cols">
+      <div class="grid-two-cols horizontal-scroll-mobile">
         {
-          servicesSample.map((service) => (
+          servicesEN.map((service) => (
             <ServiceCard
               title={service.title}
               description={service.description}
@@ -87,27 +107,25 @@ const servicesSample = [
     </Container>
   </Section>
 
-  <!-- Featured Case Studies Section -->
+  <!-- Featured Experience Section (Section 8 EN) -->
   <Section id="case-studies">
     <Container>
       <div class="section-header-flex">
         <div>
-          <Heading level={2}>Featured Case Studies</Heading>
-          <p class="section-subtitle">
-            Proyectos reales de gran escala: el problema de negocio, la arquitectura y los resultados obtenidos.
-          </p>
+          <Heading level={2}>Experience</Heading>
         </div>
-        <Button variant="secondary" href="/case-studies">Ver todos los casos</Button>
+        <Button variant="secondary" href="/case-studies">View all experience</Button>
       </div>
 
-      <div class="grid-cards">
+      <div class="grid-cards horizontal-scroll-mobile">
         {
-          featuredCaseStudies.map((study) => (
+          enCaseStudies.map((study) => (
             <CaseStudyCard
               title={study.data.title}
-              summary={study.data.summary}
+              summary={impactSummaries[study.data.slug] || study.data.summary}
               technologies={study.data.technologies}
               slug={study.data.slug}
+              href={`/case-studies/${study.data.slug}`}
             />
           ))
         }
@@ -115,28 +133,26 @@ const servicesSample = [
     </Container>
   </Section>
 
-  <!-- Engineering Highlights Section -->
+  <!-- Engineering Highlights Section (Section 13 EN) -->
   <Section id="engineering">
     <Container>
       <div class="section-header-flex">
         <div>
-          <Heading level={2}>Engineering Highlights</Heading>
-          <p class="section-subtitle">
-            Artículos y desgloses técnicos profundos sobre arquitectura, IA aplicada y soluciones de ingeniería.
-          </p>
+          <Heading level={2}>Engineering</Heading>
         </div>
-        <Button variant="secondary" href="/engineering">Ver todos los artículos</Button>
+        <Button variant="secondary" href="/engineering">View all articles</Button>
       </div>
 
-      <div class="grid-cards">
+      <div class="grid-cards horizontal-scroll-mobile">
         {
-          featuredEngineering.map((article) => (
+          enEngineering.map((article) => (
             <ArticleCard
               title={article.data.title}
               excerpt={article.data.excerpt}
               readingTime={article.data.readingTime}
               tags={article.data.tags}
               slug={article.data.slug}
+              href={`/engineering/${article.data.slug}`}
             />
           ))
         }
@@ -144,22 +160,19 @@ const servicesSample = [
     </Container>
   </Section>
 
-  <!-- Featured Products Section -->
+  <!-- Featured Products Section (Section 18 EN) -->
   <Section id="products">
     <Container>
       <div class="section-header-flex">
         <div>
-          <Heading level={2}>Productos Propios</Heading>
-          <p class="section-subtitle">
-            Plataformas y soluciones SaaS diseñadas e impulsadas por tecnología e inteligencia artificial.
-          </p>
+          <Heading level={2}>Products</Heading>
         </div>
-        <Button variant="secondary" href="/products">Ver todos los productos</Button>
+        <Button variant="secondary" href="/products">View all products</Button>
       </div>
 
-      <div class="grid-two-cols">
+      <div class="grid-two-cols horizontal-scroll-mobile">
         {
-          featuredProducts.map((product) => (
+          enProducts.map((product) => (
             <ProductCard
               title={product.data.title}
               tagline={product.data.tagline}
@@ -172,28 +185,31 @@ const servicesSample = [
     </Container>
   </Section>
 
-  <!-- About Preview Section -->
+  <!-- About Preview Section (Section 16 EN) -->
   <Section id="about-preview">
     <Container>
       <div class="about-box">
         <div class="about-content">
-          <Heading level={2}>Sobre mí</Heading>
+          <Heading level={2}>About Me</Heading>
           <p class="about-text">
-            Soy Software Engineer enfocado en diseñar y construir sistemas escalables, plataformas empresariales e integraciones de IA avanzada. Trabajo colaborando estrechamente con fundadores y equipos para transformar requisitos complejos de negocio en productos técnicos sólidos.
+            I didn't start out building software. I started as a food engineer, learning to model processes, control quality, and solve problems with structure and analysis — long before I touched a line of TypeScript.
+          </p>
+          <p class="about-text">
+            That changed when I moved into software: first building interfaces, then backend systems, and eventually taking on architecture decisions end to end...
           </p>
           <div class="about-action">
-            <Button variant="secondary" href="/about">Conocer más sobre mi trayectoria →</Button>
+            <Button variant="secondary" href="/about">Read more →</Button>
           </div>
         </div>
       </div>
     </Container>
   </Section>
 
-  <!-- Final CTA Section -->
+  <!-- Final CTA Section (Section 7 EN) -->
   <CTASection
-    title="¿Tienes un proyecto o sistema complejo en mente?"
-    description="Hablemos sobre cómo puedo ayudarte a construir una arquitectura escalable o potenciar tu producto con IA."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 
@@ -270,10 +286,11 @@ const servicesSample = [
     font-size: var(--font-size-body-lg, 20px);
     line-height: 1.6;
     margin-top: var(--space-4, 16px);
-    margin-bottom: var(--space-6, 24px);
+    margin-bottom: var(--space-4, 16px);
   }
 
   .about-action {
     display: flex;
+    margin-top: var(--space-6, 24px);
   }
 </style>

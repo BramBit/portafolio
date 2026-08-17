@@ -8,6 +8,7 @@ interface Props {
   summary: string;
   technologies?: string[];
   slug: string;
+  href?: string;
   class?: string;
 }
 
@@ -16,10 +17,9 @@ const {
   summary,
   technologies = [],
   slug,
+  href = `/case-studies/${slug}`,
   class: className = '',
 } = Astro.props;
-
-const href = `/case-studies/${slug}`;
 ---
 
 <a href={href} class={styles.cardLink}>

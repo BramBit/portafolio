@@ -6,58 +6,59 @@ import Heading from '../components/Heading.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import CTASection from '../components/CTASection.astro';
 
-const services = [
+// Section 6 EN - 6 service cards from docs/00_COPY_MAESTRO_WEB_BILINGUE_V3.md
+const servicesEN = [
+  {
+    title: 'AI Systems',
+    description: 'Design and implementation of RAG systems, semantic search, specialized chatbots, and document processing integrated into existing applications.',
+    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
+  },
   {
     title: 'Backend Development',
-    description: 'Diseño y desarrollo de sistemas backend escalables, capaces de soportar el crecimiento de tu negocio sin reescrituras costosas.',
-    technologies: ['Node.js', 'TypeScript', 'Laravel']
+    description: 'Design and implementation of backend services, business logic, and persistence for digital products.',
+    technologies: ['Node.js', 'TypeScript', 'Express', 'Laravel'],
   },
   {
     title: 'Full Stack Development',
-    description: 'Construcción de productos completos, de la base de datos a la interfaz, con una sola visión de arquitectura de punta a punta.',
-    technologies: ['Astro', 'Node.js', 'TypeScript']
+    description: 'End-to-end feature development, from data models and business logic to APIs and the interface.',
+    technologies: ['TypeScript', 'Node.js', 'React', 'Next.js'],
   },
   {
-    title: 'AI Integration',
-    description: 'Integración de inteligencia artificial en procesos reales de negocio: asistentes inteligentes, búsqueda semántica y automatización de tareas repetitivas.',
-    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI']
-  },
-  {
-    title: 'API Development',
-    description: 'Diseño de APIs REST claras, documentadas y preparadas para que otros equipos o aplicaciones se integren sin fricción.',
-    technologies: ['REST', 'Node.js']
+    title: 'APIs & Integrations',
+    description: 'Design and implementation of REST APIs and integrations between applications and external services.',
+    technologies: ['REST', 'Node.js', 'PostgreSQL', 'Webhooks'],
   },
   {
     title: 'Software Architecture',
-    description: 'Decisiones de arquitectura pensadas para que el sistema siga siendo mantenible cuando el equipo y el producto crezcan.',
-    technologies: ['DDD', 'Arquitectura Hexagonal', 'CQRS', 'Event-Driven']
+    description: 'Design and evolution of software structures using architectural patterns and principles where they solve an actual product problem.',
+    technologies: ['DDD', 'Hexagonal Architecture', 'Event-Driven'],
   },
   {
-    title: 'Technical Consulting',
-    description: 'Acompañamiento en decisiones técnicas críticas, para que la arquitectura correcta se elija antes de escribir la primera línea de código, no después.',
-    technologies: []
-  }
+    title: 'Technical Review',
+    description: 'Review of architecture, implementation decisions, and structural problems before more work is built on top of them.',
+    technologies: ['Architecture', 'Backend', 'APIs', 'Software Design'],
+  },
 ];
 ---
 
 <Layout
-  title="Servicios — Brayan Mercado"
-  description="Capacidades de ingeniería, arquitectura de software e integración de inteligencia artificial para productos escalables."
+  title="Software Engineering Services — Brayan Mercado"
+  description="Full Stack development, backend engineering, software architecture, and applied AI integration for digital products."
 >
   <Section class="page-header-section">
     <Container>
-      <Heading level={1}>Servicios & Capacidades de Ingeniería</Heading>
+      <Heading level={1}>Software Engineering Services</Heading>
       <p class="page-subtitle">
-        Soluciones integrales de desarrollo, arquitectura e inteligencia artificial para construir y escalar productos tecnológicos.
+        Full Stack development, backend engineering, software architecture, and applied AI integration for digital products.
       </p>
     </Container>
   </Section>
 
   <Section>
     <Container>
-      <div class="services-grid">
+      <div class="services-grid horizontal-scroll-mobile">
         {
-          services.map((service) => (
+          servicesEN.map((service) => (
             <ServiceCard
               title={service.title}
               description={service.description}
@@ -70,9 +71,9 @@ const services = [
   </Section>
 
   <CTASection
-    title="¿Necesitas asesoría técnica o construir tu próximo producto?"
-    description="Analicemos los requerimientos de tu sistema para encontrar la mejor arquitectura y estrategia de desarrollo."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 
@@ -99,12 +100,7 @@ const services = [
   @media (min-width: 768px) {
     .services-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .services-grid {
-      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8, 32px);
     }
   }
 </style>

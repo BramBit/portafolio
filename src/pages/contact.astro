@@ -6,29 +6,27 @@ import Heading from '../components/Heading.astro';
 import ContactSection from '../components/ContactSection.astro';
 import Button from '../components/Button.astro';
 import { siteConfig } from '../data/site';
-
-const email = 'brayanmercadodev@gmail.com';
 ---
 
 <Layout
-  title="Contacto — Brayan Mercado | Software Engineer"
-  description="Have a project in mind? Let's build it together. Hablemos sobre tu proyecto o necesidades de arquitectura."
+  title="Contact — Brayan Mercado | Software Engineer"
+  description="Tell me what you're building and where you need technical support."
 >
   <Section class="page-header-section">
     <Container>
-      <Heading level={1}>Contacto</Heading>
+      <Heading level={1}>Contact</Heading>
       <p class="page-subtitle">
-        ¿Tienes una propuesta laboral, proyecto en mente o necesitas consultoría técnica? Estaré encantado de conversar.
+        Tell me what you're building and where you need technical support.
       </p>
     </Container>
   </Section>
 
   <!-- Main Contact Callout -->
   <ContactSection
-    title="Have a project in mind? Let's build it together."
-    description="Ya sea que necesites diseñar un producto completo desde cero, escalar una plataforma existente o integrar IA aplicada a tu negocio."
-    buttonText="Let's Talk"
-    contactHref={`mailto:${email}`}
+    title="Let's talk about the project."
+    description="Tell me about the problem you're trying to solve and the stage you're at. We can define where I can contribute from there."
+    buttonText="Start the conversation"
+    contactHref={`mailto:${siteConfig.email}`}
   />
 
   <!-- Links and Additional Resources -->
@@ -42,9 +40,9 @@ const email = 'brayanmercadodev@gmail.com';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 class="card-title">Correo Electrónico</h3>
-          <p class="card-desc">Escríbeme directamente a mi dirección principal.</p>
-          <a href={`mailto:${email}`} class="card-link">{email}</a>
+          <h3 class="card-title">Email</h3>
+          <p class="card-desc">Send me an email directly.</p>
+          <a href={`mailto:${siteConfig.email}`} class="card-link">{siteConfig.email}</a>
         </div>
 
         <!-- Social Profiles Card -->
@@ -54,8 +52,8 @@ const email = 'brayanmercadodev@gmail.com';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
             </svg>
           </div>
-          <h3 class="card-title">Redes & Profesional</h3>
-          <p class="card-desc">Conecta conmigo en mis perfiles técnicos y profesionales.</p>
+          <h3 class="card-title">LinkedIn & GitHub</h3>
+          <p class="card-desc">Professional and technical profiles.</p>
           <div class="social-actions">
             <Button variant="secondary" href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">
               LinkedIn
@@ -73,11 +71,11 @@ const email = 'brayanmercadodev@gmail.com';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <h3 class="card-title">Curriculum Vitae</h3>
-          <p class="card-desc">Descarga mi documento de experiencia profesional en formato PDF.</p>
+          <h3 class="card-title">Resume / CV</h3>
+          <p class="card-desc">Download my professional resume in PDF format.</p>
           <div class="card-action">
             <Button variant="secondary" href="/cv-brayan-mercado.pdf" target="_blank" rel="noopener noreferrer">
-              Descargar CV (PDF)
+              Download CV
             </Button>
           </div>
         </div>

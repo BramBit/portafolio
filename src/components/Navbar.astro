@@ -1,8 +1,8 @@
 ---
 import Container from './Container.astro';
-import Button from './Button.astro';
 import MobileMenu from './MobileMenu.astro';
 import styles from './Navbar.module.css';
+import { getLangFromUrl, getNavItems, getEquivalentRoute } from '../i18n';
 
 interface Props {
   currentPath?: string;
@@ -11,28 +11,25 @@ interface Props {
 
 const { currentPath = Astro.url.pathname, class: className = '' } = Astro.props;
 
-const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'Case Studies', href: '/case-studies' },
-  { label: 'Engineering', href: '/engineering' },
-  { label: 'Products', href: '/products' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
+const lang = getLangFromUrl(Astro.url);
+const navItems = getNavItems(lang);
 
 const isActive = (href: string) => {
-  if (href === '/') {
-    return currentPath === '/';
+  if (href === '/' || href === '/es/') {
+    return currentPath === href;
   }
   return currentPath.startsWith(href);
 };
+
+const logoHref = lang === 'es' ? '/es/' : '/';
+const enRoute = getEquivalentRoute(currentPath, 'en');
+const esRoute = getEquivalentRoute(currentPath, 'es');
 ---
 
 <header class:list={[styles.header, className]}>
   <Container class={styles.navContainer}>
-    <a href="/" class={styles.logo} aria-label="Brayan Mercado - Home">
-      <span class={styles.logoBadge}>BM</span>
+    <a href={logoHref} class={styles.logoBadge} aria-label="Brayan Mercado - Home">
+      <img src="/logo.svg" alt="BM Logo" class={styles.logoImage} />
     </a>
 
     <nav class={styles.nav} aria-label="Main Navigation">
@@ -52,10 +49,26 @@ const isActive = (href: string) => {
             </li>
           ))
         }
+        <li class={styles.langSwitcher}>
+          {
+            lang === 'en' ? (
+              <>
+                <span class={styles.langActive}>EN</span>
+                <span>/</span>
+                <a href={esRoute} class={styles.langLink}>ES</a>
+              </>
+            ) : (
+              <>
+                <a href={enRoute} class={styles.langLink}>EN</a>
+                <span>/</span>
+                <span class={styles.langActive}>ES</span>
+              </>
+            )
+          }
+        </li>
       </ul>
     </nav>
 
     <MobileMenu currentPath={currentPath} />
   </Container>
 </header>
-

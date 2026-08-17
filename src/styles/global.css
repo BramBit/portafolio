@@ -21,3 +21,37 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Mobile horizontal card scroll layout */
+@media (max-width: 767px) {
+  .horizontal-scroll-mobile {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--space-6, 24px) !important;
+    padding-bottom: var(--space-4, 16px);
+    margin-left: calc(-1 * var(--space-16, 16px));
+    margin-right: calc(-1 * var(--space-16, 16px));
+    padding-left: var(--space-16, 16px);
+    padding-right: var(--space-16, 16px);
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .horizontal-scroll-mobile::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .horizontal-scroll-mobile > * {
+    flex: 0 0 80% !important;
+    min-width: 260px !important;
+    max-width: 320px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    scroll-snap-align: start;
+  }
+}
+

@@ -6,7 +6,7 @@
 
 @media (max-width: 768px) {
   .section {
-    padding-top: var(--space-64);
-    padding-bottom: var(--space-64);
+    padding-top: var(--space-48, 48px);
+    padding-bottom: var(--space-48, 48px);
   }
 }

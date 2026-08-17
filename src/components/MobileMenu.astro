@@ -1,5 +1,6 @@
 ---
 import styles from './MobileMenu.module.css';
+import { getLangFromUrl, getNavItems, getEquivalentRoute } from '../i18n';
 
 interface Props {
   currentPath?: string;
@@ -8,22 +9,18 @@ interface Props {
 
 const { currentPath = Astro.url.pathname, class: className = '' } = Astro.props;
 
-const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'Case Studies', href: '/case-studies' },
-  { label: 'Engineering', href: '/engineering' },
-  { label: 'Products', href: '/products' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
+const lang = getLangFromUrl(Astro.url);
+const navItems = getNavItems(lang);
 
 const isActive = (href: string) => {
-  if (href === '/') {
-    return currentPath === '/';
+  if (href === '/' || href === '/es/') {
+    return currentPath === href;
   }
   return currentPath.startsWith(href);
 };
+
+const enRoute = getEquivalentRoute(currentPath, 'en');
+const esRoute = getEquivalentRoute(currentPath, 'es');
 ---
 
 <div class:list={[styles.mobileMenuWrapper, className]}>
@@ -67,6 +64,24 @@ const isActive = (href: string) => {
         ))
       }
     </ul>
+
+    <div class={styles.langSwitcher}>
+      {
+        lang === 'en' ? (
+          <>
+            <span class={styles.langActive}>EN</span>
+            <span>/</span>
+            <a href={esRoute} class={styles.langLink}>ES</a>
+          </>
+        ) : (
+          <>
+            <a href={enRoute} class={styles.langLink}>EN</a>
+            <span>/</span>
+            <span class={styles.langActive}>ES</span>
+          </>
+        )
+      }
+    </div>
   </div>
 </div>
 
@@ -74,15 +89,15 @@ const isActive = (href: string) => {
   function setupMobileMenu() {
     const toggleBtn = document.getElementById('mobile-menu-toggle');
     const overlay = document.getElementById('mobile-menu-overlay');
-    const hamburgerIcon = toggleBtn?.querySelector('.icon-hamburger') as HTMLElement | null;
-    const closeIcon = toggleBtn?.querySelector('.icon-close') as HTMLElement | null;
-
     if (!toggleBtn || !overlay) return;
+
+    const hamburgerIcon = toggleBtn.querySelector('.icon-hamburger') as HTMLElement | null;
+    const closeIcon = toggleBtn.querySelector('.icon-close') as HTMLElement | null;
 
     function toggleMenu(open?: boolean) {
       const isOpen = open !== undefined ? open : !overlay.classList.contains('open');
       
-      overlay.classList.toggle(styles.open, isOpen);
+      overlay.classList.toggle('open', isOpen);
       toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       overlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
 
@@ -98,7 +113,10 @@ const isActive = (href: string) => {
       }
     }
 
-    toggleBtn.addEventListener('click', () => toggleMenu());
+    const newToggleBtn = toggleBtn.cloneNode(true) as HTMLElement;
+    toggleBtn.parentNode?.replaceChild(newToggleBtn, toggleBtn);
+
+    newToggleBtn.addEventListener('click', () => toggleMenu());
 
     // Close on link click
     overlay.querySelectorAll('a').forEach((link) => {
@@ -107,5 +125,6 @@ const isActive = (href: string) => {
   }
 
   setupMobileMenu();
+  document.addEventListener('astro:page-load', setupMobileMenu);
   document.addEventListener('astro:after-swap', setupMobileMenu);
 </script>

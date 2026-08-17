@@ -1,6 +1,7 @@
 ---
 import Container from './Container.astro';
 import { siteConfig } from '../data/site';
+import { getLangFromUrl } from '../i18n';
 import styles from './Footer.module.css';
 
 interface Props {
@@ -9,18 +10,28 @@ interface Props {
 
 const { class: className = '' } = Astro.props;
 const currentYear = new Date().getFullYear();
+const lang = getLangFromUrl(Astro.url);
+
+const homeHref = lang === 'es' ? '/es/' : '/';
+const roleText = lang === 'es' ? 'Ingeniero de Software' : 'Software Engineer';
+const copyrightText = lang === 'es' 
+  ? `© ${currentYear} Brayan Mercado. Todos los derechos reservados.`
+  : `© ${currentYear} Brayan Mercado. All rights reserved.`;
+const taglineText = lang === 'es' 
+  ? 'Construyendo productos de software desde frontend y backend hasta arquitectura e IA aplicada.'
+  : 'Building software products across frontend, backend, architecture, and applied AI.';
 ---
 
 <footer class:list={[styles.footer, className]}>
   <Container class={styles.content}>
     <div class={styles.topRow}>
       <div class={styles.brand}>
-        <a href="/" class={styles.logoBadge} aria-label="Brayan Mercado - Home">
-          BM
+        <a href={homeHref} class={styles.logoBadge} aria-label="Brayan Mercado - Home">
+          <img src="/logo.svg" alt="BM Logo" class={styles.logoImage} />
         </a>
         <div class={styles.brandText}>
           <span class={styles.name}>{siteConfig.name}</span>
-          <span class={styles.role}>{siteConfig.role}</span>
+          <span class={styles.role}>{roleText}</span>
         </div>
       </div>
 
@@ -67,9 +78,9 @@ const currentYear = new Date().getFullYear();
 
     <div class={styles.bottomRow}>
       <p class={styles.copyright}>
-        &copy; {currentYear} Brayan Mercado. All rights reserved.
+        {copyrightText}
       </p>
-      <p class={styles.tagline}>{siteConfig.tagline}</p>
+      <p class={styles.tagline}>{taglineText}</p>
     </div>
   </Container>
 </footer>

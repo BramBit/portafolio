@@ -9,36 +9,37 @@ import CTASection from '../../components/CTASection.astro';
 
 const articles = await getCollection('engineering');
 
-// Sort articles by publishedAt descending
-const sortedArticles = articles.sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
-);
+// Filter articles for EN
+const enArticles = articles
+  .filter((a) => a.id.startsWith('en/'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 ---
 
 <Layout
-  title="Engineering — Brayan Mercado"
-  description="Artículos técnicos y profundizaciones sobre arquitectura de software, IA aplicada y desarrollo de sistemas escalables."
+  title="Engineering — Brayan Mercado | Software Engineer"
+  description="Technical articles about software architecture, applied AI, search systems, and implementation decisions from real projects."
 >
   <Section class="page-header-section">
     <Container>
-      <Heading level={1}>Engineering Articles & Insights</Heading>
+      <Heading level={1}>Engineering</Heading>
       <p class="page-subtitle">
-        Desgloses técnicos detallados sobre patrones de diseño, integración de IA, optimización de sistemas y arquitectura de software.
+        Technical articles about software architecture, applied AI, search systems, and implementation decisions from real projects.
       </p>
     </Container>
   </Section>
 
   <Section>
     <Container>
-      <div class="articles-grid">
+      <div class="articles-grid horizontal-scroll-mobile">
         {
-          sortedArticles.map((article) => (
+          enArticles.map((article) => (
             <ArticleCard
               title={article.data.title}
               excerpt={article.data.excerpt}
               readingTime={article.data.readingTime}
               tags={article.data.tags}
               slug={article.data.slug}
+              href={`/engineering/${article.data.slug}`}
             />
           ))
         }
@@ -47,9 +48,9 @@ const sortedArticles = articles.sort(
   </Section>
 
   <CTASection
-    title="¿Quieres profundizar en algún tema de arquitectura o IA?"
-    description="Conversemos sobre los retos de ingeniería de tu producto y cómo abordarlos con patrones de diseño probados."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 

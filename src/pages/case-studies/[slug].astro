@@ -5,12 +5,12 @@ import Section from '../../components/Section.astro';
 import Container from '../../components/Container.astro';
 import Heading from '../../components/Heading.astro';
 import Tag from '../../components/Tag.astro';
-import Button from '../../components/Button.astro';
 import CTASection from '../../components/CTASection.astro';
 
 export async function getStaticPaths() {
   const caseStudies = await getCollection('case-studies');
-  return caseStudies.map((study) => ({
+  const enStudies = caseStudies.filter((study) => study.id.startsWith('en/'));
+  return enStudies.map((study) => ({
     params: { slug: study.data.slug },
     props: { study },
   }));
@@ -21,8 +21,8 @@ const { Content } = await render(study);
 ---
 
 <Layout
-  title={`${study.data.title} — Case Study | Brayan Mercado`}
-  description={study.data.summary}
+  title={`${study.data.title} — Experience | Brayan Mercado`}
+  description={study.data.impactSummary || study.data.summary}
 >
   <!-- Header Section -->
   <Section class="header-section">
@@ -32,26 +32,56 @@ const { Content } = await render(study);
           <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="back-icon">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
-          Volver a Case Studies
+          Back to Experience
         </a>
       </div>
 
       <Heading level={1} class="title">{study.data.title}</Heading>
 
-      <p class="summary">{study.data.summary}</p>
+      <p class="summary">{study.data.impactSummary || study.data.summary}</p>
 
-      {
-        study.data.technologies && study.data.technologies.length > 0 && (
-          <div class="tech-stack">
-            <span class="tech-label">Technologies & Architecture:</span>
-            <div class="tags-container">
-              {study.data.technologies.map((tech) => (
-                <Tag>{tech}</Tag>
-              ))}
+      <div class="meta-grid">
+        {
+          (study.data.company || study.data.role || study.data.timeframe) && (
+            <div class="quick-facts-card">
+              <span class="meta-label">Quick facts:</span>
+              <dl class="facts-list">
+                {study.data.company && (
+                  <div class="fact-item">
+                    <dt class="fact-key">Company:</dt>
+                    <dd class="fact-val">{study.data.company}</dd>
+                  </div>
+                )}
+                {study.data.role && (
+                  <div class="fact-item">
+                    <dt class="fact-key">Role:</dt>
+                    <dd class="fact-val">{study.data.role}</dd>
+                  </div>
+                )}
+                {study.data.timeframe && (
+                  <div class="fact-item">
+                    <dt class="fact-key">Timeframe:</dt>
+                    <dd class="fact-val">{study.data.timeframe}</dd>
+                  </div>
+                )}
+              </dl>
             </div>
-          </div>
-        )
-      }
+          )
+        }
+
+        {
+          study.data.technologies && study.data.technologies.length > 0 && (
+            <div class="tech-stack">
+              <span class="meta-label">Technologies & Architecture:</span>
+              <div class="tags-container">
+                {study.data.technologies.map((tech) => (
+                  <Tag>{tech}</Tag>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
     </Container>
   </Section>
 
@@ -66,9 +96,9 @@ const { Content } = await render(study);
 
   <!-- Footer Navigation & CTA -->
   <CTASection
-    title="¿Quieres implementar una arquitectura o solución similar?"
-    description="Hablemos de tus necesidades de desarrollo, diseño de sistemas e integración de soluciones escalables."
-    button={{ label: 'Iniciar Conversación', href: '/contact', variant: 'primary' }}
+    title="Have a project in development?"
+    description="Tell me what you're building and we can review where I can contribute."
+    button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
   />
 </Layout>
 
@@ -114,17 +144,70 @@ const { Content } = await render(study);
     margin-bottom: var(--space-6, 24px);
   }
 
-  .tech-stack {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3, 12px);
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+    margin-top: var(--space-6, 24px);
+    padding-top: var(--space-6, 24px);
+    border-top: 1px solid var(--color-surface-elevated);
   }
 
-  .tech-label {
+  @media (min-width: 768px) {
+    .meta-grid {
+      grid-template-columns: auto 1fr;
+      gap: var(--space-8, 32px);
+      align-items: start;
+    }
+  }
+
+  .meta-label {
     font-size: var(--font-size-caption, 14px);
     color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+
+  .quick-facts-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 12px);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-elevated);
+    border-radius: 8px;
+    padding: var(--space-4, 16px);
+    min-width: 260px;
+  }
+
+  .facts-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 8px);
+    margin: 0;
+  }
+
+  .fact-item {
+    display: flex;
+    gap: var(--space-2, 8px);
+    font-size: var(--font-size-small, 16px);
+  }
+
+  .fact-key {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .fact-val {
+    color: var(--color-text-primary);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 12px);
   }
 
   .tags-container {
@@ -138,7 +221,6 @@ const { Content } = await render(study);
     padding-bottom: var(--space-16, 64px);
   }
 
-  /* Spacing and styles for rendered Markdown headings and elements */
   .markdown-body {
     max-width: 860px;
     margin: 0 auto;
@@ -147,7 +229,6 @@ const { Content } = await render(study);
     line-height: 1.7;
   }
 
-  /* Spacing between main sections (H2 elements) - Token spacing 96px */
   .markdown-body :global(h2) {
     color: var(--color-text-primary);
     font-size: var(--font-size-h2, 40px);
@@ -188,5 +269,62 @@ const { Content } = await render(study);
 
   .markdown-body :global(li) {
     margin-bottom: var(--space-2, 8px);
+  }
+
+  @media (max-width: 768px) {
+    .header-section {
+      padding-top: var(--space-8, 32px);
+      padding-bottom: var(--space-6, 24px);
+    }
+
+    .summary {
+      font-size: var(--font-size-small, 16px);
+      line-height: 1.5;
+      margin-bottom: var(--space-4, 16px);
+    }
+
+    .meta-grid {
+      margin-top: var(--space-4, 16px);
+      padding-top: var(--space-4, 16px);
+      gap: var(--space-4, 16px);
+    }
+
+    .quick-facts-card {
+      min-width: 100%;
+      padding: var(--space-3, 12px) var(--space-4, 16px);
+    }
+
+    .content-section {
+      padding-top: var(--space-6, 24px);
+      padding-bottom: var(--space-12, 48px);
+    }
+
+    .markdown-body {
+      font-size: var(--font-size-small, 16px);
+      line-height: 1.65;
+    }
+
+    .markdown-body :global(h2) {
+      font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+      margin-top: var(--space-8, 32px);
+      margin-bottom: var(--space-3, 12px);
+      padding-top: var(--space-6, 24px);
+    }
+
+    .markdown-body :global(h3) {
+      font-size: clamp(1.15rem, 4.5vw, 1.35rem);
+      margin-top: var(--space-6, 24px);
+      margin-bottom: var(--space-2, 8px);
+    }
+
+    .markdown-body :global(p) {
+      margin-bottom: var(--space-4, 16px);
+    }
+
+    .markdown-body :global(ul),
+    .markdown-body :global(ol) {
+      margin-bottom: var(--space-4, 16px);
+      padding-left: var(--space-4, 16px);
+    }
   }
 </style>

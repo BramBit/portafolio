@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import Container from '../../../components/Container.astro';
+import Heading from '../../../components/Heading.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import CTASection from '../../../components/CTASection.astro';
+
+const products = await getCollection('products');
+
+// Filter products for ES
+const esProducts = products
+  .filter((p) => p.id.startsWith('es/'))
+  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+---
+
+<Layout
+  title="Productos — Brayan Mercado | Software Engineer"
+  description="Productos y proyectos de software desarrollados alrededor de problemas concretos."
+>
+  <Section class="page-header-section">
+    <Container>
+      <Heading level={1}>Productos</Heading>
+      <p class="page-subtitle">
+        Productos y proyectos de software desarrollados alrededor de problemas concretos.
+      </p>
+    </Container>
+  </Section>
+
+  <Section>
+    <Container>
+      <div class="products-grid horizontal-scroll-mobile">
+        {
+          esProducts.map((product) => (
+            <a href={`/es/productos/${product.data.slug}`} class="product-link">
+              <ProductCard
+                title={product.data.title}
+                tagline={product.data.tagline}
+                status={product.data.status}
+                link={product.data.website}
+              />
+            </a>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    title="¿Tienes un proyecto en desarrollo?"
+    description="Cuéntame qué estás construyendo y revisamos dónde puedo aportar."
+    button={{ label: 'Hablemos', href: '/es/contacto', variant: 'primary' }}
+  />
+</Layout>
+
+<style>
+  .page-header-section {
+    padding-top: var(--space-12, 48px);
+    padding-bottom: var(--space-8, 32px);
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg, 20px);
+    margin-top: var(--space-4, 16px);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6, 24px);
+  }
+
+  @media (min-width: 768px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+</style>
