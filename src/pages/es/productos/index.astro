@@ -10,9 +10,15 @@ import CTASection from '../../../components/CTASection.astro';
 const products = await getCollection('products');
 
 // Filter products for ES
+const productOrder = ['product-checkout-platform', 'pliegos'];
 const esProducts = products
   .filter((p) => p.id.startsWith('es/'))
-  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+  .sort((a, b) => {
+    const idxA = productOrder.indexOf(a.data.slug);
+    const idxB = productOrder.indexOf(b.data.slug);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    return (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0);
+  });
 ---
 
 <Layout
@@ -30,7 +36,8 @@ const esProducts = products
 
   <Section>
     <Container>
-      <div class="products-grid horizontal-scroll-mobile">
+      <h2 class="visually-hidden">Todos los productos</h2>
+      <div class="products-grid">
         {
           esProducts.map((product) => (
             <a href={`/es/productos/${product.data.slug}`} class="product-link">

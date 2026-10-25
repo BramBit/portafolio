@@ -1,0 +1,43 @@
+---
+import Tag from './Tag.astro';
+import styles from './StackGroups.module.css';
+import type { StackGroup } from '../data/stack';
+
+interface Props {
+  groups: StackGroup[];
+  class?: string;
+}
+
+const { groups, class: className = '' } = Astro.props;
+---
+
+<div class:list={[styles.groups, className]}>
+  {
+    groups.map((group) => (
+      <section class={styles.group} data-reveal>
+        <h3 class:list={['label', styles.label]}>{group.label}</h3>
+
+        {group.primary.length > 0 && (
+          <ul class={styles.primary}>
+            {group.primary.map((item) => (
+              <li class={styles.primaryItem}>
+                <span class={styles.name}>{item.name}</span>
+                <span class={styles.usage}>{item.usage}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {group.secondary.length > 0 && (
+          <ul class={styles.secondary}>
+            {group.secondary.map((name) => (
+              <li>
+                <Tag>{name}</Tag>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))
+  }
+</div>

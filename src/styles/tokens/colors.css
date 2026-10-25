@@ -1,11 +1,28 @@
 :root {
-  --color-bg: #0B0D12;
-  --color-surface: #11141A;
-  --color-surface-elevated: #1A1F2B;
-  --color-primary: #6366F1;
-  --color-secondary: #8B5CF6;
-  --color-accent: #22D3EE;
-  --color-text-primary: #F7F8FA;
-  --color-text-secondary: #9CA3AF;
-  --color-text-muted: #6B7280;
+  color-scheme: dark;
+
+  /* Surfaces: separation comes from tone, not shadows */
+  --color-bg: #0A0B10;
+  --color-surface: #111218;
+  --color-surface-elevated: #171922;
+  --color-surface-3: #1F222D;
+
+  /* Borders. --color-border is decorative; --color-border-ui is for control
+     boundaries (4.0:1 on --color-bg, meets the 3:1 non-text requirement). */
+  --color-border: #2A2D3A;
+  --color-border-ui: #6B7087;
+
+  /* Text. Contrast on --color-bg: 17.7:1 / 8.2:1 / 5.7:1 (on --color-surface-elevated: 15.8 / 7.3 / 5.1) */
+  --color-text-primary: #F2F3F7;
+  --color-text-secondary: #A3A7B7;
+  --color-text-muted: #868A9C;
+
+  /* Single accent, taken from the brand mark (6.5:1 on --color-bg) */
+  --color-accent: #8587FF;
+  --color-accent-strong: #A5A7FF;
+  --color-on-accent: #0A0B10;
+  --color-focus: var(--color-accent-strong);
+
+  /* Legacy name still used across pages and cards: alias of the accent */
+  --color-primary: var(--color-accent);
 }

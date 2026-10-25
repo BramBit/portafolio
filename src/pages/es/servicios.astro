@@ -5,38 +5,26 @@ import Container from '../../components/Container.astro';
 import Heading from '../../components/Heading.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import CTASection from '../../components/CTASection.astro';
-
-// Section 6 ES - oferta de servicios enfocada
-const servicesES = [
-  {
-    title: 'Sistemas de Inteligencia Artificial',
-    description: 'Diseño e implementación de sistemas RAG, búsqueda semántica e integraciones con LLMs, integrados a aplicaciones existentes, desde la arquitectura hasta producción.',
-    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
-  },
-  {
-    title: 'Backend & Full Stack',
-    description: 'Desarrollo de funcionalidades de punta a punta y servicios backend: modelado de datos, lógica de negocio, APIs REST y la interfaz, aplicando patrones de arquitectura donde resuelven un problema real del producto.',
-    technologies: ['TypeScript', 'Node.js', 'PostgreSQL', 'React', 'Next.js'],
-  },
-];
+import { servicesES } from '../../data/services';
 ---
 
 <Layout
   title="Servicios de Ingeniería de Software — Brayan Mercado"
-  description="Desarrollo Full Stack, ingeniería Backend, arquitectura e integración de inteligencia artificial para productos digitales."
+  description="Desarrollo de software a la medida, automatización, inteligencia artificial aplicada y evolución de plataformas existentes adaptadas a tus procesos de negocio."
 >
   <Section class="page-header-section">
     <Container>
       <Heading level={1}>Servicios de Ingeniería de Software</Heading>
       <p class="page-subtitle">
-        Desarrollo Full Stack, ingeniería Backend, arquitectura e integración de inteligencia artificial para productos digitales.
+        Desarrollo de software a la medida, automatización, inteligencia artificial aplicada y evolución de plataformas existentes adaptadas a tus procesos de negocio.
       </p>
     </Container>
   </Section>
 
   <Section>
     <Container>
-      <div class="services-grid horizontal-scroll-mobile">
+      <h2 class="visually-hidden">Todos los servicios</h2>
+      <div class="services-grid">
         {
           servicesES.map((service) => (
             <ServiceCard

@@ -1,7 +1,7 @@
 ---
 title: "Replacing Algolia with a Hybrid Search Engine"
 slug: "hybrid-search-vs-algolia"
-excerpt: "How Algolia's search in PLEI was replaced with a hybrid engine built on PostgreSQL, pgvector, Full Text Search, and Reciprocal Rank Fusion."
+excerpt: "How an external search provider was replaced with an in-house hybrid engine built on PostgreSQL, pgvector, Full Text Search, and Reciprocal Rank Fusion in an e-learning platform."
 readingTime: "10 min"
 tags:
   - "Search"
@@ -9,7 +9,7 @@ tags:
   - "pgvector"
   - "Hybrid Search"
   - "RRF"
-tldr: "Replacing Algolia in PLEI with an in-house hybrid search engine built on PostgreSQL, combining pgvector, tsvector, and pg_trgm using Reciprocal Rank Fusion (RRF)."
+tldr: "Replacing Algolia in an e-learning platform with an in-house hybrid search engine built on PostgreSQL, combining pgvector, tsvector, and pg_trgm using Reciprocal Rank Fusion (RRF)."
 publishedAt: 2026-08-02
 ---
 
@@ -19,13 +19,13 @@ It was the replacement of an external dependency with search infrastructure that
 
 ---
 
-# 1. The problem: search does not only mean finding text
+## 1. The problem: search does not only mean finding text
 
-The first version of PLEI's search used Algolia.
+The first version of the platform's search used Algolia.
 
 It worked reasonably well for textual searches, but the platform's content started to require something different.
 
-PLEI does not manage plain text only. The search engine works across resources that can represent courses, lessons, documents, and other platform content.
+The platform does not manage plain text only. The search engine works across heterogeneous resources representing courses, lessons, documents, and other platform content.
 
 That changes the nature of the problem.
 
@@ -82,9 +82,9 @@ The conclusion was clear:
 
 ---
 
-# 2. Before and after
+## 2. Before and after
 
-## Before
+### Before
 
 ```text
 User
@@ -98,7 +98,7 @@ Results
 
 Search depended on an external provider and a primary retrieval strategy.
 
-## After
+### After
 
 ```text
 User
@@ -129,7 +129,7 @@ The infrastructure now directly controls the signals that determine which result
 
 ---
 
-# 3. The architectural decision
+## 3. The architectural decision
 
 The question was not simply:
 
@@ -177,7 +177,7 @@ Search remained inside the same data infrastructure used by the rest of the appl
 
 ---
 
-# 4. The four retrieval signals
+## 4. The four retrieval signals
 
 The engine combines four types of signal:
 
@@ -219,7 +219,7 @@ It is to let each strategy contribute when it has useful information.
 
 ---
 
-# 5. Vector search: understanding intent
+## 5. Vector search: understanding intent
 
 Vector search uses embeddings stored through `pgvector`.
 
@@ -257,7 +257,7 @@ Even though the words do not completely match, there is a semantic relationship.
 
 That is the space where vector search adds value.
 
-## But it has a limitation
+### But it has a limitation
 
 Semantic similarity is not always what the user needs.
 
@@ -279,7 +279,7 @@ That is why vector search is only one piece.
 
 ---
 
-# 6. Full Text Search: when words matter
+## 6. Full Text Search: when words matter
 
 PostgreSQL provides Full Text Search through `tsvector` and `websearch_to_tsquery`.
 
@@ -315,7 +315,7 @@ That makes Full Text Search complementary to vector retrieval.
 
 ---
 
-# 7. Fuzzy search: tolerating how users actually type
+## 7. Fuzzy search: tolerating how users actually type
 
 Users do not always write exactly as the content is written.
 
@@ -352,7 +352,7 @@ They solve different problems.
 
 ---
 
-# 8. Exact title matching
+## 8. Exact title matching
 
 Titles have special value.
 
@@ -382,7 +382,7 @@ It is especially useful when the user already knows which resource they are look
 
 ---
 
-# 9. The problem of combining results
+## 9. The problem of combining results
 
 This is where one of the most interesting design problems appears.
 
@@ -453,7 +453,7 @@ The solution was to work with **rank position**, not raw scores.
 
 ---
 
-# 10. Reciprocal Rank Fusion
+## 10. Reciprocal Rank Fusion
 
 The technique used to combine the results was **Reciprocal Rank Fusion (RRF)**.
 
@@ -489,7 +489,7 @@ If a document ranks highly across several strategies, it accumulates evidence.
 
 ---
 
-# 11. Why RRF fits this problem
+## 11. Why RRF fits this problem
 
 Suppose:
 
@@ -543,7 +543,7 @@ This allows semantic, textual, and direct title matches to compete inside one ra
 
 ---
 
-# 12. Orchestration: these are not four independent searches
+## 12. Orchestration: these are not four independent searches
 
 The engine does not expose four different search engines to the user.
 
@@ -577,7 +577,7 @@ From the product's point of view, there is still a single search experience.
 
 ---
 
-# 13. Relevance does not mean authorization
+## 13. Relevance does not mean authorization
 
 This was another important design consideration.
 
@@ -622,11 +622,11 @@ A document can be the search engine's number-one result and still be invalid for
 
 ---
 
-# 14. Keeping embeddings synchronized
+## 14. Keeping embeddings synchronized
 
 Vector search introduces another problem.
 
-PLEI's content changes.
+Educational platform content changes continuously.
 
 If a course, resource, or lesson changes, its semantic representation can become stale.
 
@@ -674,7 +674,7 @@ It is about keeping that index coherent with the product.
 
 ---
 
-# 15. One database for different signals
+## 15. One database for different signals
 
 One of the most interesting implementation decisions was not to create separate infrastructure for each search type.
 
@@ -705,7 +705,7 @@ Hybrid search is built using specialized capabilities on top of persistence infr
 
 ---
 
-# 16. Replacing Algolia was not only a technology change
+## 16. Replacing Algolia was not only a technology change
 
 Changing providers could look like a mechanical task:
 
@@ -758,4 +758,4 @@ Query
 
 Algolia offered good search over indexed text.
 
-The hybrid engine on PostgreSQL made it possible to build a retrieval system tailored to PLEI's domain, combining semantic search, textual search, fuzzy search, title matching, and access control on top of a single infrastructure.
+The hybrid engine on PostgreSQL made it possible to build a retrieval system tailored to the product's domain, combining semantic search, textual search, fuzzy search, title matching, and access control on top of a single infrastructure.

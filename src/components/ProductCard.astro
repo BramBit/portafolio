@@ -40,12 +40,7 @@ const linkText = t('cta.viewProduct');
   {
     link && (
       <div class={styles.footer}>
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          class={styles.link}
-        >
+        <span class={styles.link}>
           <span>{linkText}</span>
           <svg class={styles.linkIcon} viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -54,7 +49,7 @@ const linkText = t('cta.viewProduct');
               d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"
             />
           </svg>
-        </a>
+        </span>
       </div>
     )
   }

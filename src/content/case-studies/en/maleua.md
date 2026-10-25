@@ -1,10 +1,11 @@
 ---
 title: "Fundación Maleua — Institutional Website"
 slug: "maleua"
-impactSummary: "Built a static institutional website with a content structure designed for simple maintenance."
-summary: "Development of a static institutional website with Astro, with content separated from the presentation layer to simplify maintenance."
+impactSummary: "Designed and built a static institutional website with Astro and decoupled content architecture for non-technical maintainers."
+summary: "Development of a static institutional website on Astro and Vercel, with content completely decoupled from presentation to ensure zero-cost autonomous maintenance."
 technologies:
   - "Astro"
+  - "TypeScript"
   - "Vercel"
 company: "Alaska Tech"
 role: "Developer"
@@ -12,26 +13,35 @@ timeframe: "Jan 2023 – Present"
 publishedAt: 2026-08-01
 ---
 
-## Problem
+## Product Context and Problem
 
-Fundación Maleua needed an institutional landing site to present the organization, its programs, and its services to the community — with fast load times, low maintenance overhead, and a simple deployment process, since the team maintaining it afterward wouldn't be developers.
+Fundación Maleua is a non-profit organization dedicated to community development and social programs in the Santa Marta region. The foundation needed an institutional web portal to communicate its initiatives, open community calls, and program results to partners and the public.
 
-## Solution
+Project constraints:
+- Minimal load times on mobile cellular connections.
+- Zero recurring hosting or database operational costs.
+- Straightforward maintenance workflow, since the staff updating program announcements would have no coding background.
 
-I built the site as a static site with Astro, deployed on Vercel, with content fully decoupled from the presentation layer.
+## Role and Individual Contribution
 
-## Architecture
+As a developer at Alaska Tech, I took full technical ownership of the site's architecture, implementation, and deployment pipeline:
+- Architectural selection of Static Site Generation (SSG) with Astro.
+- Engineering the decoupled content and presentation layer.
+- Configuring the automated continuous deployment pipeline on Vercel.
 
-Static Site Generation on Astro, with all copy, images, and configuration centralized in data files rather than embedded in components.
+## Key Features Engineered
 
-## Implementation
+1. **Static Site Generation (SSG):** Complete pre-rendering of institutional pages, ensuring edge delivery with sub-second response times.
+2. **Decoupled Data Architecture:** Copy, program profiles, partner logos, and team details centralized into structured data files, keeping raw Astro UI components completely untouched during content updates.
+3. **Asset & Performance Optimization:** Responsive layouts with pure CSS, native system typography eliminating font render blocking, and lazy loading for images.
 
-Structuring content this way means updating text, images, or settings doesn't require touching the interface components directly — someone can update a data file without knowing how the site is built.
+## Technical Challenges & Architecture Decisions
 
-## Challenges
+- **Maintainability Without a Heavy CMS:** Deploying a dynamic CMS (such as WordPress or Strapi) would have created database maintenance overhead, security vulnerability patches, and recurring hosting costs. Decoupling plain data files from presentation provided an intuitive editing experience without risk of breaking interface markup.
+- **Frictionless Continuous Deployment:** Configured automated Vercel webhooks so that updates committed to the data repository automatically trigger production builds and edge propagation within seconds.
 
-The main constraint was designing for a team that wouldn't be maintaining the code themselves — the content architecture had to make future updates safe without developer involvement.
+## Verifiable Results
 
-## Results
-
-The foundation's landing page runs fast, deploys simply, and can be updated by non-developers without touching the site's components.
+- Institutional site operating in production with zero recurring server or database hosting costs.
+- Top Core Web Vitals scores achieved through lean, static HTML delivery without unnecessary client JavaScript.
+- Autonomous editorial updates carried out by foundation staff without requiring developer intervention for routine text or image changes.

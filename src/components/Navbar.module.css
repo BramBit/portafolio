@@ -4,32 +4,14 @@
   z-index: 100;
   width: 100%;
   background-color: var(--color-bg);
-  border-bottom: 1px solid var(--color-surface-elevated);
-  transition: background-color 200ms ease, border-color 200ms ease;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .navContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
-}
-
-.logo {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-h4);
-  font-weight: 700;
-  color: var(--color-text-primary);
-  text-decoration: none;
-  letter-spacing: -0.02em;
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  transition: opacity 150ms ease;
-}
-
-.logo:hover {
-  opacity: 0.9;
+  height: var(--nav-height);
 }
 
 .logoBadge {
@@ -39,22 +21,30 @@
   width: 36px;
   height: 36px;
   background-color: var(--color-surface-elevated);
-  border: 1px solid var(--color-primary);
-  border-radius: 6px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .logoImage {
   width: 50px;
   height: 50px;
+  max-width: none;
   object-fit: contain;
-  border-radius: 6px;
 }
 
+/* Desktop navigation. Below 60rem the mobile menu takes over. */
 .nav {
-  display: flex;
-  align-items: center;
-  gap: var(--space-24);
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-24);
+  }
 }
 
 .navLinks {
@@ -62,32 +52,54 @@
   align-items: center;
   gap: var(--space-24);
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-small);
+  font-weight: 500;
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: color 150ms ease;
-  font-weight: 500;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
-.navLink:hover,
+.navLink:hover {
+  color: var(--color-text-primary);
+  text-decoration-line: underline;
+}
+
 .navLink.active {
   color: var(--color-text-primary);
 }
 
+/* Current page: dot indicator, not only a color change */
+.navLink.active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  transform: translateX(-50%);
+}
+
 .langSwitcher {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-small);
-  color: var(--color-text-muted);
-  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: var(--space-1, 4px);
+  gap: var(--space-4);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  padding-left: var(--space-24);
+  border-left: 1px solid var(--color-border);
 }
 
 .langActive {
@@ -96,18 +108,17 @@
 }
 
 .langLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
   color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color 150ms ease;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .langLink:hover {
-  color: var(--color-primary);
+  color: var(--color-accent-strong);
 }
-
-@media (max-width: 768px) {
-  .navLinks {
-    display: none !important;
-  }
-}
-

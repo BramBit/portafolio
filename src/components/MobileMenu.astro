@@ -21,63 +21,68 @@ const isActive = (href: string) => {
 
 const enRoute = getEquivalentRoute(currentPath, 'en');
 const esRoute = getEquivalentRoute(currentPath, 'es');
+const toggleLabel = lang === 'es' ? 'Abrir o cerrar el menú de navegación' : 'Toggle navigation menu';
+const navLabel = lang === 'es' ? 'Navegación móvil' : 'Mobile navigation';
 ---
 
 <div class:list={[styles.mobileMenuWrapper, className]}>
   <button
     id="mobile-menu-toggle"
     class={styles.menuToggle}
-    aria-label="Toggle Navigation Menu"
+    type="button"
+    aria-label={toggleLabel}
     aria-expanded="false"
     aria-controls="mobile-menu-overlay"
   >
-    <svg class={styles.icon} viewBox="0 0 24 24" stroke="currentColor">
+    <svg class={styles.icon} viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
       <path
-        class="icon-hamburger"
+        class={styles.iconOpen}
         stroke-linecap="round"
         stroke-linejoin="round"
         d="M4 6h16M4 12h16M4 18h16"></path>
       <path
-        class="icon-close"
+        class={styles.iconClose}
         stroke-linecap="round"
         stroke-linejoin="round"
-        d="M6 18L18 6M6 6l12 12"
-        style="display: none;"></path>
+        d="M6 18L18 6M6 6l12 12"></path>
     </svg>
   </button>
 
-  <div id="mobile-menu-overlay" class={styles.overlay} aria-hidden="true">
-    <ul class={styles.navList}>
-      {
-        navItems.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              class:list={[
-                styles.navLink,
-                { [styles.active]: isActive(item.href) }
-              ]}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <div id="mobile-menu-overlay" class={styles.overlay} inert>
+    <nav aria-label={navLabel}>
+      <ul class={styles.navList}>
+        {
+          navItems.map((item, index) => {
+            const active = isActive(item.href);
+            return (
+              <li style={`--i: ${index}`}>
+                <a
+                  href={item.href}
+                  class:list={[styles.navLink, { [styles.active]: active }]}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
 
     <div class={styles.langSwitcher}>
       {
         lang === 'en' ? (
           <>
-            <span class={styles.langActive}>EN</span>
-            <span>/</span>
-            <a href={esRoute} class={styles.langLink}>ES</a>
+            <span class={styles.langActive} aria-current="true">EN</span>
+            <span aria-hidden="true">/</span>
+            <a href={esRoute} class={styles.langLink} lang="es" hreflang="es">ES</a>
           </>
         ) : (
           <>
-            <a href={enRoute} class={styles.langLink}>EN</a>
-            <span>/</span>
-            <span class={styles.langActive}>ES</span>
+            <a href={enRoute} class={styles.langLink} lang="en" hreflang="en">EN</a>
+            <span aria-hidden="true">/</span>
+            <span class={styles.langActive} aria-current="true">ES</span>
           </>
         )
       }
@@ -87,44 +92,61 @@ const esRoute = getEquivalentRoute(currentPath, 'es');
 
 <script>
   function setupMobileMenu() {
-    const toggleBtn = document.getElementById('mobile-menu-toggle');
-    const overlay = document.getElementById('mobile-menu-overlay');
-    if (!toggleBtn || !overlay) return;
+    const toggle = document.getElementById('mobile-menu-toggle') as HTMLButtonElement | null;
+    const overlay = document.getElementById('mobile-menu-overlay') as HTMLElement | null;
+    if (!toggle || !overlay || toggle.dataset.bound === 'true') return;
+    toggle.dataset.bound = 'true';
 
-    const hamburgerIcon = toggleBtn.querySelector('.icon-hamburger') as HTMLElement | null;
-    const closeIcon = toggleBtn.querySelector('.icon-close') as HTMLElement | null;
+    const desktop = window.matchMedia('(min-width: 60rem)');
+    const links = Array.from(overlay.querySelectorAll<HTMLAnchorElement>('a'));
 
-    function toggleMenu(open?: boolean) {
-      const isOpen = open !== undefined ? open : !overlay.classList.contains('open');
-      
-      overlay.classList.toggle('open', isOpen);
-      toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      overlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    function isOpen() {
+      return toggle!.getAttribute('aria-expanded') === 'true';
+    }
 
-      if (hamburgerIcon && closeIcon) {
-        hamburgerIcon.style.display = isOpen ? 'none' : 'block';
-        closeIcon.style.display = isOpen ? 'block' : 'none';
-      }
-
-      if (isOpen) {
+    function setOpen(open: boolean, returnFocus = false) {
+      toggle!.setAttribute('aria-expanded', String(open));
+      overlay!.inert = !open;
+      if (open) {
+        overlay!.dataset.open = 'true';
         document.body.style.overflow = 'hidden';
+        links[0]?.focus();
       } else {
+        delete overlay!.dataset.open;
         document.body.style.overflow = '';
+        if (returnFocus) toggle!.focus();
       }
     }
 
-    const newToggleBtn = toggleBtn.cloneNode(true) as HTMLElement;
-    toggleBtn.parentNode?.replaceChild(newToggleBtn, toggleBtn);
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+    links.forEach((link) => link.addEventListener('click', () => setOpen(false)));
 
-    newToggleBtn.addEventListener('click', () => toggleMenu());
+    document.addEventListener('keydown', (event) => {
+      if (!isOpen()) return;
+      if (event.key === 'Escape') {
+        setOpen(false, true);
+        return;
+      }
+      if (event.key === 'Tab') {
+        // Keep focus inside the toggle + menu links while the menu is open
+        const focusable = [toggle!, ...links];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
 
-    // Close on link click
-    overlay.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => toggleMenu(false));
+    desktop.addEventListener('change', (event) => {
+      if (event.matches && isOpen()) setOpen(false);
     });
   }
 
   setupMobileMenu();
   document.addEventListener('astro:page-load', setupMobileMenu);
-  document.addEventListener('astro:after-swap', setupMobileMenu);
 </script>

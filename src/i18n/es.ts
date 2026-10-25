@@ -7,7 +7,7 @@ export const es = {
   'cta.viewAllProducts': 'Ver todos los productos',
   'cta.readMore': 'Leer más',
   'cta.letsTalk': 'Hablemos',
-  'badge.comingSoon': 'Próximamente',
+  'badge.comingSoon': 'En desarrollo',
   'badge.live': 'En operación',
   'label.company': 'Empresa',
   'label.role': 'Rol',

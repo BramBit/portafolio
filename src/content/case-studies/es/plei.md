@@ -1,40 +1,62 @@
 ---
 title: "PLEI — Plataforma E-Learning e Infraestructura de IA"
 slug: "plei"
-impactSummary: "Reemplacé Algolia por un motor de búsqueda híbrido construido a la medida y desarrollé capacidades reutilizables de RAG y soporte con IA para la plataforma."
-summary: "Participación en la evolución de una plataforma e-learning mediante infraestructura de IA, procesamiento documental, RAG y un motor de búsqueda híbrido."
+impactSummary: "Reemplacé Algolia por un motor de búsqueda híbrido a la medida y desarrollé capacidades de RAG y automatización para la plataforma."
+summary: "Ingeniería Frontend y Full Stack sobre una plataforma e-learning: migración a Vite, motor de búsqueda híbrido en PostgreSQL y triage asistido por IA."
 technologies:
+  - "PHP"
+  - "Laravel"
   - "React"
   - "TypeScript"
-  - "Laravel"
   - "PostgreSQL"
   - "pgvector"
+  - "RAG"
+  - "MySQL"
+  - "Redis"
+  - "Vite"
 company: "Belvi Digital"
-role: "Frontend → Full Stack"
+role: "Frontend → Full Stack Developer"
 timeframe: "dic. 2023 – may. 2026"
 publishedAt: 2026-08-04
 ---
 
-## Problema
+## Contexto del Producto y Problema
 
-PLEI es una plataforma e-learning multipropósito construida para apoyar el ecosistema de clientes de Belvi Digital: distribuye contenido educativo, recursos multimedia y herramientas orientadas al crecimiento comercial de clínicas estéticas. Debía dar soporte a cursos, videos y material de capacitación para el uso de dispositivos médicos, junto con recursos de marketing y posicionamiento para los negocios afiliados — y su buscador existente, construido sobre Algolia, no alcanzaba para esa mezcla de tipos de contenido, mientras el soporte consumía tiempo de desarrollo en preguntas repetitivas y triage de errores.
+PLEI es una plataforma e-learning y de recursos comerciales construida para apoyar el ecosistema de clientes de Belvi Digital (clínicas estéticas y profesionales médicos). Su catálogo distribuye cursos en video, capacitaciones para el uso de equipos médicos y materiales de marketing.
 
-## Solución
+La plataforma enfrentaba dos problemas críticos de ingeniería:
+1. **Búsqueda limitada y costosa:** El motor original sobre Algolia implicaba un costo de suscripción externo creciente y no comprendía la naturaleza heterogénea del contenido (lecciones, documentos técnicos y videos), limitándose a coincidencias de texto plano sin comprensión semántica.
+2. **Deuda técnica en frontend y triage de soporte:** La interfaz arrastraba un setup heredado en React 16 con tiempos de compilación lentos y sin pruebas automatizadas, mientras que el triage de errores en producción consumía tiempo recurrente de ingeniería.
 
-Entré al equipo frontend de PLEI durante su migración de React 16 a Vite (cerca del 40% de la migración), luego construí su primera suite de pruebas automatizadas con Vitest, y pasé a trabajo full stack enfocado en IA, automatización e integración entre plataformas. Lo central fue una plataforma de IA reutilizable para PLEI: un sistema RAG personalizado, un motor de búsqueda híbrido que reemplazó completamente a Algolia, un chatbot de soporte inteligente y automatización del análisis de errores — todo detrás de una sola fachada de acceso para que distintas partes del producto reutilizaran las mismas capacidades de IA en vez de construir cada una la suya.
+## Rol y Responsabilidad Individual
 
-## Arquitectura
+Me incorporé al equipo frontend durante la migración de React 16 a Vite (asumiendo de forma directa cerca del 40% del proceso de migración y construyendo su primera suite de pruebas automatizadas con Vitest). Posteriormente pasé a responsabilidades full stack en el backend Laravel/PHP:
+- Diseño y desarrollo completo del motor de búsqueda híbrido *Smart Search* que sustituyó a Algolia.
+- Implementación del pipeline de embeddings asíncrono con base de datos dual (MySQL + PostgreSQL/pgvector).
+- Optimización de activos multimedia y archivado automático en AWS S3.
+- Automatización del análisis de incidentes de Sentry asistido por IA y notificación a Microsoft Teams.
 
-El backend en Laravel/PHP usa Eloquent ORM, jobs y traits para su dominio principal, con una base PostgreSQL separada dedicada a las funcionalidades de IA, usando pgvector, tsvector y pg_trgm como base para la búsqueda semántica e híbrida. La plataforma de IA en sí está detrás de una fachada centralizada que desacopla cada funcionalidad de IA del resto de la aplicación, para que una capacidad construida para un módulo —búsqueda, chat, análisis de errores— pueda reutilizarse en otro sin duplicar lógica.
+## Funcionalidades Implementadas
 
-## Implementación
+1. **Smart Search Híbrido Multiseñal:** Pipeline de recuperación que orquesta cuatro señales complementarias:
+   - *Búsqueda vectorial:* Similitud semántica de intenciones con embeddings en `pgvector`.
+   - *Búsqueda de texto completo:* Coincidencia léxica mediante `tsvector` y `websearch_to_tsquery`.
+   - *Búsqueda difusa:* Tolerancia a errores tipográficos y variaciones ortográficas con `pg_trgm`.
+   - *Concordancia exacta:* Priorización de títulos directos de cursos y lecciones.
+2. **Ranking Unificado con Reciprocal Rank Fusion (RRF):** Algoritmo que combina las cuatro señales en función de la posición ordinal relativa de cada resultado, eliminando el problema de comparar puntuaciones con escalas incompatibles.
+3. **Pipeline Asíncrono de Embeddings:** Arquitectura dual que mantiene la lógica relacional en MySQL y sincroniza los vectores en PostgreSQL mediante Observers de Eloquent, colas de trabajo y comandos Artisan programados.
+4. **Optimización Multimedia en AWS S3:** Pipeline para la conversión automática de imágenes a formato WebP, compresión de video/audio de lecciones y políticas de archivado automático de recursos sin uso.
+5. **Triage de Errores Asistido por IA:** Servicio que captura eventos de error en Sentry, analiza la traza de ejecución y el contexto con un LLM, y genera diagnósticos preliminares distribuidos a canales de Microsoft Teams mediante webhooks.
 
-Smart Search corre pgvector para búsqueda vectorial, tsvector para búsqueda de texto completo, pg_trgm para coincidencia difusa, y coincidencia exacta de títulos, orquestados como un pipeline híbrido de varias etapas que adapta su estrategia según el tipo de recurso consultado —documentos, videos, imágenes y otros medios—. El sistema RAG maneja procesamiento documental, chunking, embeddings, recuperación semántica y construcción dinámica de contexto, construido sin frameworks externos para encajar en la arquitectura existente de PLEI. El chatbot de soporte va más allá de una FAQ: acepta capturas de pantalla, genera un diagnóstico preliminar con IA cuando un usuario reporta un problema, y notifica al equipo de desarrollo mediante webhooks a Microsoft Teams. Un pipeline separado procesa los eventos de error de Sentry, corre un análisis asistido por IA, y distribuye reportes enriquecidos al equipo automáticamente.
+## Retos Técnicos y Decisiones de Arquitectura
 
-## Retos
+- **Reemplazo integral de Algolia sin degradación de velocidad:** Sustituir un producto especializado por un desarrollo propio exigió optimizar consultas SQL complejas para que la combinación de cuatro señales respondiera dentro de los márgenes de latencia requeridos por la experiencia de usuario.
+- **Autorización y Visibilidad en la Capa de Datos:** Un recurso relevante semánticamente no debe exponerse si el usuario no cuenta con la membresía adecuada. Las políticas de control de acceso se integraron directamente en las sentencias de base de datos antes de calcular el ranking final.
+- **Capa de Fachada Unificada:** Para evitar que cada módulo del producto construyera su propia integración de IA, se diseñó una fachada centralizada en Laravel que desacopló los proveedores de modelos y permitió reutilizar la infraestructura en búsqueda, soporte y análisis de errores.
 
-Reemplazar Algolia significaba igualar o superar un producto de búsqueda maduro y especializado con un sistema construido internamente — eso exigió combinar varias estrategias de recuperación en vez de depender de una sola, porque ningún método individual cubría bien todos los tipos de contenido. Mantener las funcionalidades de IA reutilizables en un producto que no fue diseñado originalmente para eso implicó invertir primero en una capa de fachada, antes de que esa reutilización realmente rindiera.
+## Resultados Verificables
 
-## Resultado
-
-PLEI corre hoy sobre Vite en vez del setup heredado en React 16, tiene una suite de pruebas automatizadas donde antes no existía ninguna, ya no depende de Algolia, y su RAG, su búsqueda y sus herramientas de soporte se usan como una plataforma de IA compartida en todo el producto en vez de funcionalidades aisladas. La automatización del análisis de errores redujo de forma medible el tiempo necesario para entender y priorizar incidentes en producción.
+- Reemplazo total y definitivo de Algolia, eliminando la dependencia externa y los costos mensuales de suscripción.
+- Modernización de la arquitectura frontend sobre Vite y establecimiento de la primera suite de pruebas con Vitest.
+- Motor de búsqueda híbrido operando en producción sobre el catálogo de cursos y recursos de la plataforma.
+- Triage automatizado de incidentes operando en Teams, reduciendo el tiempo de análisis inicial de errores en producción.

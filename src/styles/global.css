@@ -1,16 +1,22 @@
-@import '@fontsource/space-grotesk/400.css';
-@import '@fontsource/space-grotesk/500.css';
-@import '@fontsource/space-grotesk/600.css';
-@import '@fontsource/space-grotesk/700.css';
+@import '@fontsource/space-grotesk/latin-400.css';
+@import '@fontsource/space-grotesk/latin-500.css';
+@import '@fontsource/space-grotesk/latin-700.css';
 
 @import './tokens/colors.css';
 @import './tokens/typography.css';
 @import './tokens/spacing.css';
+@import './tokens/motion.css';
 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-padding-top: calc(var(--nav-height) + var(--space-16));
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html, body {
@@ -22,36 +28,95 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Mobile horizontal card scroll layout */
-@media (max-width: 767px) {
-  .horizontal-scroll-mobile {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: stretch !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: var(--space-6, 24px) !important;
-    padding-bottom: var(--space-4, 16px);
-    margin-left: calc(-1 * var(--space-16, 16px));
-    margin-right: calc(-1 * var(--space-16, 16px));
-    padding-left: var(--space-16, 16px);
-    padding-right: var(--space-16, 16px);
-    scrollbar-width: none; /* Firefox */
-  }
+body {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
 
-  .horizontal-scroll-mobile::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
+::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  color: var(--color-text-primary);
+}
 
-  .horizontal-scroll-mobile > * {
-    flex: 0 0 80% !important;
-    min-width: 260px !important;
-    max-width: 320px !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    scroll-snap-align: start;
+/* Visible keyboard focus for every interactive element.
+   :where() keeps specificity at zero so components can refine it. */
+:where(a, button, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Scroll reveal: pure CSS scroll-driven animation on [data-reveal].
+   Only applies where animation-timeline is supported and motion is allowed;
+   everywhere else the content is simply visible (no JavaScript involved). */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+  }
+}
+
+/* Shared utilities */
+.skip-link {
+  position: absolute;
+  top: var(--space-8);
+  left: var(--space-8);
+  z-index: 200;
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-md);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--space-16)));
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover {
+  color: var(--color-accent-strong);
+}
+
+
 

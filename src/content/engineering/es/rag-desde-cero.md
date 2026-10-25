@@ -13,11 +13,11 @@ tldr: "Dos pipelines RAG en producción, construidos sin framework, con el prove
 publishedAt: 2026-08-01
 ---
 
-La diferencia apareció en la implementación. Zeus permitió integrar el RAG directamente dentro de un Backend basado en DDD y Arquitectura Hexagonal. PLEI llevó el problema más lejos: procesamiento documental, OCR, deduplicación mediante hash, diferentes tipos de documentos y una infraestructura de IA reutilizable.
+La diferencia apareció en la implementación. En el primer caso (una plataforma IoT médica), el reto fue integrar el pipeline RAG directamente dentro de un Backend existente basado en DDD y Arquitectura Hexagonal. En el segundo caso (una plataforma e-learning de alta concurrencia), el problema se trasladó a la ingestión documental masiva: procesamiento de archivos heterogéneos, OCR, deduplicación mediante hash, segmentación tipificada y una infraestructura de IA desacoplada y reutilizable.
 
 ---
 
-# 1. El problema real detrás de un RAG
+## 1. El problema real detrás de un RAG
 
 Un modelo de lenguaje puede generar una respuesta sin conocer los datos privados de una aplicación.
 
@@ -45,9 +45,9 @@ El modelo deja de ser la fuente primaria de conocimiento. Su función pasa a ser
 
 ---
 
-# 2. ¿Por qué construir el pipeline directamente?
+## 2. ¿Por qué construir el pipeline directamente?
 
-En Zeus ya existía una arquitectura Backend basada en **Domain-Driven Design y Arquitectura Hexagonal**.
+En el primer escenario (plataforma IoT) ya existía una arquitectura Backend basada en **Domain-Driven Design y Arquitectura Hexagonal**.
 
 La decisión fue no introducir un framework de RAG que terminara imponiendo sus propias convenciones sobre la arquitectura existente.
 
@@ -70,11 +70,11 @@ La decisión no fue evitar frameworks por principio. Fue mantener el control sob
 
 ---
 
-# 3. La arquitectura común
+## 3. La arquitectura común
 
-Aunque Zeus y PLEI eran productos diferentes, ambos sistemas comparten el mismo flujo conceptual.
+Aunque ambos casos correspondían a productos y dominios diferentes, ambos sistemas comparten el mismo flujo conceptual.
 
-## Indexación
+### Indexación
 
 ```text
 Documento
@@ -88,7 +88,7 @@ Embeddings
 PostgreSQL + pgvector
 ```
 
-## Consulta
+### Consulta
 
 ```text
 Pregunta
@@ -110,15 +110,15 @@ La separación es importante: la indexación ocurre antes de la consulta. Cuando
 
 ---
 
-# 4. Primera implementación: Zeus
+## 4. Primera implementación: Plataforma IoT médica
 
-## Contexto
+### Contexto
 
-Zeus es una plataforma IoT orientada a la administración de dispositivos médicos estéticos.
+El primer sistema correspondió a una plataforma IoT orientada a la administración y telemetría de dispositivos médicos estéticos.
 
 Su Backend utiliza Node.js, TypeScript, Express y PostgreSQL, dentro de una arquitectura que incorpora DDD, Arquitectura Hexagonal y procesamiento asincrónico.
 
-## Problema
+### Problema
 
 La plataforma necesitaba proporcionar respuestas utilizando información propia del producto.
 
@@ -126,9 +126,9 @@ Enviar solamente la pregunta al LLM no garantizaba que el modelo conociera la do
 
 La solución requería construir una capa de recuperación antes de generar la respuesta.
 
-## Implementación
+### Implementación
 
-Diseñé e implementé una arquitectura RAG integrada dentro del Backend de Zeus.
+Diseñé e implementé una arquitectura RAG integrada dentro del Backend de la plataforma.
 
 ```text
 Documento
@@ -156,33 +156,33 @@ LLM
 Respuesta
 ```
 
-## Procesamiento documental
+### Procesamiento documental
 
 La solución contempla procesamiento de documentos, extracción de texto, segmentación, generación de embeddings, almacenamiento vectorial y recuperación semántica.
 
 PostgreSQL con `pgvector` se utiliza para almacenar los vectores.
 
-## ¿Por qué pgvector?
+### ¿Por qué pgvector?
 
-PostgreSQL ya formaba parte de la infraestructura de Zeus. Utilizar `pgvector` permitió incorporar almacenamiento y recuperación vectorial sin crear una infraestructura de persistencia independiente únicamente para el RAG.
+PostgreSQL ya formaba parte de la infraestructura de persistencia. Utilizar `pgvector` permitió incorporar almacenamiento y recuperación vectorial sin crear una infraestructura de persistencia independiente únicamente para el RAG.
 
 La decisión mantuvo el sistema cerca de las abstracciones existentes.
 
-## Resultado
+### Resultado
 
-### Antes
+#### Antes
 
 La plataforma necesitaba una forma de proporcionar conocimiento propio del producto al modelo antes de generar una respuesta.
 
-### Después
+#### Después
 
-Zeus incorporó una infraestructura de recuperación de conocimiento que permite utilizar documentación interna como contexto para modelos de lenguaje.
+La plataforma incorporó una infraestructura de recuperación de conocimiento que permite utilizar documentación interna como contexto para modelos de lenguaje.
 
 ---
 
-# 5. Segunda implementación: PLEI
+## 5. Segunda implementación: Plataforma E-learning y Pipeline Documental
 
-PLEI es una plataforma e-learning utilizada para distribuir contenido educativo y recursos orientados al desarrollo de los clientes de Belvi.
+El segundo sistema correspondió a una plataforma e-learning utilizada para distribuir contenido educativo, manuales técnicos y recursos multimedia para usuarios corporativos.
 
 Aquí el objetivo volvió a ser incorporar IA sobre información propia de la plataforma.
 
@@ -192,9 +192,9 @@ También había que construir la infraestructura para producir ese contexto.
 
 ---
 
-# 6. Una infraestructura de IA reutilizable
+## 6. Una infraestructura de IA reutilizable
 
-PLEI no necesitaba que el RAG existiera solamente para un chatbot.
+En este caso no se necesitaba que el RAG existiera solamente para un chatbot aislado.
 
 La infraestructura debía poder reutilizarse para distintas capacidades:
 
@@ -225,7 +225,7 @@ La razón fue evitar que cada funcionalidad implementara directamente su integra
 
 ---
 
-# 7. Mantener el proveedor de IA intercambiable
+## 7. Mantener el proveedor de IA intercambiable
 
 La integración se diseñó mediante una abstracción basada en estrategias.
 
@@ -249,7 +249,7 @@ Esto permite cambiar la implementación concreta sin propagar dependencias de pr
 
 ---
 
-# 8. El verdadero cuello de botella: los documentos
+## 8. El verdadero cuello de botella: los documentos
 
 Un RAG no comienza con el LLM.
 
@@ -257,7 +257,7 @@ Comienza con los datos.
 
 Un documento completo no es una unidad adecuada para enviarlo directamente a un modelo. Primero debe convertirse en unidades recuperables.
 
-En PLEI se implementó un pipeline documental:
+En la plataforma e-learning se implementó un pipeline documental multietapa:
 
 ```text
 Documento
@@ -287,7 +287,7 @@ Cada etapa resuelve un problema concreto.
 
 ---
 
-# 9. Evitar reprocesamiento innecesario
+## 9. Evitar reprocesamiento innecesario
 
 Antes de ejecutar todo el pipeline, el documento se identifica mediante un hash SHA-256.
 
@@ -310,7 +310,7 @@ Esto convierte el pipeline en un proceso idempotente respecto de documentos ya i
 
 ---
 
-# 10. Cuando el PDF no contiene texto
+## 10. Cuando el PDF no contiene texto
 
 No todos los PDFs contienen texto real.
 
@@ -341,7 +341,7 @@ No es una característica aislada: es una etapa de normalización previa a la in
 
 ---
 
-# 11. Chunking: convertir documentos en unidades recuperables
+## 11. Chunking: convertir documentos en unidades recuperables
 
 Una vez obtenido el texto, hay que dividirlo.
 
@@ -369,7 +369,7 @@ El objetivo es evitar que una información relevante quede partida de forma que 
 
 ---
 
-# 12. Las FAQ necesitan otra estrategia
+## 12. Las FAQ necesitan otra estrategia
 
 Una FAQ tiene una estructura semántica distinta a un documento normal:
 
@@ -387,7 +387,7 @@ No existe una única estrategia de fragmentación que sea adecuada para cualquie
 
 ---
 
-# 13. Embeddings y pgvector
+## 13. Embeddings y pgvector
 
 Cada chunk se transforma en una representación vectorial.
 
@@ -422,7 +422,7 @@ PostgreSQL vuelve a actuar como parte central de la infraestructura: almacena lo
 
 ---
 
-# 14. De los chunks a la respuesta
+## 14. De los chunks a la respuesta
 
 Una vez indexado el conocimiento, la consulta puede seguir un flujo compacto:
 
@@ -448,7 +448,7 @@ La indexación es una fase previa. La consulta utiliza las representaciones que 
 
 ---
 
-# 15. Mantener la respuesta anclada al contexto
+## 15. Mantener la respuesta anclada al contexto
 
 Para los chatbots construidos sobre estas capacidades se utilizó una estrategia de `System Prompt` que orienta la respuesta hacia el contexto recuperado.
 
@@ -473,13 +473,13 @@ La finalidad es reducir el espacio de respuesta y hacer que la generación se ba
 
 ---
 
-# 16. Controlar el costo del pipeline
+## 16. Controlar el costo del pipeline
 
 Un sistema RAG puede implicar operaciones costosas: generación de embeddings, retrieval e inferencia.
 
 Por eso la arquitectura también debe evitar trabajo repetido cuando sea posible.
 
-En PLEI se utilizó Redis como parte de una estrategia de caché:
+En el caso de la plataforma e-learning se utilizó Redis como parte de una estrategia de caché:
 
 ```text
 Consulta
@@ -505,20 +505,20 @@ Es una capa para reutilizar resultados cuando el escenario permite hacerlo.
 
 ---
 
-# 17. Zeus y PLEI: dos implementaciones, una misma idea
+## 17. Dos implementaciones, una misma idea: Comparativa técnica
 
-| | Zeus | PLEI |
+| Dimensión | Caso 1: Plataforma IoT médica | Caso 2: Plataforma E-learning |
 |---|---|---|
-| Producto | Plataforma IoT | Plataforma e-learning |
-| Objetivo | Conocimiento propio del producto | Conocimiento propio de la plataforma |
-| Backend | Node.js / TypeScript / Express | Laravel |
+| Producto | Plataforma IoT y telemetría | Plataforma e-learning y formación |
+| Objetivo | Conocimiento sobre manuales de producto | Conocimiento sobre recursos formativos |
+| Backend | Node.js / TypeScript / Express | Laravel / PHP |
 | Vector store | PostgreSQL + pgvector | PostgreSQL + pgvector |
-| Procesamiento documental | Sí | Sí |
+| Procesamiento documental | Integrado en backend | Pipeline asíncrono multietapa |
 | Embeddings | Sí | Sí |
-| Retrieval | Semántico | Sobre conocimiento documental |
+| Retrieval | Semántico sobre documentación interna | Semántico sobre chunks clasificados |
 | Proveedores | OpenAI / Ollama | OpenAI / Ollama |
-| Arquitectura destacada | DDD + Hexagonal | Infraestructura de IA reutilizable |
-| Reto principal | Integración arquitectónica | Procesamiento y reutilización |
+| Arquitectura destacada | DDD + Arquitectura Hexagonal | AI Facade + Pipeline desacoplado |
+| Reto principal | Integración arquitectónica en backend | Ingesta documental, OCR y reutilización |
 
 La infraestructura conceptual es similar.
 
@@ -528,11 +528,11 @@ Y esa diferencia es precisamente lo interesante.
 
 ---
 
-# 18. Qué partes del sistema son realmente reutilizables
+## 18. Qué partes del sistema son realmente reutilizables
 
 Después de construir el patrón dos veces, es posible separar el núcleo RAG de las decisiones específicas del producto.
 
-## Núcleo
+### Núcleo
 
 ```text
 Documento
@@ -552,7 +552,7 @@ Context
 LLM
 ```
 
-## Decisiones específicas
+### Decisiones específicas
 
 ```text
 RAG
@@ -566,8 +566,8 @@ RAG
  │     └── Ollama
  │
  └── Procesamiento
-       ├── Zeus
-       └── PLEI
+       ├── Caso 1 (IoT / DDD)
+       └── Caso 2 (E-learning / Pipeline)
 ```
 
 El patrón permanece.
@@ -576,7 +576,7 @@ Las decisiones de implementación cambian según el dominio, los datos y la arqu
 
 ---
 
-# 19. Lo que cambió entre la primera y la segunda implementación
+## 19. Lo que cambió entre la primera y la segunda implementación
 
 La primera implementación respondió principalmente a:
 
@@ -598,9 +598,9 @@ El aprendizaje importante fue que integrar un modelo de lenguaje y construir inf
 
 ---
 
-# 20. Antes y después
+## 20. Antes y después
 
-## Zeus
+### Caso 1: Plataforma IoT médica
 
 **Antes**
 
@@ -628,7 +628,7 @@ LLM
 
 El conocimiento propio del producto pasó a formar parte del flujo de generación.
 
-## PLEI
+### Caso 2: Plataforma E-learning
 
 **Antes**
 
@@ -661,7 +661,7 @@ La plataforma obtuvo una base común para funcionalidades de IA que utilizan con
 
 ---
 
-# 21. La parte difícil no era llamar al LLM
+## 21. La parte difícil no era llamar al LLM
 
 Un RAG puede parecer una secuencia corta:
 
@@ -696,15 +696,15 @@ La ingeniería está en construir todo lo que ocurre antes y alrededor de él.
 
 ---
 
-# Conclusión
+## Conclusión
 
 Construir un RAG una vez permite entender el mecanismo.
 
 Construirlo nuevamente en otro producto permite distinguir qué pertenece al patrón y qué depende del contexto.
 
-En Zeus, el reto principal fue integrar la recuperación de conocimiento dentro de un Backend con una arquitectura ya definida.
+En el primer escenario (plataforma IoT), el reto principal fue integrar la recuperación de conocimiento dentro de un Backend con una arquitectura ya definida.
 
-En PLEI, el problema se amplió hacia una infraestructura documental y de IA reutilizable: deduplicación, extracción, OCR, clasificación, chunking, embeddings, almacenamiento vectorial y abstracción de proveedores.
+En el segundo escenario (plataforma e-learning), el problema se amplió hacia una infraestructura documental y de IA reutilizable: deduplicación, extracción, OCR, clasificación, chunking, embeddings, almacenamiento vectorial y abstracción de proveedores.
 
 La conclusión es simple:
 

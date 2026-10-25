@@ -43,7 +43,7 @@
   color: var(--color-text-primary);
   line-height: 1.2;
   margin: 0 0 var(--space-16) 0;
-  transition: color 150ms ease;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .cardLink:hover .title {
@@ -82,7 +82,7 @@
   font-size: var(--font-size-caption);
   font-weight: 600;
   color: var(--color-primary);
-  transition: transform 150ms ease;
+  transition: transform var(--dur-fast) var(--ease-out);
 }
 
 .cardLink:hover .readMore {

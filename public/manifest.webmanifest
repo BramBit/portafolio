@@ -4,8 +4,8 @@
   "description": "Portfolio profesional de Brayan Mercado, Software Engineer especializado en backend, desarrollo full stack, arquitectura de software e IA aplicada.",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#111318",
-  "background_color": "#111318",
+  "theme_color": "#0A0B10",
+  "background_color": "#0A0B10",
   "lang": "es",
   "icons": [
     {
@@ -23,9 +23,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Ver Proyectos",
-      "short_name": "Proyectos",
-      "url": "/#projects",
+      "name": "Ver Productos",
+      "short_name": "Productos",
+      "url": "/products",
       "icons": [
         {
           "src": "/icon-192.png",
@@ -37,7 +37,7 @@
     {
       "name": "Experiencia",
       "short_name": "Experiencia",
-      "url": "/#experience",
+      "url": "/case-studies",
       "icons": [
         {
           "src": "/icon-192.png",
@@ -49,7 +49,7 @@
     {
       "name": "Contacto",
       "short_name": "Contacto",
-      "url": "/#contact",
+      "url": "/contact",
       "icons": [
         {
           "src": "/icon-192.png",

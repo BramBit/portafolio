@@ -1,21 +1,34 @@
+/* The wrapper (toggle + overlay) only exists below 60rem */
+.mobileMenuWrapper {
+  display: block;
+}
+
+@media (min-width: 60rem) {
+  .mobileMenuWrapper {
+    display: none;
+  }
+}
+
 .menuToggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background: transparent;
-  border: 1px solid var(--color-surface-elevated);
-  border-radius: 6px;
+  border: 1px solid var(--color-border-ui);
+  border-radius: var(--radius-md);
   color: var(--color-text-primary);
   cursor: pointer;
   padding: 0;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .menuToggle:hover {
-  background-color: var(--color-surface);
-  border-color: var(--color-primary);
+  background-color: var(--color-surface-elevated);
+  border-color: var(--color-accent);
 }
 
 .icon {
@@ -26,27 +39,43 @@
   fill: none;
 }
 
+.iconClose {
+  display: none;
+}
+
+.menuToggle[aria-expanded='true'] .iconOpen {
+  display: none;
+}
+
+.menuToggle[aria-expanded='true'] .iconClose {
+  display: inline;
+}
+
 .overlay {
   position: fixed;
-  top: 80px;
+  top: var(--nav-height);
   left: 0;
-  width: 100vw;
-  height: calc(100vh - 80px);
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
   background-color: var(--color-bg);
-  border-top: 1px solid var(--color-surface-elevated);
-  padding: var(--space-32) var(--space-24);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-32) var(--gutter);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: var(--space-32);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
-  transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+  transition:
+    opacity var(--dur-base) var(--ease-in-out),
+    transform var(--dur-base) var(--ease-in-out),
+    visibility var(--dur-base) var(--ease-in-out);
   z-index: 99;
 }
 
-.overlay.open,
-:global(#mobile-menu-overlay.open) {
+.overlay[data-open='true'] {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -54,39 +83,58 @@
 
 .navList {
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-24);
+  gap: var(--space-8);
+}
+
+.navList li {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.overlay[data-open='true'] .navList li {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i, 0) * var(--stagger));
 }
 
 .navLink {
+  display: block;
+  padding: var(--space-12) 0 var(--space-12) var(--space-16);
+  border-left: 2px solid transparent;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-body-lg);
+  font-size: var(--font-size-h3);
   font-weight: 500;
   color: var(--color-text-secondary);
   text-decoration: none;
-  display: block;
-  transition: color 150ms ease, transform 150ms ease;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
 
-.navLink:hover,
+.navLink:hover {
+  color: var(--color-text-primary);
+  text-decoration-line: underline;
+}
+
 .navLink.active {
   color: var(--color-text-primary);
-  transform: translateX(4px);
+  border-left-color: var(--color-accent);
 }
 
 .langSwitcher {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-body);
-  color: var(--color-text-muted);
-  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: var(--space-2, 8px);
+  gap: var(--space-8);
   padding-top: var(--space-24);
-  border-top: 1px solid var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
 }
 
 .langActive {
@@ -95,19 +143,17 @@
 }
 
 .langLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-8);
   color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color 150ms ease;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .langLink:hover {
-  color: var(--color-primary);
+  color: var(--color-accent-strong);
 }
-
-@media (min-width: 769px) {
-  .menuToggle,
-  .overlay {
-    display: none !important;
-  }
-}
-

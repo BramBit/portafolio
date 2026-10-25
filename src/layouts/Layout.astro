@@ -2,6 +2,9 @@
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import { getEquivalentRoute } from "../i18n";
+import font400 from "@fontsource/space-grotesk/files/space-grotesk-latin-400-normal.woff2?url";
+import font700 from "@fontsource/space-grotesk/files/space-grotesk-latin-700-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -15,9 +18,12 @@ const {
   ogType = 'website',
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, 'https://brayanmercado.com').toString();
 const currentPath = Astro.url.pathname;
 const isEs = currentPath.startsWith('/es');
+const canonicalURL = new URL(currentPath, 'https://brayanmercado.com').toString();
+const enURL = new URL(getEquivalentRoute(currentPath, 'en'), 'https://brayanmercado.com').toString();
+const esURL = new URL(getEquivalentRoute(currentPath, 'es'), 'https://brayanmercado.com').toString();
+const skipLabel = isEs ? 'Saltar al contenido' : 'Skip to content';
 const locale = isEs ? 'es_ES' : 'en_US';
 const ogImageURL = 'https://brayanmercado.com/og-image.png';
 
@@ -44,6 +50,11 @@ const personSchema = {
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="es" href={esURL} />
+    <link rel="alternate" hreflang="x-default" href={enURL} />
+    <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={font700} as="font" type="font/woff2" crossorigin />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Primary Meta Tags -->
@@ -70,8 +81,9 @@ const personSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">{skipLabel}</a>
     <Navbar />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <Footer />

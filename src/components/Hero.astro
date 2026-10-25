@@ -6,9 +6,12 @@ import styles from './Hero.module.css';
 interface ButtonConfig {
   label: string;
   href?: string;
-  onClick?: string;
-  type?: 'button' | 'submit' | 'reset';
   [key: string]: any;
+}
+
+interface MetaItem {
+  label: string;
+  value: string;
 }
 
 interface Props {
@@ -17,6 +20,8 @@ interface Props {
   description: string;
   primaryButton?: ButtonConfig;
   secondaryButton?: ButtonConfig;
+  /** Verified profile facts shown beside (wide) or below (narrow) the headline */
+  meta?: MetaItem[];
   showGlow?: boolean;
   class?: string;
 }
@@ -27,46 +32,70 @@ const {
   description,
   primaryButton,
   secondaryButton,
+  meta = [],
   showGlow = true,
   class: className = '',
 } = Astro.props;
+
+// Intentional line break: the clause before the first colon leads, the rest follows.
+// The visible text is unchanged (the colon stays, the space is kept between spans).
+const splitAt = title.indexOf(': ');
+const lead = splitAt > -1 ? title.slice(0, splitAt + 1) : title;
+const rest = splitAt > -1 ? title.slice(splitAt + 2) : '';
+
+const { label: primaryLabel, ...primaryRest } = primaryButton ?? { label: '' };
+const { label: secondaryLabel, ...secondaryRest } = secondaryButton ?? { label: '' };
 ---
 
-<section class:list={[styles.heroSection, className]}>
-  {showGlow && <div class={styles.glowBackground} aria-hidden="true" />}
+<section class:list={[styles.heroSection, className]} aria-labelledby="hero-title">
+  {showGlow && <div class={styles.glow} aria-hidden="true" />}
 
-  <Container class={styles.content}>
-    {subtitle && <p class={styles.subtitle}>{subtitle}</p>}
+  <Container class={styles.layout}>
+    <div class={styles.main}>
+      {
+        subtitle && (
+          <p class:list={[styles.eyebrow, styles.reveal]} style="--i: 0">
+            {subtitle}
+          </p>
+        )
+      }
 
-    <h1 class={styles.title}>{title}</h1>
+      <h1 id="hero-title" class:list={[styles.title, styles.reveal]} style="--i: 1">
+        <span class={styles.lead}>{lead}</span>{' '}
+        {rest && <span class={styles.rest}>{rest}</span>}
+      </h1>
 
-    <p class={styles.description}>{description}</p>
+      <p class:list={[styles.description, styles.reveal]} style="--i: 2">{description}</p>
+
+      {
+        (primaryButton || secondaryButton) && (
+          <div class:list={[styles.actions, styles.reveal]} style="--i: 3">
+            {primaryButton && (
+              <Button variant="primary" class={styles.cta} {...primaryRest}>
+                {primaryLabel}
+                <span class={styles.arrow} aria-hidden="true">→</span>
+              </Button>
+            )}
+            {secondaryButton && (
+              <Button variant="secondary" class={styles.cta} {...secondaryRest}>
+                {secondaryLabel}
+              </Button>
+            )}
+          </div>
+        )
+      }
+    </div>
 
     {
-      (primaryButton || secondaryButton) && (
-        <div class={styles.actions}>
-          {primaryButton && (
-            <Button
-              variant="primary"
-              href={primaryButton.href}
-              type={primaryButton.type}
-              {...primaryButton}
-            >
-              {primaryButton.label}
-            </Button>
-          )}
-
-          {secondaryButton && (
-            <Button
-              variant="secondary"
-              href={secondaryButton.href}
-              type={secondaryButton.type}
-              {...secondaryButton}
-            >
-              {secondaryButton.label}
-            </Button>
-          )}
-        </div>
+      meta.length > 0 && (
+        <dl class:list={[styles.meta, styles.reveal]} style="--i: 4">
+          {meta.map((item) => (
+            <div class={styles.metaItem}>
+              <dt class="label">{item.label}</dt>
+              <dd class={styles.metaValue}>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
       )
     }
   </Container>

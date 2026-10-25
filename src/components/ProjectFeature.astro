@@ -1,0 +1,70 @@
+---
+import Badge from './Badge.astro';
+import Button from './Button.astro';
+import styles from './ProjectFeature.module.css';
+import { getLangFromUrl, useTranslations } from '../i18n';
+
+interface Props {
+  title: string;
+  tagline: string;
+  status: 'live' | 'coming-soon';
+  problem?: string;
+  solution?: string;
+  /** Detail page of the project (internal) */
+  href: string;
+  /** Public website, only when the content provides it */
+  website?: string;
+  /** Flip the columns on wide screens, to alternate several features */
+  reverse?: boolean;
+  class?: string;
+}
+
+const { title, tagline, status, problem, solution, href, website, reverse = false, class: className = '' } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const isLive = status === 'live';
+const websiteLabel = lang === 'es' ? 'Visitar sitio' : 'Visit website';
+---
+
+<article class:list={[styles.feature, { [styles.reverse]: reverse }, className]} data-reveal>
+  <div class={styles.intro}>
+    <div>
+      <Badge variant={isLive ? 'accent' : 'default'}>{isLive ? t('badge.live') : t('badge.comingSoon')}</Badge>
+      <h3 class={styles.name}>{title}</h3>
+      <p class={styles.tagline}>{tagline}</p>
+    </div>
+    <div class={styles.actions}>
+      <Button variant="primary" href={href}>
+        {t('cta.viewProduct')}
+        <span class={styles.arrow} aria-hidden="true">→</span>
+      </Button>
+      {
+        website && (
+          <Button variant="secondary" href={website} target="_blank" rel="noopener noreferrer">
+            {websiteLabel}
+          </Button>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    (problem || solution) && (
+      <div class={styles.panel}>
+        {problem && (
+          <div class={styles.block}>
+            <h4 class="label">{t('label.problem')}</h4>
+            <p>{problem}</p>
+          </div>
+        )}
+        {solution && (
+          <div class={styles.block}>
+            <h4 class="label">{t('label.solution')}</h4>
+            <p>{solution}</p>
+          </div>
+        )}
+      </div>
+    )
+  }
+</article>

@@ -26,7 +26,7 @@
   color: var(--color-text-primary);
   line-height: 1.2;
   margin: 0;
-  transition: color 150ms ease;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .cardLink:hover .title {
@@ -41,7 +41,7 @@
   fill: none;
   flex-shrink: 0;
   margin-top: 4px;
-  transition: transform 150ms ease, stroke 150ms ease;
+  transition: transform var(--dur-fast) var(--ease-out), stroke var(--dur-fast) var(--ease-out);
 }
 
 .cardLink:hover .arrowIcon {

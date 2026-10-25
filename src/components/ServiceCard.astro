@@ -1,5 +1,6 @@
 ---
 import Card from './Card.astro';
+import { getLangFromUrl } from '../i18n';
 import styles from './ServiceCard.module.css';
 
 interface Props {
@@ -17,6 +18,9 @@ const {
   interactive = false,
   class: className = '',
 } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const techLabel = lang === 'es' ? 'Tecnologías:' : 'Tech Stack:';
 ---
 
 <Card interactive={interactive} class:list={[styles.serviceCard, className]}>
@@ -26,7 +30,7 @@ const {
   {
     technologies.length > 0 && (
       <div class={styles.techFooter}>
-        <span class={styles.techLabel}>Tech Stack:</span>
+        <span class={styles.techLabel}>{techLabel}</span>
         <span class={styles.techList}>{technologies.join(' · ')}</span>
       </div>
     )

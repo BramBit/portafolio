@@ -1,0 +1,114 @@
+.timeline {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.group {
+  display: grid;
+  gap: var(--space-24);
+  padding: var(--space-32) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.company {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.companyName {
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+.timeframe {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.entries {
+  list-style: none;
+  min-width: 0;
+}
+
+.entries li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-24) 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.entries li:first-child .entry {
+  padding-top: 0;
+}
+
+.entries li:last-child .entry {
+  padding-bottom: 0;
+}
+
+.entryHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.entryTitle {
+  font-size: var(--font-size-h4);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.entryArrow {
+  flex: none;
+  color: var(--color-accent);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.entry:hover .entryTitle {
+  color: var(--color-accent-strong);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .entry:hover .entryArrow {
+    transform: translateX(4px);
+  }
+}
+
+.entryMeta {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+.entrySummary {
+  max-width: var(--measure);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+@media (min-width: 60rem) {
+  .group {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: var(--space-48);
+  }
+}

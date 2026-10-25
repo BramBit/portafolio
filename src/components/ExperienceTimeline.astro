@@ -1,0 +1,51 @@
+---
+import Tag from './Tag.astro';
+import styles from './ExperienceTimeline.module.css';
+import type { ExperienceGroup } from '../data/experience';
+
+interface Props {
+  groups: ExperienceGroup[];
+  class?: string;
+}
+
+const { groups, class: className = '' } = Astro.props;
+---
+
+<ol class:list={[styles.timeline, className]}>
+  {
+    groups.map((group) => (
+      <li class={styles.group} data-reveal>
+        <div class={styles.company}>
+          {group.company && <h3 class={styles.companyName}>{group.company}</h3>}
+          {group.timeframe && <p class={styles.timeframe}>{group.timeframe}</p>}
+        </div>
+
+        <ul class={styles.entries}>
+          {group.entries.map((entry) => (
+            <li>
+              <a href={entry.href} class={styles.entry}>
+                <span class={styles.entryHeader}>
+                  <h4 class={styles.entryTitle}>{entry.title}</h4>
+                  <span class={styles.entryArrow} aria-hidden="true">→</span>
+                </span>
+                {(entry.role || entry.timeframe) && (
+                  <span class={styles.entryMeta}>
+                    {[entry.role, entry.timeframe].filter(Boolean).join(' · ')}
+                  </span>
+                )}
+                <span class={styles.entrySummary}>{entry.summary}</span>
+                {entry.technologies.length > 0 && (
+                  <span class={styles.tags}>
+                    {entry.technologies.map((tech) => (
+                      <Tag>{tech}</Tag>
+                    ))}
+                  </span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ol>

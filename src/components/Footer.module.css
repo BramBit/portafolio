@@ -1,7 +1,7 @@
 .footer {
   width: 100%;
   background-color: var(--color-bg);
-  border-top: 1px solid var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
   padding: var(--space-48) 0;
   margin-top: auto;
 }
@@ -65,6 +65,7 @@
 }
 
 .socialLinks {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   gap: var(--space-16);
@@ -77,15 +78,16 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-8);
+  min-height: 44px;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
   text-decoration: none;
   padding: var(--space-8) var(--space-12);
   border-radius: 6px;
-  border: 1px solid var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
   background-color: var(--color-surface);
-  transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
 }
 
 .socialLink:hover {
@@ -105,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
   padding-top: var(--space-24);
   gap: var(--space-16);
   flex-wrap: wrap;

@@ -23,3 +23,13 @@ Thumbs.db
 # Logs
 npm-debug.log*
 pnpm-debug.log*
+
+# AI & Internal Strategy docs
+00_ESTRATEGIA_Y_COPY_MAESTRO*
+AGENT.md
+AGENT.*
+CLAUDE.md
+.claude/
+.agent/
+.agents/
+

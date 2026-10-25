@@ -5,38 +5,26 @@ import Container from '../components/Container.astro';
 import Heading from '../components/Heading.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import CTASection from '../components/CTASection.astro';
-
-// Section 6 EN - focused service offering
-const servicesEN = [
-  {
-    title: 'AI Systems',
-    description: 'Design and implementation of RAG systems, semantic search, and LLM integrations built into existing applications, from architecture to production.',
-    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
-  },
-  {
-    title: 'Backend & Full Stack Development',
-    description: 'End-to-end feature development and backend services: data modeling, business logic, REST APIs, and the interface, applying architectural patterns where they solve a real product problem.',
-    technologies: ['TypeScript', 'Node.js', 'PostgreSQL', 'React', 'Next.js'],
-  },
-];
+import { servicesEN } from '../data/services';
 ---
 
 <Layout
   title="Software Engineering Services — Brayan Mercado"
-  description="Full Stack development, backend engineering, software architecture, and applied AI integration for digital products."
+  description="Custom software development, automation, applied AI, and software evolution tailored to real business processes."
 >
   <Section class="page-header-section">
     <Container>
       <Heading level={1}>Software Engineering Services</Heading>
       <p class="page-subtitle">
-        Full Stack development, backend engineering, software architecture, and applied AI integration for digital products.
+        Custom software development, automation, applied AI, and software evolution tailored to real business processes.
       </p>
     </Container>
   </Section>
 
   <Section>
     <Container>
-      <div class="services-grid horizontal-scroll-mobile">
+      <h2 class="visually-hidden">All Services</h2>
+      <div class="services-grid">
         {
           servicesEN.map((service) => (
             <ServiceCard

@@ -5,6 +5,7 @@ import Section from '../../../components/Section.astro';
 import Container from '../../../components/Container.astro';
 import Heading from '../../../components/Heading.astro';
 import Tag from '../../../components/Tag.astro';
+import Button from '../../../components/Button.astro';
 import CTASection from '../../../components/CTASection.astro';
 
 export async function getStaticPaths() {
@@ -78,6 +79,38 @@ const { Content } = await render(study);
                   <Tag>{tech}</Tag>
                 ))}
               </div>
+            </div>
+          )
+        }
+        {
+          (study.data.storeLink || study.data.repository) && (
+            <div class="action-bar">
+              {study.data.storeLink && (
+                <Button
+                  variant="primary"
+                  href={study.data.storeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ver en Google Play
+                  <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </Button>
+              )}
+              {study.data.repository && (
+                <Button
+                  variant="secondary"
+                  href={study.data.repository}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Repositorio en GitHub
+                  <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </Button>
+              )}
             </div>
           )
         }
@@ -214,6 +247,20 @@ const { Content } = await render(study);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2, 8px);
+  }
+
+  .action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4, 16px);
+    grid-column: 1 / -1;
+    margin-top: var(--space-4, 16px);
+  }
+
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: var(--space-2, 8px);
   }
 
   .content-section {

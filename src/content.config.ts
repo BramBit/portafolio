@@ -22,6 +22,8 @@ const caseStudiesCollection = defineCollection({
     company: z.string().optional(),
     role: z.string().optional(),
     timeframe: z.string().optional(),
+    storeLink: z.string().optional(),
+    repository: z.string().optional(),
     publishedAt: z.date(),
   }),
 });
@@ -57,6 +59,9 @@ const productsCollection = defineCollection({
     problem: z.string().optional(),
     solution: z.string().optional(),
     website: z.string().optional(),
+    repository: z.string().optional(),
+    demo: z.string().optional(),
+    docs: z.string().optional(),
     featured: z.boolean(),
   }),
 });

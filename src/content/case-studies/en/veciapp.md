@@ -1,40 +1,53 @@
 ---
-title: "VeciApp — Backend for a Local Marketplace"
+title: "VeciApp — Backend & Platform for a Local Marketplace"
 slug: "veciapp"
-impactSummary: "Designed and built the backend for a multi-role marketplace connecting local merchants with their customers."
-summary: "Design and implementation of the backend for a multi-role marketplace, including authentication, geolocation, payments, and external integrations."
+impactSummary: "Designed and built the backend and admin dashboard for a multi-role marketplace serving approximately 300 local merchants."
+summary: "Design and implementation of a multi-role marketplace backend, including authentication, PostGIS geolocation, payments, and external integrations."
 technologies:
   - "Node.js"
   - "TypeScript"
+  - "Express"
   - "PostgreSQL"
   - "PostGIS"
   - "Redis"
+  - "React"
+  - "Render"
 company: "Alaska Tech"
-role: "Co-Founder / Backend"
+role: "Co-Founder / Backend & Full Stack"
 timeframe: "Jan 2023 – Present"
+storeLink: "https://play.google.com/store/apps/details?id=com.alaskatech.veciapp"
 publishedAt: 2026-08-02
 ---
 
-## Problem
+## Product Context and Problem
 
-VeciApp is a multi-role marketplace built for Fundación Maleua to help small local merchants in the Santa Marta region digitize their businesses — merchants who typically don't have the resources to build their own technology. It needed to let merchants manage their business, list products, and receive orders, while giving consumers a single marketplace to shop from, and it needed to be built and shipped by a small team from the ground up.
+VeciApp is a multi-role local commerce marketplace built in the context of **Alaska Tech** for Fundación Maleua, conceived to help small neighborhood merchants in the Santa Marta region digitize their product catalogs and connect with nearby consumers.
 
-## Solution
+According to platform operational records, the service caters to approximately 300 merchants who required a dependable tool to list products, manage live inventory, and fulfill customer orders without paying steep commission cuts to major delivery apps.
 
-I designed and built the entire backend of VeciApp, plus specific modules of the administrative frontend. That included the full data model for users, merchants, products, orders, and the relationships between them, a complete JWT-based authentication system with account verification, geospatial features for location-based merchant discovery, media management through Cloudinary, payment processing through the Wompi widget, transactional email through Resend, and deployment on Render. On the frontend, I built the store, customer, and product administration modules and the main dashboard with financial indicators.
+## Role and Individual Contribution
 
-## Architecture
+As co-founder and lead backend engineer at Alaska Tech:
+- Designed and engineered the entire REST API and relational/geospatial database models.
+- Implemented multi-role authentication security and external payment gateway processing.
+- Built the administrative web dashboard in React for store onboarding and operational reporting.
+- Configured cloud database infrastructure and CI/CD pipelines on Render.
 
-The backend uses Node.js, TypeScript, Express, PostgreSQL with PostGIS, TypeORM, and Redis, following the Business Object Pattern — a lightweight architecture chosen deliberately for a project of this size, prioritizing simplicity and ease of maintenance over the heavier patterns used on larger platforms.
+## Key Features Engineered
 
-## Implementation
+1. **Multi-Role Authentication & Security:** Registration and login flows powered by JWT, session management, account verification codes, and strict role-based access control (merchant, consumer, administrator).
+2. **Geospatial Discovery with PostGIS:** Real-time location-based queries calculating Euclidean/spherical distances to surface nearby stores within active delivery polygons.
+3. **Checkout Integration with Wompi:** Embedded official Wompi payment widget with verified webhooks for cryptographic transaction confirmation and atomic order state updates.
+4. **Media Processing & Notification Pipelines:** Cloudinary asset management for catalog images and automated transactional email dispatch via Resend.
+5. **Administrative Web Dashboard:** React-based control panel for merchant verification, store catalog audits, and financial performance visualization.
 
-Authentication covers JWT-based login, user registration, account verification via codes, session management, and route protection. PostGIS powers geographic queries over registered merchants, supporting location and coverage-based features. Cloudinary handles image upload, organization, and reference persistence, consumed from both the admin frontend and the team's mobile app. Payments run through Wompi's official widget, and Resend handles transactional emails across the application's lifecycle.
+## Technical Challenges & Architecture Decisions
 
-## Challenges
+- **Business Object Pattern vs. Overengineering:** The *Business Object Pattern* was deliberately chosen over heavier architectural patterns. For a local marketplace maintained by a lean team, this approach delivered high development velocity while keeping domain business logic clean and isolated.
+- **Addressing in Non-Standardized Urban Zones:** Given irregular street naming in certain informal neighborhoods, delivery radiuses were computed directly against spatial coordinates using GiST indexes in PostGIS, bypassing the inaccuracies of textual geocoding services.
 
-Building a marketplace end-to-end for a small team meant choosing an architecture that matched the project's actual size instead of over-engineering it — the Business Object Pattern was a deliberate trade-off toward maintainability and speed over the more elaborate patterns used on larger Belvi projects. Geospatial features and multi-role access (merchants, consumers, admins) had to work correctly from day one, since the marketplace's core value depends on merchants being findable by location.
+## Verifiable Results
 
-## Results
-
-VeciApp's backend runs the platform's full commercial operation today — user and merchant management, product catalogs, orders, payments, and location-based discovery — with an administrative frontend the Fundación Maleua team uses to manage stores, customers, and financial performance.
+- Core backend running continuously on Render, powering day-to-day operations for affiliated merchants.
+- Serves roughly 300 local merchants according to internal platform records.
+- Official client mobile application live and available on the app store: [View VeciApp on Google Play Store](https://play.google.com/store/apps/details?id=com.alaskatech.veciapp).

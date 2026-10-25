@@ -1,41 +1,57 @@
 ---
 title: "Zeus — Plataforma IoT para Dispositivos Médicos"
 slug: "zeus"
-impactSummary: "Desarrollé capacidades Full Stack y Backend para una plataforma IoT que cubre uso de dispositivos, reportes financieros, soporte e IA aplicada."
-summary: "Desarrollo Full Stack sobre una plataforma IoT para dispositivos médicos, incluyendo reporting, geolocalización y funcionalidades de soporte con IA."
+impactSummary: "Desarrollé la arquitectura RAG, reportería financiera automatizada y módulos backend y frontend para una plataforma IoT médica."
+summary: "Ingeniería Backend y Full Stack sobre una plataforma IoT médica con telemetría en tiempo real, sistema RAG integrado a Hexagonal/DDD y reportería mensual automatizada."
 technologies:
-  - "Next.js"
-  - "React"
+  - "TypeScript"
   - "Node.js"
+  - "Express"
   - "PostgreSQL"
+  - "pgvector"
+  - "RAG"
   - "Redis"
   - "RabbitMQ"
+  - "Next.js"
+  - "React"
 company: "Belvi Digital"
-role: "Frontend → Full Stack / Backend"
+role: "Backend Developer (alcance Full Stack)"
 timeframe: "dic. 2023 – may. 2026"
 publishedAt: 2026-08-03
 ---
 
-## Problema
+## Contexto del Producto y Problema
 
-Zeus administra dispositivos IoT que usan clínicas estéticas para tratamientos dermatológicos y depilación por pulsos lumínicos, bajo un modelo de facturación pay-per-shot: cada tratamiento se factura según la cantidad de disparos que realiza el dispositivo. Belvi Digital necesitaba una plataforma capaz de centralizar el uso de los dispositivos, generar reportes financieros, dar soporte a distintos roles administrativos y, cada vez más, usar IA para reducir trabajo manual: responder preguntas repetitivas de los usuarios, generar información a partir de documentación técnica y simplificar el soporte.
+Zeus es una plataforma IoT orientada a la administración, telemetría y facturación de dispositivos médicos estéticos en producción (equipos para tratamientos dermatológicos y depilación por pulsos lumínicos), utilizada por cerca de 1.000 usuarios activos.
 
-## Solución
+El modelo comercial opera bajo esquema *Pay-Per-Shot*: cada clínica adquiere disparos para sus equipos y la plataforma factura según el consumo real registrado por los sensores de telemetría. Belvi Digital requería centralizar este consumo masivo, liquidar estados financieros mensuales sin errores de conciliación, monitorear la ubicación geográfica de los dispositivos y reducir la carga de soporte técnico mediante inteligencia artificial anclada estrictamente a la documentación interna de los equipos.
 
-Trabajé en Zeus primero como desarrollador frontend, y fui asumiendo responsabilidades backend y full stack a medida que la plataforma crecía. En frontend construí el módulo de geolocalización que ubica las clínicas que operan dispositivos Belvi, toda la capa de internacionalización de la plataforma (español e inglés) desde cero, los dashboards administrativos usados por clientes, managers y administradores, y la suite de pruebas end-to-end. En backend diseñé y construí un sistema RAG personalizado integrado directamente a la Arquitectura Hexagonal existente, sin frameworks externos, además de chatbots especializados para soporte y preguntas frecuentes, un sistema automático de reportes financieros para el modelo Pay-Per-Shot, y la integración entre la billetera digital de la plataforma y su información financiera.
+## Rol y Responsabilidad Individual
 
-## Arquitectura
+Ingresé al equipo trabajando en interfaces administrativas en Next.js y asumí progresivamente la responsabilidad técnica de servicios críticos en el Backend en TypeScript/Node.js bajo Arquitectura Hexagonal y Domain-Driven Design (DDD):
+- Diseño e implementación completa del sistema RAG y del asistente de soporte técnico.
+- Arquitectura de la capa de IA con patrón Strategy y fallback automático de proveedores.
+- Módulo de análisis y mantenimiento predictivo de desgaste de equipos.
+- Motor de reportería financiera mensual automatizada con generación de extractos y enlaces seguros.
+- Módulo de geolocalización cartográfica de clínicas y tests automatizados (Jest, Cucumber, Vitest, Playwright).
 
-El backend sigue Arquitectura Hexagonal con Domain-Driven Design, manteniendo la lógica de negocio desacoplada de la persistencia y la infraestructura. RabbitMQ funciona como event bus entre componentes del dominio, y Redis provee caché para mantener la plataforma con buen rendimiento. El pipeline de RAG —ingesta documental, chunking, embeddings, almacenamiento vectorial en pgvector, recuperación semántica y construcción dinámica de contexto— se construyó como un módulo propio dentro de esa arquitectura, con una abstracción basada en Strategy Pattern que desacopla el proveedor de LLM del resto del sistema, para poder cambiar de proveedor por entorno sin tocar la lógica de negocio.
+## Funcionalidades Implementadas
 
-## Implementación
+1. **Sistema RAG Propio:** Pipeline de ingesta documental para manuales de usuario y protocolos técnicos (PDF y Markdown), división en fragmentos (*chunking*), generación de embeddings y almacenamiento vectorial en PostgreSQL mediante la extensión `pgvector`.
+2. **Capa de IA Resiliente (Strategy Pattern):** Abstracción sobre proveedores de LLM que permite alternar entre OpenAI y modelos locales en Ollama/Llama según el entorno de ejecución, con conmutación automática (*fallback*) en caso de indisponibilidad o latencia excesiva.
+3. **Mantenimiento Predictivo:** Algoritmo que procesa la serie temporal de disparos acumulados por cada cabezal, estima el desgaste restante mediante regresión lineal y genera un diagnóstico preventivo en lenguaje natural asistido por LLM.
+4. **Liquidación Financiera Pay-Per-Shot:** Procesos programados que consolidan los eventos de consumo transmitidos por los equipos, generan extractos dinámicos en HTML/PDF/Excel y envían correos mensuales automáticos con enlaces de acceso seguro firmados mediante JWT.
+5. **Geolocalización de Dispositivos:** Mapa interactivo en frontend para ubicar clínicas y estados operativos de equipos Belvi, conectado a la plataforma PLEI para recomendar cursos de capacitación técnica según el uso del dispositivo.
 
-El sistema de reportes financieros consolida el consumo Pay-Per-Shot mediante procesos programados y eventos de RabbitMQ, construye reportes HTML de forma dinámica y los envía automáticamente por correo a clientes y managers cada mes. Los chatbots usan una estrategia de system prompt que restringe las respuestas al contexto recuperado desde la base documental, para que las respuestas se mantengan ancladas a lo que la plataforma realmente sabe. El pipeline de procesamiento documental maneja fuentes PDF y Markdown, haciéndoles chunking y embeddings para su recuperación.
+## Retos Técnicos y Decisiones de Arquitectura
 
-## Retos
+- **Integración limpia en Arquitectura Hexagonal y DDD:** El sistema RAG debía integrarse a un Backend estructurado previamente con límites de contexto claros (*Bounded Contexts*). Se descartaron frameworks externos genéricos (como LangChain) para evitar acoplamientos innecesarios; en su lugar, el pipeline RAG se implementó como un puerto de dominio con adaptadores de infraestructura intercambiables.
+- **Tolerancia a fallos en telemetría y facturación:** El volumen continuo de eventos emitidos por los equipos IoT se desacopló del motor transaccional mediante colas de mensajería asíncrona en RabbitMQ y caché de lecturas en Redis, absorbiendo picos de actividad sin sobrecargar PostgreSQL.
+- **Restricción estricta de alucinaciones en soporte:** El chatbot de asistencia médica/técnica utiliza una directiva de sistema que prohíbe responder fuera del contexto documental recuperado de `pgvector`, garantizando que ninguna clínica reciba instrucciones que no correspondan al manual oficial del equipo.
 
-Dos restricciones definieron la mayoría de las decisiones técnicas: el sistema RAG tenía que encajar dentro de una Arquitectura Hexagonal existente sin traer frameworks externos que comprometieran esa estructura, y el proveedor de LLM no podía quedar fijo en el código — la plataforma necesitaba poder cambiar de proveedor según el entorno sin tocar la lógica de negocio que dependía de ellos. Ambos se resolvieron con la misma disciplina: separación estricta entre lógica de dominio e infraestructura, y un Strategy Pattern que trata al proveedor de IA como una dependencia intercambiable más.
+## Resultados Verificables
 
-## Resultado
-
-Hoy Zeus corre reportes financieros automatizados para toda su base de clientes Pay-Per-Shot, tiene un sistema RAG funcionando junto con chatbots especializados atendiendo flujos reales de soporte, soporte bilingüe completo, y dashboards administrativos usados a diario por clientes, managers y administradores.
+- Plataforma operando de manera continua para cerca de 1.000 usuarios activos en el sector de estética médica.
+- Automatización del 100% del ciclo de generación y envío de reportes mensuales Pay-Per-Shot, eliminando la intervención manual en conciliaciones.
+- Asistente de IA operando con respuestas sustentadas en documentación verificada, reduciendo la entrada de tickets de soporte técnico rutinarios.
+- Suite de pruebas automatizadas con pruebas unitarias en Jest, pruebas de comportamiento BDD con Cucumber y pruebas E2E con Playwright sobre flujos financieros críticos.

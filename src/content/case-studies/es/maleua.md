@@ -1,10 +1,11 @@
 ---
 title: "Fundación Maleua — Sitio Institucional"
 slug: "maleua"
-impactSummary: "Construí un sitio institucional estático con una estructura de contenido diseñada para facilitar su mantenimiento."
-summary: "Desarrollo de un sitio institucional estático con Astro, con el contenido desacoplado de la presentación para simplificar su mantenimiento."
+impactSummary: "Diseñé y construí un sitio institucional estático en Astro con arquitectura de contenido desacoplada para mantenedores no técnicos."
+summary: "Desarrollo de un sitio institucional estático con Astro sobre Vercel, con el contenido desacoplado de la presentación para garantizar mantenimiento autónomo y costo cero."
 technologies:
   - "Astro"
+  - "TypeScript"
   - "Vercel"
 company: "Alaska Tech"
 role: "Desarrollador"
@@ -12,26 +13,35 @@ timeframe: "ene. 2023 – actualidad"
 publishedAt: 2026-08-01
 ---
 
-## Problema
+## Contexto del Producto y Problema
 
-La Fundación Maleua necesitaba un sitio institucional para presentar la organización, sus programas y sus servicios a la comunidad — con tiempos de carga reducidos, bajo costo de mantenimiento y un proceso de despliegue simple, porque el equipo que lo mantendría después no serían desarrolladores.
+La Fundación Maleua es una organización sin ánimo de lucro orientada a proyectos comunitarios y sociales en la región de Santa Marta. La entidad requería un portal institucional para presentar sus programas, convocatorias y rendición de cuentas a aliados y comunidad.
 
-## Solución
+Las restricciones del proyecto eran claras:
+- Tiempos de carga mínimos en redes móviles.
+- Cero costo recurrente de infraestructura de servidores o bases de datos.
+- Proceso de actualización simple, dado que el equipo que administraría la información posteriormente no contaría con perfil técnico ni conocimientos de desarrollo.
 
-Construí el sitio como un sitio estático con Astro, desplegado en Vercel, con el contenido totalmente desacoplado de la capa de presentación.
+## Rol y Responsabilidad Individual
 
-## Arquitectura
+Como desarrollador en Alaska Tech, asumí la concepción técnica, desarrollo y despliegue del sitio institucional:
+- Selección de la arquitectura basada en Generación de Sitios Estáticos (SSG) con Astro.
+- Diseño de la estructura de desacoplamiento entre datos y componentes.
+- Configuración del flujo de despliegue continuo en Vercel.
 
-Static Site Generation sobre Astro, con todo el copy, las imágenes y la configuración centralizados en archivos de datos en vez de incrustados en los componentes.
+## Funcionalidades Implementadas
 
-## Implementación
+1. **Generación de Sitio Estático (SSG):** Pre-renderizado completo de las páginas institucionales, garantizando entrega directa desde el borde (*edge*) con tiempos de respuesta instantáneos.
+2. **Capa de Contenido Desacoplada:** Toda la información textual, imágenes, datos de contacto y programas sociales se organizaron en archivos de datos estructurados e independientes, separados de los componentes Astro.
+3. **Optimización de Rendimiento y Assets:** Carga diferida de imágenes, fuentes del sistema para eliminar bloqueos de renderizado y diseño responsivo sin librerías externas de CSS.
 
-Estructurar el contenido así significa que actualizar textos, imágenes o configuraciones no requiere tocar directamente los componentes de la interfaz — alguien puede actualizar un archivo de datos sin saber cómo está construido el sitio.
+## Retos Técnicos y Decisiones de Arquitectura
 
-## Retos
+- **Mantenibilidad sin CMS pesado:** Montar un CMS tradicional (como WordPress o Strapi) habría introducido costos de hosting, mantenimiento de base de datos y riesgos de seguridad. La solución adoptada fue centralizar el contenido en esquemas de datos planos que pueden ser editados de forma segura sin riesgo de romper los componentes visuales ni la estructura semántica de la web.
+- **Despliegues continuos sin fricción:** La integración con Vercel permite que cualquier cambio en los archivos de datos desencadene una compilación y publicación automática en segundos.
 
-La restricción principal fue diseñar pensando en un equipo que no mantendría el código directamente — la arquitectura de contenido tenía que hacer que futuras actualizaciones fueran seguras sin necesitar un desarrollador.
+## Resultados Verificables
 
-## Resultado
-
-La landing de la fundación carga rápido, se despliega de forma simple, y puede actualizarse por personas no desarrolladoras sin tocar los componentes del sitio.
+- Portal institucional en producción con costo cero de infraestructura de servidores.
+- Calificaciones de rendimiento sobresalientes en Core Web Vitals gracias a la entrega estática sin JavaScript bloqueante.
+- Mantenimiento autónomo por parte del personal de la fundación sin requerir intervención de ingeniería para la actualización regular de programas y actividades.

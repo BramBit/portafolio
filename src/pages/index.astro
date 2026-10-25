@@ -4,52 +4,67 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Section from '../components/Section.astro';
 import Container from '../components/Container.astro';
-import Heading from '../components/Heading.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import ProjectFeature from '../components/ProjectFeature.astro';
+import ExperienceTimeline from '../components/ExperienceTimeline.astro';
+import StackGroups from '../components/StackGroups.astro';
 import ServiceCard from '../components/ServiceCard.astro';
-import CaseStudyCard from '../components/CaseStudyCard.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import ProductCard from '../components/ProductCard.astro';
 import CTASection from '../components/CTASection.astro';
 import Button from '../components/Button.astro';
+import { groupByCompany } from '../data/experience';
+import { buildStackGroups } from '../data/stack';
+import { servicesEN } from '../data/services';
+import { siteConfig } from '../data/site';
 
-// Fetch content collections for EN
-const caseStudies = await getCollection('case-studies');
-const enCaseStudies = caseStudies
+const byNewest = <T extends { data: { publishedAt: Date } }>(a: T, b: T) =>
+  b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+
+// Experience: every case study of this language, grouped by company
+const caseStudies = (await getCollection('case-studies'))
   .filter((c) => c.id.startsWith('en/'))
-  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-  .slice(0, 3);
+  .sort(byNewest);
 
-// Impact summaries map for EN case studies (Section 11 EN)
-const impactSummaries: Record<string, string> = {
-  zeus: 'Developed full-stack and backend capabilities for an IoT platform covering device usage, financial reporting, support, and applied AI.',
-  plei: 'Replaced Algolia with a custom hybrid search engine and built reusable RAG and AI support capabilities for the platform.',
-  veciapp: 'Designed and built the backend for a multi-role marketplace connecting local merchants with their customers.',
-  maleua: 'Built a static institutional website with a content structure designed for simple maintenance.',
-};
+const experienceGroups = groupByCompany(
+  caseStudies.map((study) => ({
+    title: study.data.title,
+    summary: study.data.impactSummary ?? study.data.summary,
+    role: study.data.role,
+    timeframe: study.data.timeframe,
+    company: study.data.company,
+    technologies: study.data.technologies,
+    href: `/case-studies/${study.data.slug}`,
+  }))
+);
 
-const engineeringArticles = await getCollection('engineering');
-const enEngineering = engineeringArticles
+const engineeringArticles = (await getCollection('engineering'))
   .filter((e) => e.id.startsWith('en/'))
-  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .sort(byNewest)
   .slice(0, 3);
 
-const products = await getCollection('products');
-const enProducts = products
+const productOrder = ['product-checkout-platform', 'pliegos'];
+const products = (await getCollection('products'))
   .filter((p) => p.id.startsWith('en/'))
-  .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+  .sort((a, b) => {
+    const idxA = productOrder.indexOf(a.data.slug);
+    const idxB = productOrder.indexOf(b.data.slug);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    return (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0);
+  });
 
-// Services in exact order from Section 5 EN
-const servicesEN = [
-  {
-    title: 'AI Systems',
-    description: 'RAG systems, semantic search, and LLM integrations designed and shipped into real products — from architecture to production.',
-    technologies: ['RAG', 'Embeddings', 'pgvector', 'OpenAI'],
-  },
-  {
-    title: 'Backend & Full Stack Development',
-    description: 'End-to-end features and backend services: data modeling, business logic, and REST APIs through to the interface.',
-    technologies: ['TypeScript', 'Node.js', 'PostgreSQL', 'React', 'Next.js'],
-  },
+// Stack: only technologies already documented in the case studies and services
+const stackGroups = buildStackGroups({
+  projects: caseStudies.map((study) => study.data.technologies),
+  extra: servicesEN.flatMap((service) => service.technologies),
+  labels: { backend: 'Backend', frontend: 'Frontend', data: 'Data & Storage', ai: 'Applied AI', infra: 'Infrastructure & Tools' },
+  usage: (n) => `${n} projects`,
+});
+
+// Verified contact channels (src/data/site.ts)
+const contacts = [
+  { label: 'Email', value: siteConfig.email, href: `mailto:${siteConfig.email}` },
+  { label: 'LinkedIn', value: 'brayan-mercado-sanmartin', href: siteConfig.social.linkedin, external: true },
+  { label: 'GitHub', value: 'BramBit', href: siteConfig.social.github, external: true },
 ];
 ---
 
@@ -64,22 +79,34 @@ const servicesEN = [
     description="I develop Full Stack features and backend systems, integrating interfaces, APIs, data, and AI into a single solution."
     primaryButton={{ label: 'See the work', href: '/case-studies' }}
     secondaryButton={{ label: "Let's talk about your project", href: '/contact' }}
+    meta={[
+      { label: 'Currently', value: 'Co-Founder & Full Stack Software Engineer at Alaska Tech' },
+      { label: 'Ecosystem', value: 'TypeScript' },
+      { label: 'Focus', value: 'Full Stack, Backend, Applied AI, Software Architecture' },
+    ]}
   />
 
-  <!-- Services Preview Section (Section 5 EN) -->
-  <Section id="services">
+  <!-- 01 Products: the featured project leads the page -->
+  <Section id="products">
     <Container>
-      <div class="section-header">
-        <Heading level={2}>Services</Heading>
-      </div>
-
-      <div class="grid-two-cols horizontal-scroll-mobile">
+      <SectionHeader
+        index="01"
+        title="Products"
+        href="/products"
+        linkLabel="View all products"
+      />
+      <div class="feature-list">
         {
-          servicesEN.map((service) => (
-            <ServiceCard
-              title={service.title}
-              description={service.description}
-              technologies={service.technologies}
+          products.map((product, i) => (
+            <ProjectFeature
+              title={product.data.title}
+              tagline={product.data.tagline}
+              status={product.data.status}
+              problem={product.data.problem}
+              solution={product.data.solution}
+              href={`/products/${product.data.slug}`}
+              website={product.data.website}
+              reverse={i % 2 === 1}
             />
           ))
         }
@@ -87,45 +114,18 @@ const servicesEN = [
     </Container>
   </Section>
 
-  <!-- Featured Experience Section (Section 8 EN) -->
-  <Section id="case-studies">
-    <Container>
-      <div class="section-header-flex">
-        <div>
-          <Heading level={2}>Experience</Heading>
-        </div>
-        <Button variant="secondary" href="/case-studies">View all experience</Button>
-      </div>
-
-      <div class="grid-cards horizontal-scroll-mobile">
-        {
-          enCaseStudies.map((study) => (
-            <CaseStudyCard
-              title={study.data.title}
-              summary={impactSummaries[study.data.slug] || study.data.summary}
-              technologies={study.data.technologies}
-              slug={study.data.slug}
-              href={`/case-studies/${study.data.slug}`}
-            />
-          ))
-        }
-      </div>
-    </Container>
-  </Section>
-
-  <!-- Engineering Highlights Section (Section 13 EN) -->
+  <!-- 02 Engineering: documented technical decisions -->
   <Section id="engineering">
     <Container>
-      <div class="section-header-flex">
-        <div>
-          <Heading level={2}>Engineering</Heading>
-        </div>
-        <Button variant="secondary" href="/engineering">View all articles</Button>
-      </div>
-
-      <div class="grid-cards horizontal-scroll-mobile">
+      <SectionHeader
+        index="02"
+        title="Engineering"
+        href="/engineering"
+        linkLabel="View all articles"
+      />
+      <div class="grid-cards" data-reveal>
         {
-          enEngineering.map((article) => (
+          engineeringArticles.map((article) => (
             <ArticleCard
               title={article.data.title}
               excerpt={article.data.excerpt}
@@ -140,24 +140,36 @@ const servicesEN = [
     </Container>
   </Section>
 
-  <!-- Featured Products Section (Section 18 EN) -->
-  <Section id="products">
+  <!-- 03 Experience: grouped by company, every case study included -->
+  <Section id="case-studies">
     <Container>
-      <div class="section-header-flex">
-        <div>
-          <Heading level={2}>Products</Heading>
-        </div>
-        <Button variant="secondary" href="/products">View all products</Button>
-      </div>
+      <SectionHeader
+        index="03"
+        title="Experience"
+        href="/case-studies"
+        linkLabel="View all experience"
+      />
+      <ExperienceTimeline groups={experienceGroups} />
+    </Container>
+  </Section>
 
-      <div class="grid-two-cols horizontal-scroll-mobile">
+  <!-- 04 Services -->
+  <Section id="services">
+    <Container>
+      <SectionHeader
+        index="04"
+        title="Services"
+        href="/services"
+        linkLabel="View all services"
+        description="Every solution starts with the problem you need to solve. Technology is chosen based on goals, scale, and operational realities."
+      />
+      <div class="grid-two-cols" data-reveal>
         {
-          enProducts.map((product) => (
-            <ProductCard
-              title={product.data.title}
-              tagline={product.data.tagline}
-              status={product.data.status}
-              link={product.data.website}
+          servicesEN.map((service) => (
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              technologies={service.technologies}
             />
           ))
         }
@@ -165,12 +177,20 @@ const servicesEN = [
     </Container>
   </Section>
 
+  <!-- 05 Tech stack -->
+  <Section id="stack">
+    <Container>
+      <SectionHeader index="05" title="Tech stack" description="Grouped by layer. Highlighted technologies appear in more than one documented project." />
+      <StackGroups groups={stackGroups} />
+    </Container>
+  </Section>
+
   <!-- About Preview Section (Section 16 EN) -->
   <Section id="about-preview">
     <Container>
-      <div class="about-box">
+      <div class="about-box" data-reveal>
         <div class="about-content">
-          <Heading level={2}>About Me</Heading>
+          <SectionHeader index="06" title="About Me" />
           <p class="about-text">
             I didn't start out building software. I started as a food engineer, learning to model processes, control quality, and solve problems with structure and analysis — long before I touched a line of TypeScript.
           </p>
@@ -185,60 +205,34 @@ const servicesEN = [
     </Container>
   </Section>
 
-  <!-- Final CTA Section (Section 7 EN) -->
   <CTASection
     title="Have a project in development?"
     description="Tell me what you're building and we can review where I can contribute."
     button={{ label: "Let's talk", href: '/contact', variant: 'primary' }}
+    contacts={contacts}
   />
 </Layout>
 
 <style>
-  .section-header {
-    margin-bottom: var(--space-8, 32px);
-  }
-
-  .section-header-flex {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4, 16px);
-    margin-bottom: var(--space-8, 32px);
-  }
-
-  @media (min-width: 768px) {
-    .section-header-flex {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-  }
-
-  .section-subtitle {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-body-lg, 20px);
-    margin-top: var(--space-2, 8px);
-    max-width: 640px;
+  .feature-list {
+    display: grid;
+    gap: var(--space-32);
   }
 
   .grid-two-cols {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-6, 24px);
-  }
-
-  @media (min-width: 768px) {
-    .grid-two-cols {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    gap: var(--space-24);
   }
 
   .grid-cards {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-6, 24px);
+    gap: var(--space-24);
   }
 
   @media (min-width: 768px) {
+    .grid-two-cols,
     .grid-cards {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -252,9 +246,9 @@ const servicesEN = [
 
   .about-box {
     background-color: var(--color-surface);
-    border: 1px solid var(--color-surface-elevated);
-    border-radius: 12px;
-    padding: var(--space-8, 32px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-32);
   }
 
   .about-content {
@@ -263,14 +257,14 @@ const servicesEN = [
 
   .about-text {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-body-lg, 20px);
+    font-size: var(--font-size-body-lg);
     line-height: 1.6;
-    margin-top: var(--space-4, 16px);
-    margin-bottom: var(--space-4, 16px);
+    margin-top: var(--space-16);
+    margin-bottom: var(--space-16);
   }
 
   .about-action {
     display: flex;
-    margin-top: var(--space-6, 24px);
+    margin-top: var(--space-24);
   }
 </style>

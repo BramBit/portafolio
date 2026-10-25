@@ -1,0 +1,27 @@
+---
+import Heading from './Heading.astro';
+import Button from './Button.astro';
+import styles from './SectionHeader.module.css';
+
+interface Props {
+  title: string;
+  /** Decorative section number, e.g. "01" */
+  index?: string;
+  headingId?: string;
+  description?: string;
+  href?: string;
+  linkLabel?: string;
+  class?: string;
+}
+
+const { title, index, headingId, description, href, linkLabel, class: className = '' } = Astro.props;
+---
+
+<div class:list={[styles.header, className]} data-reveal>
+  <div class={styles.text}>
+    {index && <p class:list={['label', styles.index]} aria-hidden="true">{index} /</p>}
+    <Heading level={2} id={headingId}>{title}</Heading>
+    {description && <p class={styles.description}>{description}</p>}
+  </div>
+  {href && linkLabel && <Button variant="secondary" href={href}>{linkLabel}</Button>}
+</div>

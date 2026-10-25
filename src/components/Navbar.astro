@@ -24,44 +24,46 @@ const isActive = (href: string) => {
 const logoHref = lang === 'es' ? '/es/' : '/';
 const enRoute = getEquivalentRoute(currentPath, 'en');
 const esRoute = getEquivalentRoute(currentPath, 'es');
+const navLabel = lang === 'es' ? 'Navegación principal' : 'Main navigation';
 ---
 
 <header class:list={[styles.header, className]}>
   <Container class={styles.navContainer}>
     <a href={logoHref} class={styles.logoBadge} aria-label="Brayan Mercado - Home">
-      <img src="/logo.svg" alt="BM Logo" class={styles.logoImage} />
+      <img src="/logo.svg" alt="BM Logo" width="50" height="50" class={styles.logoImage} />
     </a>
 
-    <nav class={styles.nav} aria-label="Main Navigation">
+    <nav class={styles.nav} aria-label={navLabel}>
       <ul class={styles.navLinks}>
         {
-          navItems.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class:list={[
-                  styles.navLink,
-                  { [styles.active]: isActive(item.href) }
-                ]}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
+          navItems.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={[styles.navLink, { [styles.active]: active }]}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
         }
         <li class={styles.langSwitcher}>
           {
             lang === 'en' ? (
               <>
-                <span class={styles.langActive}>EN</span>
-                <span>/</span>
-                <a href={esRoute} class={styles.langLink}>ES</a>
+                <span class={styles.langActive} aria-current="true">EN</span>
+                <span aria-hidden="true">/</span>
+                <a href={esRoute} class={styles.langLink} lang="es" hreflang="es">ES</a>
               </>
             ) : (
               <>
-                <a href={enRoute} class={styles.langLink}>EN</a>
-                <span>/</span>
-                <span class={styles.langActive}>ES</span>
+                <a href={enRoute} class={styles.langLink} lang="en" hreflang="en">EN</a>
+                <span aria-hidden="true">/</span>
+                <span class={styles.langActive} aria-current="true">ES</span>
               </>
             )
           }

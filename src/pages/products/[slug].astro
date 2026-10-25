@@ -42,26 +42,67 @@ const isLive = product.data.status === 'live';
       <div class="header-top">
         <Heading level={1} class="title">{product.data.title}</Heading>
         <Badge variant={isLive ? 'accent' : 'default'}>
-          {isLive ? 'Live' : 'Coming Soon'}
+          {isLive ? 'Live' : 'In Development'}
         </Badge>
       </div>
 
       <p class="tagline">{product.data.tagline}</p>
 
       {
-        isLive && product.data.website && (
+        (product.data.website || product.data.demo || product.data.repository || product.data.docs) && (
           <div class="action-bar">
-            <Button
-              variant="primary"
-              href={product.data.website}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit Website
-              <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
-              </svg>
-            </Button>
+            {product.data.demo && (
+              <Button
+                variant="primary"
+                href={product.data.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Live Demo
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                </svg>
+              </Button>
+            )}
+            {!product.data.demo && product.data.website && (
+              <Button
+                variant="primary"
+                href={product.data.website}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Visit Website
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                </svg>
+              </Button>
+            )}
+            {product.data.repository && (
+              <Button
+                variant="secondary"
+                href={product.data.repository}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Repository
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </Button>
+            )}
+            {product.data.docs && (
+              <Button
+                variant="secondary"
+                href={product.data.docs}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                API Docs (Swagger)
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" class="btn-icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </Button>
+            )}
           </div>
         )
       }
@@ -76,14 +117,14 @@ const isLive = product.data.status === 'live';
           <div class="overview-grid">
             {product.data.problem && (
               <div class="info-card">
-                <Heading level={3} class="card-title">The Problem</Heading>
+                <Heading level={2} class="card-title">The Problem</Heading>
                 <p class="card-text">{product.data.problem}</p>
               </div>
             )}
 
             {product.data.solution && (
               <div class="info-card highlight-card">
-                <Heading level={3} class="card-title">The Solution</Heading>
+                <Heading level={2} class="card-title">The Solution</Heading>
                 <p class="card-text">{product.data.solution}</p>
               </div>
             )}
@@ -160,6 +201,7 @@ const isLive = product.data.status === 'live';
 
   .action-bar {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-4, 16px);
   }
 

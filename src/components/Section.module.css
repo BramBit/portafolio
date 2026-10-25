@@ -1,12 +1,5 @@
 .section {
-  padding-top: var(--space-96);
-  padding-bottom: var(--space-96);
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-section);
   position: relative;
-}
-
-@media (max-width: 768px) {
-  .section {
-    padding-top: var(--space-48, 48px);
-    padding-bottom: var(--space-48, 48px);
-  }
 }

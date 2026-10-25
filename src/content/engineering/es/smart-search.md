@@ -1,7 +1,7 @@
 ---
 title: "Reemplazando Algolia con un Motor de Búsqueda Híbrido"
 slug: "smart-search"
-excerpt: "Cómo se reemplazó la búsqueda de Algolia en PLEI por un motor híbrido construido sobre PostgreSQL, pgvector, Full Text Search y ranking por Reciprocal Rank Fusion."
+excerpt: "Cómo se reemplazó un motor de búsqueda externo por un sistema híbrido propio sobre PostgreSQL, pgvector, Full Text Search y Reciprocal Rank Fusion en una plataforma e-learning."
 readingTime: "10 min"
 tags:
   - "Search"
@@ -9,7 +9,7 @@ tags:
   - "pgvector"
   - "Hybrid Search"
   - "RRF"
-tldr: "Sustitución de Algolia en PLEI por un motor híbrido propio en PostgreSQL que combina pgvector, tsvector y pg_trgm con Reciprocal Rank Fusion (RRF)."
+tldr: "Sustitución de Algolia en una plataforma e-learning por un motor híbrido en PostgreSQL que combina pgvector, tsvector y pg_trgm con Reciprocal Rank Fusion (RRF)."
 publishedAt: 2026-08-02
 ---
 
@@ -19,13 +19,13 @@ Fue reemplazar una dependencia externa por una infraestructura de búsqueda que 
 
 ---
 
-# 1. El problema: buscar no significa solamente encontrar texto
+## 1. El problema: buscar no significa solamente encontrar texto
 
-La primera versión del buscador de PLEI utilizaba Algolia.
+La primera versión del buscador de la plataforma utilizaba Algolia.
 
 Funcionaba razonablemente bien para búsquedas textuales, pero el contenido de la plataforma empezó a requerir algo diferente.
 
-PLEI no maneja únicamente texto plano. El buscador trabaja sobre recursos que pueden representar cursos, lecciones, documentos y otros contenidos de la plataforma.
+La plataforma no maneja únicamente texto plano. El buscador trabaja sobre recursos heterogéneos: cursos, lecciones, documentos y otros contenidos estructurados.
 
 Eso cambia la naturaleza del problema.
 
@@ -82,9 +82,9 @@ La conclusión fue clara:
 
 ---
 
-# 2. Antes y después
+## 2. Antes y después
 
-## Antes
+### Antes
 
 ```text
 Usuario
@@ -98,7 +98,7 @@ Resultados
 
 La búsqueda dependía de un proveedor externo y de una estrategia principal de recuperación.
 
-## Después
+### Después
 
 ```text
 Usuario
@@ -129,7 +129,7 @@ La infraestructura pasó a controlar directamente las señales que determinan qu
 
 ---
 
-# 3. La decisión arquitectónica
+## 3. La decisión arquitectónica
 
 La pregunta no era simplemente:
 
@@ -177,7 +177,7 @@ La búsqueda quedó dentro de la misma infraestructura de datos que el resto de 
 
 ---
 
-# 4. Las cuatro señales de recuperación
+## 4. Las cuatro señales de recuperación
 
 El motor combina cuatro tipos de señal:
 
@@ -219,7 +219,7 @@ Se trata de permitir que cada una contribuya cuando tiene información útil.
 
 ---
 
-# 5. Búsqueda vectorial: entender la intención
+## 5. Búsqueda vectorial: entender la intención
 
 La búsqueda vectorial utiliza embeddings almacenados mediante `pgvector`.
 
@@ -257,7 +257,7 @@ Aunque las palabras no coincidan completamente, existe una relación semántica.
 
 Ese es el espacio donde la búsqueda vectorial aporta valor.
 
-## Pero tiene una limitación
+### Pero tiene una limitación
 
 La similitud semántica no siempre es lo que el usuario necesita.
 
@@ -279,7 +279,7 @@ Por eso la búsqueda vectorial es solamente una pieza.
 
 ---
 
-# 6. Full Text Search: cuando las palabras importan
+## 6. Full Text Search: cuando las palabras importan
 
 PostgreSQL proporciona Full Text Search mediante `tsvector` y `websearch_to_tsquery`.
 
@@ -315,7 +315,7 @@ Eso hace que Full Text Search sea complementario al retrieval vectorial.
 
 ---
 
-# 7. Búsqueda difusa: tolerar cómo escribe realmente un usuario
+## 7. Búsqueda difusa: tolerar cómo escribe realmente un usuario
 
 Los usuarios no siempre escriben exactamente como aparece el contenido.
 
@@ -352,7 +352,7 @@ Son problemas diferentes.
 
 ---
 
-# 8. Coincidencia exacta de títulos
+## 8. Coincidencia exacta de títulos
 
 Los títulos tienen un valor especial.
 
@@ -382,7 +382,7 @@ Es especialmente útil cuando el usuario ya sabe qué recurso está buscando.
 
 ---
 
-# 9. El problema de combinar los resultados
+## 9. El problema de combinar los resultados
 
 Aquí aparece uno de los problemas más interesantes del diseño.
 
@@ -453,7 +453,7 @@ La solución fue trabajar con **posición dentro del ranking**, no con scores cr
 
 ---
 
-# 10. Reciprocal Rank Fusion
+## 10. Reciprocal Rank Fusion
 
 La técnica utilizada para combinar los resultados fue **Reciprocal Rank Fusion (RRF)**.
 
@@ -489,7 +489,7 @@ Si un documento aparece bien posicionado en varias estrategias, acumula evidenci
 
 ---
 
-# 11. Por qué RRF encaja bien aquí
+## 11. Por qué RRF encaja bien aquí
 
 Supongamos:
 
@@ -543,7 +543,7 @@ Eso permite que una coincidencia semántica, una textual y una coincidencia dire
 
 ---
 
-# 12. Orquestación: no son cuatro búsquedas independientes
+## 12. Orquestación: no son cuatro búsquedas independientes
 
 El motor no expone cuatro buscadores diferentes al usuario.
 
@@ -577,7 +577,7 @@ Desde el punto de vista del producto sigue existiendo una sola búsqueda.
 
 ---
 
-# 13. Relevancia no significa autorización
+## 13. Relevancia no significa autorización
 
 Esta fue otra consideración importante del diseño.
 
@@ -622,11 +622,11 @@ Un documento puede ser el resultado número uno del buscador y seguir siendo inv
 
 ---
 
-# 14. Mantener los embeddings sincronizados
+## 14. Mantener los embeddings sincronizados
 
 El buscador vectorial introduce otro problema.
 
-El contenido de PLEI cambia.
+El contenido de una plataforma educativa cambia continuamente.
 
 Si un curso, recurso o lección cambia, su representación semántica puede quedar desactualizada.
 
@@ -674,7 +674,7 @@ Se trata de mantenerlo coherente con el producto.
 
 ---
 
-# 15. Una sola base para diferentes señales
+## 15. Una sola base para diferentes señales
 
 Una de las decisiones más interesantes de la implementación fue no crear una infraestructura separada para cada tipo de búsqueda.
 
@@ -705,7 +705,7 @@ La búsqueda híbrida se construye utilizando capacidades especializadas sobre u
 
 ---
 
-# 16. El reemplazo de Algolia no fue solamente tecnológico
+## 16. El reemplazo de Algolia no fue solamente tecnológico
 
 Cambiar de proveedor podría parecer una tarea mecánica:
 
@@ -758,4 +758,4 @@ Consulta
 
 Algolia ofrecía una buena búsqueda sobre texto indexado.
 
-El motor híbrido sobre PostgreSQL permitió construir un sistema de recuperación adaptado al dominio de PLEI, combinando búsqueda semántica, textual, difusa, coincidencia de títulos y control de acceso en una misma infraestructura.
+El motor híbrido sobre PostgreSQL permitió construir un sistema de recuperación adaptado al dominio del producto, combinando búsqueda semántica, textual, difusa, coincidencia de títulos y control de acceso en una misma infraestructura.
