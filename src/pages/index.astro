@@ -6,13 +6,12 @@ import Section from '../components/Section.astro';
 import Container from '../components/Container.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import ProjectFeature from '../components/ProjectFeature.astro';
-import ExperienceTimeline from '../components/ExperienceTimeline.astro';
+import ExperienceGroups from '../components/ExperienceGroups.astro';
 import StackGroups from '../components/StackGroups.astro';
 import ServiceCard from '../components/ServiceCard.astro';
-import ArticleCard from '../components/ArticleCard.astro';
 import CTASection from '../components/CTASection.astro';
 import Button from '../components/Button.astro';
-import { groupByCompany } from '../data/experience';
+import { getExperienceGroups } from '../data/experience';
 import { buildStackGroups } from '../data/stack';
 import { servicesEN } from '../data/services';
 import { siteConfig } from '../data/site';
@@ -25,22 +24,7 @@ const caseStudies = (await getCollection('case-studies'))
   .filter((c) => c.id.startsWith('en/'))
   .sort(byNewest);
 
-const experienceGroups = groupByCompany(
-  caseStudies.map((study) => ({
-    title: study.data.title,
-    summary: study.data.impactSummary ?? study.data.summary,
-    role: study.data.role,
-    timeframe: study.data.timeframe,
-    company: study.data.company,
-    technologies: study.data.technologies,
-    href: `/case-studies/${study.data.slug}`,
-  }))
-);
-
-const engineeringArticles = (await getCollection('engineering'))
-  .filter((e) => e.id.startsWith('en/'))
-  .sort(byNewest)
-  .slice(0, 3);
+const experienceGroups = getExperienceGroups(caseStudies, 'en');
 
 const productOrder = ['product-checkout-platform', 'pliegos'];
 const products = (await getCollection('products'))
@@ -52,12 +36,11 @@ const products = (await getCollection('products'))
     return (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0);
   });
 
-// Stack: only technologies already documented in the case studies and services
+// Stack: documented case studies, services, and product technologies
 const stackGroups = buildStackGroups({
-  projects: caseStudies.map((study) => study.data.technologies),
-  extra: servicesEN.flatMap((service) => service.technologies),
-  labels: { backend: 'Backend', frontend: 'Frontend', data: 'Data & Storage', ai: 'Applied AI', infra: 'Infrastructure & Tools' },
-  usage: (n) => `${n} projects`,
+  lang: 'en',
+  cases: caseStudies.map((study) => ({ slug: study.data.slug, technologies: study.data.technologies })),
+  services: servicesEN.map((service) => ({ slug: service.id, technologies: service.technologies })),
 });
 
 // Verified contact channels (src/data/site.ts)
@@ -114,73 +97,43 @@ const contacts = [
     </Container>
   </Section>
 
-  <!-- 02 Engineering: documented technical decisions -->
-  <Section id="engineering">
-    <Container>
-      <SectionHeader
-        index="02"
-        title="Engineering"
-        href="/engineering"
-        linkLabel="View all articles"
-      />
-      <div class="grid-cards" data-reveal>
-        {
-          engineeringArticles.map((article) => (
-            <ArticleCard
-              title={article.data.title}
-              excerpt={article.data.excerpt}
-              readingTime={article.data.readingTime}
-              tags={article.data.tags}
-              slug={article.data.slug}
-              href={`/engineering/${article.data.slug}`}
-            />
-          ))
-        }
-      </div>
-    </Container>
-  </Section>
-
-  <!-- 03 Experience: grouped by company, every case study included -->
+  <!-- 02 Experience: grouped by company, every case study included -->
   <Section id="case-studies">
     <Container>
       <SectionHeader
-        index="03"
+        index="02"
         title="Experience"
         href="/case-studies"
         linkLabel="View all experience"
       />
-      <ExperienceTimeline groups={experienceGroups} />
+      <ExperienceGroups groups={experienceGroups} lang="en" />
     </Container>
   </Section>
 
-  <!-- 04 Services -->
+  <!-- 03 Services -->
   <Section id="services">
     <Container>
       <SectionHeader
-        index="04"
+        index="03"
         title="Services"
         href="/services"
         linkLabel="View all services"
         description="Every solution starts with the problem you need to solve. Technology is chosen based on goals, scale, and operational realities."
       />
-      <div class="grid-two-cols" data-reveal>
+      <div class="grid-two-cols">
         {
           servicesEN.map((service) => (
-            <ServiceCard
-              title={service.title}
-              description={service.description}
-              technologies={service.technologies}
-            />
+            <ServiceCard service={service} />
           ))
         }
       </div>
     </Container>
   </Section>
 
-  <!-- 05 Tech stack -->
+  <!-- 04 Tech stack -->
   <Section id="stack">
     <Container>
-      <SectionHeader index="05" title="Tech stack" description="Grouped by layer. Highlighted technologies appear in more than one documented project." />
+      <SectionHeader index="04" title="Tech stack" description="Technologies documented in case studies, products, and services, organized by layer." />
       <StackGroups groups={stackGroups} />
     </Container>
   </Section>
@@ -190,7 +143,7 @@ const contacts = [
     <Container>
       <div class="about-box" data-reveal>
         <div class="about-content">
-          <SectionHeader index="06" title="About Me" />
+          <SectionHeader index="05" title="About Me" />
           <p class="about-text">
             I didn't start out building software. I started as a food engineer, learning to model processes, control quality, and solve problems with structure and analysis — long before I touched a line of TypeScript.
           </p>
@@ -214,6 +167,9 @@ const contacts = [
 </Layout>
 
 <style>
+  :global(#stack) { padding-bottom: var(--space-64); }
+  :global(#about-preview) { padding-top: var(--space-64); }
+
   .feature-list {
     display: grid;
     gap: var(--space-32);
@@ -225,22 +181,9 @@ const contacts = [
     gap: var(--space-24);
   }
 
-  .grid-cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-24);
-  }
-
   @media (min-width: 768px) {
-    .grid-two-cols,
-    .grid-cards {
+    .grid-two-cols {
       grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .grid-cards {
-      grid-template-columns: repeat(3, 1fr);
     }
   }
 

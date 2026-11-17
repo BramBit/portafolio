@@ -1,62 +1,51 @@
 ---
-title: "PLEI — E-Learning Platform and AI Infrastructure"
+title: "PLEI — Learning platform and hybrid search"
 slug: "plei"
-impactSummary: "Replaced Algolia with a custom hybrid search engine and built RAG and automation capabilities for the platform."
-summary: "Frontend and Full Stack engineering on an e-learning platform: Vite migration, custom hybrid search on PostgreSQL, and AI-assisted error triage."
+impactSummary: "I built most of Smart Search, combining three retrieval routes with weighted RRF, and contributed to frontend, media, and support work."
+summary: "Frontend and backend contributions to a learning platform and resource library for aesthetic professionals."
 technologies:
   - "PHP"
   - "Laravel"
   - "React"
-  - "TypeScript"
   - "PostgreSQL"
   - "pgvector"
-  - "RAG"
   - "MySQL"
   - "Redis"
   - "Vite"
-company: "Belvi Digital"
+  - "Vitest"
+  - "Playwright"
+company: "Belvi Digital SAS"
 role: "Frontend → Full Stack Developer"
 timeframe: "Dec 2023 – May 2026"
 publishedAt: 2026-08-04
 ---
 
-## Product Context and Problem
+## Context and problem
 
-PLEI is an e-learning and business development platform built to support Belvi Digital's client network of aesthetic medical clinics. It distributes video courses, technical equipment training, and practice management resources.
+PLEI is an e-learning platform and resource library for aesthetic professionals. The earlier search relied on Algolia and needed to retrieve courses, lessons, and other materials under different access rules. The team also worked on the administrative frontend, media processing, and incident support.
 
-The platform faced two critical engineering bottlenecks:
-1. **Costly and Inflexible Search:** The original Algolia integration imposed growing SaaS subscription fees and struggled with heterogeneous content (courses, PDF protocols, and lesson videos), lacking true semantic understanding.
-2. **Frontend Technical Debt & Support Triage:** The client interface ran on an outdated React 16 setup with sluggish compilation times and zero test coverage, while developers spent recurring hours manually triaging production error reports.
+## My contribution
 
-## Role and Individual Contribution
+I built most of `Services/SmartSearch/` and contributed across frontend and backend. Another team member developed the Laravel `Facades/Ai.php` facade and some factories and strategies.
 
-I originally joined the frontend team during the migration from React 16 to Vite (personally completing approximately 40% of the migration and implementing the platform's first automated test suite with Vitest). I then transitioned to full-stack engineering on the PHP/Laravel backend:
-- Architecture and implementation of the *Smart Search* hybrid engine that completely replaced Algolia.
-- Design of an asynchronous embedding synchronization pipeline across a dual-database architecture (MySQL + PostgreSQL/pgvector).
-- Optimization of multimedia assets and automated archival policies in AWS S3.
-- Automated error triage pipeline integrating Sentry incident streams with LLM analysis and Microsoft Teams webhooks.
+## Smart Search: three routes and rank fusion
 
-## Key Features Engineered
+The engine combines vector search with PostgreSQL/pgvector embeddings and an HNSW index; full-text search using `tsvector`, `websearch_to_tsquery`, and `ts_rank`; and title matches using `ILIKE`. Weighted Reciprocal Rank Fusion combines the rankings. A `pg_trgm` index accelerates `ILIKE` queries.
 
-1. **Multi-Signal Hybrid Smart Search:** Retrieval pipeline orchestrating four complementary signals:
-   - *Dense Vector Search:* Capturing semantic intent using embeddings stored in `pgvector`.
-   - *Full-Text Search:* Lexical keyword matching via PostgreSQL `tsvector` and `websearch_to_tsquery`.
-   - *Fuzzy Matching:* Typo tolerance and spelling variations powered by `pg_trgm`.
-   - *Exact Title Matching:* Prioritizing direct course and lesson title lookups.
-2. **Unified Ranking with Reciprocal Rank Fusion (RRF):** Merging distinct retrieval signals based strictly on relative ordinal rank, resolving the challenge of comparing fundamentally incompatible score distributions.
-3. **Asynchronous Embedding Pipeline:** Dual-database structure maintaining transactional data in MySQL while syncing vector representations into PostgreSQL via Eloquent Observers, worker queues, and scheduled Artisan commands.
-4. **AWS S3 Media Optimization:** Automated conversion pipeline converting uploaded images to WebP, compressing video and audio streams, and executing lifecycle archival on unused media assets.
-5. **AI-Assisted Error Triage:** Service capturing Sentry exceptions, analyzing stack traces and environmental context with an LLM, and generating root-cause summaries dispatched directly to Microsoft Teams developer channels via webhooks.
+Content visibility depends on role, hierarchy, brand, product line, and other access rules. The system applies these restrictions to its results.
 
-## Technical Challenges & Architecture Decisions
+## Embeddings, cache, and media
 
-- **Full In-House Algolia Replacement:** Matching the performance of a mature search SaaS with internal infrastructure required rigorous SQL query tuning, ensuring that running four concurrent retrieval passes still met strict latency targets.
-- **Authorization Filters Enforced at Data Layer:** Relevant semantic results must never be surfaced to unauthorized users. Membership and role-based visibility filters were executed directly within SQL query boundaries before rank fusion.
-- **Unified AI Access Facade:** To avoid duplicate integrations across different modules, a centralized service facade was engineered in Laravel, exposing reusable AI capabilities for search, support, and error diagnostics.
+Entity changes can pass through Eloquent Model Events, Observer/`HasEmbedding`, `GenerateEmbeddingJob`, `EmbeddingGenerationService`, and an entity-specific processor before reaching PostgreSQL/pgvector. Artisan commands support rebuilding and indexing. Redis participates in search caching through `Cache::tags()->remember()`.
 
-## Verifiable Results
+I contributed WebP image conversion, FFmpeg video processing, audio optimization, reprocessing of existing media, and detection of unreferenced files. Such files were archived to AWS S3 Glacier Instant Retrieval.
 
-- Successfully eliminated third-party SaaS dependency by replacing Algolia entirely, removing recurring subscription costs.
-- Modernized client build tooling with Vite and established the project's first Vitest automated test suite.
-- Custom hybrid search engine running continuously in production across the entire catalog.
-- Production error triage automated in Teams, measurably accelerating initial incident diagnosis and prioritization.
+## Support and frontend
+
+A Sentry webhook validated with HMAC-SHA256 starts an asynchronous job. LLM-assisted analysis uses the incident description and stack trace and sends information to Microsoft Teams. A separate support flow retrieves context for user questions; bugs and suggestions can create tickets.
+
+I helped reorganize the React frontend by context and built administrative modules for courses, lessons, seminars, favorites, authentication, and the help center. I wrote Vitest unit tests and some Playwright E2E tests. Another team member completed the Vite configuration migration.
+
+## Implementation and outcomes
+
+Smart Search replaced the previous Algolia integration. My work also covered embedding generation, media processing, incident analysis, administrative interfaces, and tests alongside the team.

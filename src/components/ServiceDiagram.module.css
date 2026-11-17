@@ -1,0 +1,26 @@
+.diagram { min-width: 0; margin: 0; }
+.graphic { display: block; width: 100%; height: auto; overflow: visible; }
+.graphic rect, .graphic path, .graphic circle { vector-effect: non-scaling-stroke; }
+.guide { fill: none; stroke: var(--color-border-ui); stroke-width: 1; }
+.flow { fill: none; stroke: var(--color-accent); stroke-width: 1.5; opacity: .7; transition: opacity var(--dur-base) var(--ease-out); }
+.module, .destination, .document, .legacy { fill: var(--color-surface-elevated); stroke: var(--color-border-ui); stroke-width: 1; transition: stroke var(--dur-base) var(--ease-out), fill var(--dur-base) var(--ease-out); }
+.core, .response { fill: var(--color-surface-3); stroke: var(--color-accent); stroke-width: 1.5; transition: fill var(--dur-base) var(--ease-out); }
+.port { fill: var(--color-accent); }
+.event { fill: var(--color-surface-3); stroke: var(--color-accent); stroke-width: 1.5; }
+.indexBox, .retrieval { fill: var(--color-surface-elevated); stroke: var(--color-accent); stroke-width: 1.3; }
+.query, .context { fill: var(--color-surface-elevated); stroke: var(--color-border-ui); stroke-width: 1; }
+.legacy { stroke-dasharray: 5 4; }
+.legacyLines { fill: none; stroke: var(--color-text-muted); stroke-width: 1; opacity: .55; }
+.arrow { fill: none; stroke: var(--color-accent); stroke-width: 1.5; }
+.validation { fill: none; stroke: var(--color-accent); stroke-width: 1.3; }
+.expanded .graphic { margin-bottom: var(--space-8); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :global(article:hover) .diagram .flow, :global(article:focus-within) .diagram .flow { animation: trace var(--dur-slow) var(--ease-out) 1 both; }
+  :global(article:hover) .diagram .module, :global(article:focus-within) .diagram .module { stroke: var(--color-accent-strong); }
+  :global(article:hover) .diagram .core, :global(article:focus-within) .diagram .core,
+  :global(article:hover) .diagram .response, :global(article:focus-within) .diagram .response { fill: var(--color-surface-elevated); }
+  @keyframes trace { from { stroke-dasharray: 900; stroke-dashoffset: 900; opacity: .45; } to { stroke-dasharray: 900; stroke-dashoffset: 0; opacity: .85; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .graphic *, .flow { animation: none !important; transition: none !important; }
+}

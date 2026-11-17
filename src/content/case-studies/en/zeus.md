@@ -1,57 +1,52 @@
 ---
-title: "Zeus — IoT Platform for Medical Devices"
+title: "Zeus — IoT platform for medical devices"
 slug: "zeus"
-impactSummary: "Engineered the RAG architecture, automated financial reporting, and backend/frontend capabilities for a medical IoT platform."
-summary: "Backend and Full Stack engineering on a medical IoT platform featuring real-time telemetry, embedded RAG on Hexagonal/DDD architecture, and automated monthly reporting."
+impactSummary: "I built a document RAG system, predictive analysis module, and reporting and frontend features within an existing IoT platform."
+summary: "Backend and frontend contributions to a Pay-Per-Shot medical aesthetic device operations and billing platform."
 technologies:
   - "TypeScript"
   - "Node.js"
   - "Express"
+  - "TypeORM"
   - "PostgreSQL"
   - "pgvector"
-  - "RAG"
-  - "Redis"
   - "RabbitMQ"
   - "Next.js"
   - "React"
-company: "Belvi Digital"
-role: "Backend Developer (Full Stack Scope)"
+  - "Jest"
+  - "Vitest"
+company: "Belvi Digital SAS"
+role: "Backend Developer (Full Stack scope)"
 timeframe: "Dec 2023 – May 2026"
 publishedAt: 2026-08-03
 ---
 
-## Product Context and Problem
+## Context and problem
 
-Zeus is a production IoT platform managing telemetry, operational status, and automated billing for medical aesthetic devices (pulsed light and dermatological therapy equipment), serving approximately 1,000 active users.
+Zeus was an IoT platform for managing medical aesthetic devices and billing usage through a Pay-Per-Shot model. It needed ways to consult equipment documentation, analyze wear signals, and generate financial information for users. I worked within an existing product and architecture. RabbitMQ was part of the existing infrastructure.
 
-The business model operates on a *Pay-Per-Shot* basis: clinics purchase treatment shot packages, and the platform audits and bills based on real consumption recorded by IoT hardware sensors. Belvi Digital needed to consolidate high-frequency usage events, reconcile monthly billing statements without manual ledger accounting, map clinic equipment geographic distribution, and streamline technical support using AI strictly anchored to internal machine manuals.
+## My contribution
 
-## Role and Individual Contribution
+As a Backend Developer with Full Stack scope, I built the document manager and RAG pipeline, the handpiece or hose lifecycle analysis module, financial report generation and consultation features, and several administrative interfaces. I extended wallet backend functions for statements, outstanding debt, and administrative views. Another team member developed the original wallet backend core.
 
-I joined the engineering team developing administrative web modules in Next.js and progressively took ownership of mission-critical services on the TypeScript/Node.js backend under Hexagonal Architecture and Domain-Driven Design (DDD):
-- Architecture and implementation of the in-house RAG pipeline and support chatbot.
-- Design of a provider-agnostic AI layer utilizing the Strategy Pattern with automated fallback.
-- Engineering of the predictive maintenance and hardware wear-analysis module.
-- Automated monthly financial billing engine with dynamic statement generation and secure JWT token links.
-- Clinic geolocation mapping module and test automation suite (Jest, Cucumber, Vitest, Playwright).
+## RAG system and architecture decision
 
-## Key Features Engineered
+The manager accepts PDF and Markdown, detects duplicates with SHA-256, and stores documents in S3. Documents move through `pending → processing → completed | failed`. Processing extracts and cleans text, creates overlapping chunks, generates embeddings, and stores vectors in PostgreSQL with pgvector. A question retrieves chunks through cosine similarity, builds context for the model, and records question and answer history.
 
-1. **Custom In-House RAG Pipeline:** Document ingestion pipeline for machine user manuals and clinical protocols (PDF and Markdown), semantic chunking, embedding generation, and vector indexing in PostgreSQL using the `pgvector` extension.
-2. **Resilient AI Layer (Strategy Pattern):** LLM provider abstraction that dynamically routes inferences between OpenAI and local models hosted on Ollama/Llama depending on the deployment environment, executing automated fallbacks during upstream provider downtime or rate limits.
-3. **Predictive Hardware Maintenance:** Analytics service processing cumulative shot time-series per handpiece, calculating remaining lifespan via linear regression, and generating preventative maintenance diagnostics in natural language using an LLM.
-4. **Pay-Per-Shot Financial Billing Engine:** Scheduled background workflows that aggregate device consumption events, generate dynamic HTML/PDF/Excel statements, and dispatch monthly emails with secure, time-limited JWT authentication links.
-5. **Equipment Geolocation & Integration:** Interactive clinic map visualizing operational machine statuses, integrated with PLEI to recommend contextual staff training modules based on specific device usage.
+AI integration uses an `AiStrategy` domain port with OpenAI and Ollama adapters. Provider selection is configurable, checks availability, and can fall back when the selected provider fails. I used `@langchain/openai` and `@langchain/ollama` as model clients inside the adapters. Ingestion, storage, and retrieval were implemented in the product architecture.
 
-## Technical Challenges & Architecture Decisions
+## Predictive analysis
 
-- **Clean Integration with Hexagonal Architecture & DDD:** The RAG system needed to integrate cleanly into an established backend with strict bounded contexts. Heavy external frameworks (like LangChain) were rejected to avoid unwanted coupling; instead, RAG operations were modeled as pure domain ports with swappable infrastructure adapters.
-- **Fault-Tolerant Telemetry Ingestion:** The steady stream of incoming IoT hardware signals was decoupled from the transactional core using RabbitMQ message queues and Redis read caches, absorbing sudden bursts of telemetry without degrading primary PostgreSQL database performance.
-- **Strict Hallucination Prevention in Support:** The support chatbot operates under strict system constraints forbidding answers outside the retrieved `pgvector` context, ensuring clinical staff never receive unauthorized instructions conflicting with official equipment specifications.
+A device event triggers lifecycle recalculation. Deterministic metrics and linear regression produce trends; an LLM interprets those results, and its output is structurally validated before persistence. The statistical calculation does not depend on the LLM.
 
-## Verifiable Results
+## Reporting, wallet, and integration
 
-- Maintained continuous platform operation serving roughly 1,000 active clinical users.
-- Automated 100% of the monthly Pay-Per-Shot statement generation and delivery cycle, eliminating manual reconciliation overhead.
-- AI support assistant operating exclusively on validated technical documentation, measurably reducing repetitive support tickets routed to engineering.
-- Automated test coverage implemented using unit tests in Jest, BDD behavior tests with Cucumber, and E2E tests with Playwright across core billing and telemetry flows.
+I implemented financial report generation and consultation, movement aggregation, statements accessed through JWT links, and email notification features. The monthly sending cron was commented out in the documented branch. Scheduled monthly delivery was therefore not active in that branch.
+
+On the frontend, I built wallet views, movement history, a statement dashboard, PDF and Excel exports, a Leaflet device map, and administrative views. I also implemented an HTTP integration from Zeus to PLEI for course suggestions based on device and brand, using a repository port, Axios adapter, API key, configurable timeout, and controlled degradation. It was not an AI recommendation engine.
+
+Other contributions included a nightly user incident detection job, notifications, filters, pagination, queries, and consolidated OpenAPI documentation. I contributed Jest and Cucumber tests for my modules, frontend tests with Vitest, and some Playwright tests.
+
+## Implementation and outcomes
+
+The work connected documentary support, device lifecycle analysis, financial reporting, and administrative interfaces within the existing product. My contribution included new modules and extensions to shared systems.

@@ -1,0 +1,162 @@
+---
+import type { ServiceId } from '../data/services';
+import { getLangFromUrl } from '../i18n';
+import DiagramFrame from './DiagramFrame.astro';
+import DiagramCompact from './DiagramCompact.astro';
+import DiagramLabel from './DiagramLabel.astro';
+import styles from './ServiceDiagram.module.css';
+
+interface Props { id: ServiceId; mode?: 'compact' | 'expanded'; nodeFontSize?: number; indicatorFontSize?: number; }
+const { id, mode = 'compact', nodeFontSize, indicatorFontSize } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const copy: Record<ServiceId, { en: string; es: string; enNodes: string[]; esNodes: string[] }> = {
+  'custom-software': {
+    en: 'Interface and API connect to business logic, which uses a separate data layer.',
+    es: 'La interfaz y la API se conectan con la lógica de negocio, que utiliza una capa de datos separada.',
+    enNodes: ['Interface', 'Application / API', 'Domain Logic', 'Data'],
+    esNodes: ['Interfaz', 'Aplicación / API', 'Lógica de dominio', 'Datos'],
+  },
+  automation: {
+    en: 'An external event reaches a worker through a queue and branches toward separate destinations.',
+    es: 'Un evento externo llega a un worker mediante una cola y se ramifica hacia destinos separados.',
+    enNodes: ['External system', 'Webhook / Event', 'Queue / Worker', 'Destinations A, B, C'],
+    esNodes: ['Sistema externo', 'Webhook / Evento', 'Cola / Worker', 'Destinos A, B, C'],
+  },
+  'applied-ai': {
+    en: 'Documents are prepared and indexed. A separate query flow retrieves context before an LLM generates a response.',
+    es: 'Los documentos se preparan e indexan. Un flujo de consulta separado recupera contexto antes de generar una respuesta con un LLM.',
+    enNodes: ['Documents', 'Processing / Embeddings', 'Vector index', 'Query', 'Retrieval', 'Context', 'LLM response'],
+    esNodes: ['Documentos', 'Procesamiento / Embeddings', 'Índice vectorial', 'Consulta', 'Recuperación', 'Contexto', 'Respuesta LLM'],
+  },
+  modernization: {
+    en: 'A coupled system is reorganized into bounded modules with automated validation around the change.',
+    es: 'Un sistema acoplado se reorganiza en módulos delimitados con validación automatizada del cambio.',
+    enNodes: ['Coupled system', 'Bounded modules', 'Automated validation', 'Evolved system'],
+    esNodes: ['Sistema acoplado', 'Módulos delimitados', 'Validación automatizada', 'Sistema evolucionado'],
+  },
+};
+const diagram = copy[id];
+const nodes = lang === 'es' ? diagram.esNodes : diagram.enNodes;
+const labelsByKind: Record<string, string[][]> = {
+  'custom-software': [
+    lang === 'es' ? ["Interfaz"] : ["Interface"],
+    lang === 'es' ? ["Aplicación", "/ API"] : ["Application", "/ API"],
+    lang === 'es' ? ["Lógica de dominio"] : ["Domain Logic"],
+    lang === 'es' ? ["Datos"] : ["Data"],
+  ],
+  'automation': [
+    lang === 'es' ? ["Sistema", "externo"] : ["External", "System"],
+    lang === 'es' ? ["Webhook", "/ Evento"] : ["Webhook", "/ Event"],
+    lang === 'es' ? ["Cola", "/ Worker"] : ["Queue", "/ Worker"],
+    lang === 'es' ? ["Destino", "A"] : ["Destination", "A"],
+    lang === 'es' ? ["Destino", "B"] : ["Destination", "B"],
+    lang === 'es' ? ["Destino", "C"] : ["Destination", "C"],
+  ],
+  'applied-ai': [
+    lang === 'es' ? ["Documentos"] : ["Documents"],
+    lang === 'es' ? ["Proceso", "Embeddings"] : ["Processing", "Embeddings"],
+    lang === 'es' ? ["Índice", "vectorial"] : ["Vector", "Index"],
+    lang === 'es' ? ["Consulta"] : ["Query"],
+    lang === 'es' ? ["Recuperación"] : ["Retrieval"],
+    lang === 'es' ? ["Contexto"] : ["Context"],
+    lang === 'es' ? ["Respuesta", "LLM"] : ["LLM", "Response"],
+  ],
+  'modernization': [
+    lang === 'es' ? ["Sistema", "existente"] : ["Legacy", "System"],
+    lang === 'es' ? ["Arquitectura modular"] : ["Modular Architecture"],
+    lang === 'es' ? ["Módulo A"] : ["App A"],
+    lang === 'es' ? ["Módulo B"] : ["App B"],
+    lang === 'es' ? ["Módulo C"] : ["App C"],
+    lang === 'es' ? ["Módulo D"] : ["App D"],
+    lang === 'es' ? ["Validación automatizada"] : ["Automated Validation"],
+    lang === 'es' ? ["Sistema evolucionado"] : ["Evolved System"],
+  ],
+};
+
+---
+<figure class:list={[styles.diagram, styles[mode]]} data-service={id} style={`${nodeFontSize === undefined ? '' : `--diagram-node-font-size: ${nodeFontSize}px;`}${indicatorFontSize === undefined ? '' : ` --diagram-indicator-font-size: ${indicatorFontSize}px;`}`}>
+  <DiagramFrame variant="service" visibleFontSize={mode === 'expanded' ? 15 : 13} proportionalText={mode === 'expanded'} caption={lang === 'es' ? diagram.es : diagram.en} parts={nodes} lang={lang}>
+  <DiagramCompact kind={id} labels={labelsByKind[id]} classes={styles} lang={lang} />
+  {id === 'custom-software' && (
+    <svg class:list={[styles.graphic, 'diagram-wide']} viewBox="0 0 600 260" aria-hidden="true" focusable="false">
+      <path class={styles.guide} d="M172 60H213Q227 60 227 74V106M428 60H387Q373 60 373 74V106M300 174V202" />
+      <path class={styles.flow} d="M172 60H213Q227 60 227 74V106M428 60H387Q373 60 373 74V106M300 174V202" />
+      <rect class={styles.module} x="36" y="27" width="136" height="66" rx="5" />
+      <rect class={styles.module} x="428" y="27" width="136" height="66" rx="5" />
+      <rect class={styles.core} x="211" y="106" width="178" height="68" rx="7" />
+      <rect class={styles.module} x="234" y="202" width="132" height="43" rx="5" />
+      <circle class={styles.port} cx="227" cy="106" r="4" /><circle class={styles.port} cx="373" cy="106" r="4" /><circle class={styles.port} cx="300" cy="202" r="4" />
+
+      <DiagramLabel x={104} y={60} lines={labelsByKind['custom-software'][0]} />
+      <DiagramLabel x={496} y={60} lines={labelsByKind['custom-software'][1]} />
+      <DiagramLabel x={300} y={140} lines={labelsByKind['custom-software'][2]} />
+      <DiagramLabel x={300} y={224} lines={labelsByKind['custom-software'][3]} />
+</svg>
+  )}
+  {id === 'automation' && (
+    <svg class:list={[styles.graphic, 'diagram-wide']} viewBox="0 0 600 260" aria-hidden="true" focusable="false">
+      <path class={styles.guide} d="M153 130H205M233 130H271M391 130H438Q455 130 455 113V52H476M455 130H476M455 130V208H476" />
+      <path class={styles.flow} d="M153 130H205M233 130H271M391 130H438Q455 130 455 113V52H476M455 130H476M455 130V208H476" />
+      <rect class={styles.module} x="37" y="91" width="116" height="78" rx="5" />
+      <path class={styles.event} d="m219 110 20 20-20 20-20-20z" />
+      <rect class={styles.core} x="271" y="83" width="120" height="94" rx="6" />
+      <rect class={styles.destination} x="476" y="30" width="114" height="43" rx="4" />
+      <rect class={styles.destination} x="476" y="109" width="114" height="43" rx="4" />
+      <rect class={styles.destination} x="476" y="187" width="114" height="43" rx="4" />
+
+
+      <DiagramLabel x={95} y={130} lines={labelsByKind['automation'][0]} />
+      <DiagramLabel x={219} y={79} lines={labelsByKind['automation'][1]} />
+      <DiagramLabel x={331} y={130} lines={labelsByKind['automation'][2]} />
+      <DiagramLabel x={533} y={51} lines={labelsByKind['automation'][3]} />
+      <DiagramLabel x={533} y={130} lines={labelsByKind['automation'][4]} />
+      <DiagramLabel x={533} y={208} lines={labelsByKind['automation'][5]} />
+</svg>
+  )}
+  {id === 'applied-ai' && (
+    <svg class:list={[styles.graphic, 'diagram-wide']} viewBox="0 0 600 260" aria-hidden="true" focusable="false">
+      <path class={styles.guide} d="M137 60H146M266 60H302M353 89V127H206V157M120 190H144M268 190H316M416 190H455" />
+      <path class={styles.flow} d="M137 60H146M266 60H302M353 89V127H206V157M120 190H144M268 190H316M416 190H455" />
+      <path class={styles.document} d="M21 29h116v63H21z" />
+      <rect class={styles.module} x="146" y="31" width="120" height="58" rx="5" />
+      <rect class={styles.indexBox} x="302" y="31" width="102" height="58" rx="5" />
+      <circle class={styles.query} cx="76" cy="190" r="44" />
+      <rect class={styles.retrieval} x="144" y="157" width="124" height="66" rx="5" />
+      <rect class={styles.context} x="316" y="164" width="100" height="52" rx="5" />
+      <rect class={styles.response} x="455" y="153" width="111" height="75" rx="6" />
+      <circle class={styles.port} cx="206" cy="157" r="4" />
+
+      <DiagramLabel x={79} y={60} lines={labelsByKind['applied-ai'][0]} />
+      <DiagramLabel x={206} y={60} lines={labelsByKind['applied-ai'][1]} />
+      <DiagramLabel x={353} y={60} lines={labelsByKind['applied-ai'][2]} />
+      <DiagramLabel x={76} y={190} lines={labelsByKind['applied-ai'][3]} />
+      <DiagramLabel x={206} y={190} lines={labelsByKind['applied-ai'][4]} />
+      <DiagramLabel x={366} y={190} lines={labelsByKind['applied-ai'][5]} />
+      <DiagramLabel x={510} y={190} lines={labelsByKind['applied-ai'][6]} />
+</svg>
+  )}
+  {id === 'modernization' && (
+    <svg class:list={[styles.graphic, 'diagram-wide']} viewBox="0 0 600 295" aria-hidden="true" focusable="false">
+      <rect class={styles.legacy} x="31" y="38" width="171" height="184" rx="6" />
+      <path class={styles.legacyLines} d="M50 61l130 141M180 61L50 202" opacity="0.25" />
+      <path class={styles.guide} d="M202 130H320" /><path class={styles.flow} d="M202 130H320" />
+      <path class={styles.arrow} d="m306 117 14 13-14 13" />
+      <rect class={styles.module} x="332" y="39" width="99" height="65" rx="5" />
+      <rect class={styles.module} x="461" y="39" width="99" height="65" rx="5" />
+      <rect class={styles.module} x="332" y="127" width="99" height="65" rx="5" />
+      <rect class={styles.module} x="461" y="127" width="99" height="65" rx="5" />
+      <path class={styles.guide} d="M382 104v23M510 104v23M431 72h30M431 160h30" />
+      <path class={styles.validation} d="M332 222h228M350 222l8 8 15-17M479 222l8 8 15-17" />
+
+      <DiagramLabel x={116} y={130} lines={labelsByKind['modernization'][0]} />
+      <DiagramLabel x={446} y={20} lines={labelsByKind['modernization'][1]} />
+      <DiagramLabel x={382} y={72} lines={labelsByKind['modernization'][2]} />
+      <DiagramLabel x={510} y={72} lines={labelsByKind['modernization'][3]} />
+      <DiagramLabel x={382} y={160} lines={labelsByKind['modernization'][4]} />
+      <DiagramLabel x={510} y={160} lines={labelsByKind['modernization'][5]} />
+      <DiagramLabel x={446} y={248} lines={labelsByKind['modernization'][6]} />
+      <text x="446" y="278" text-anchor="middle" fill="var(--color-text-secondary)" font-size="var(--diagram-indicator-font-size, 18px)">{lang === 'es' ? 'Sistema evolucionado' : 'Evolved System'}</text>
+</svg>
+  )}
+  </DiagramFrame>
+</figure>

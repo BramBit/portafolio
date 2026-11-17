@@ -1,4 +1,5 @@
 ---
+import { productStatusLabels, type ProductStatus } from '../data/productStatus';
 import Badge from './Badge.astro';
 import Button from './Button.astro';
 import styles from './ProjectFeature.module.css';
@@ -7,7 +8,7 @@ import { getLangFromUrl, useTranslations } from '../i18n';
 interface Props {
   title: string;
   tagline: string;
-  status: 'live' | 'coming-soon';
+  status: ProductStatus;
   problem?: string;
   solution?: string;
   /** Detail page of the project (internal) */
@@ -23,14 +24,14 @@ const { title, tagline, status, problem, solution, href, website, reverse = fals
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const isLive = status === 'live';
-const websiteLabel = lang === 'es' ? 'Visitar sitio' : 'Visit website';
+const isLive = status === 'live' || status === 'sandbox-demo';
+const websiteLabel = lang === 'es' ? 'Ver demo sandbox' : 'View sandbox demo';
 ---
 
-<article class:list={[styles.feature, { [styles.reverse]: reverse }, className]} data-reveal>
+<article class:list={[styles.feature, { [styles.reverse]: reverse }, className]}>
   <div class={styles.intro}>
     <div>
-      <Badge variant={isLive ? 'accent' : 'default'}>{isLive ? t('badge.live') : t('badge.comingSoon')}</Badge>
+      <Badge variant={isLive ? 'accent' : 'default'}>{productStatusLabels[lang][status]}</Badge>
       <h3 class={styles.name}>{title}</h3>
       <p class={styles.tagline}>{tagline}</p>
     </div>

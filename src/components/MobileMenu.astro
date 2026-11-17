@@ -110,7 +110,13 @@ const navLabel = lang === 'es' ? 'Navegación móvil' : 'Mobile navigation';
       if (open) {
         overlay!.dataset.open = 'true';
         document.body.style.overflow = 'hidden';
-        links[0]?.focus();
+        // Wait for visibility to update before moving keyboard focus into the menu.
+        requestAnimationFrame(() => {
+          const transitions = overlay!.getAnimations().map((animation) => animation.finished.catch(() => {}));
+          Promise.all(transitions).then(() => {
+            if (isOpen() && (document.activeElement === toggle || document.activeElement === document.body)) links[0]?.focus();
+          });
+        });
       } else {
         delete overlay!.dataset.open;
         document.body.style.overflow = '';

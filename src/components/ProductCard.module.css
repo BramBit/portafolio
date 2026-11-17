@@ -6,13 +6,20 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-12);
   margin-bottom: var(--space-16);
 }
 
+.singleLineStatus {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .title {
+  flex: 1 1 10rem;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-h3);
   font-weight: 700;

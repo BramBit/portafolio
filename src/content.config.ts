@@ -55,7 +55,7 @@ const productsCollection = defineCollection({
     title: z.string(),
     slug: z.string(),
     tagline: z.string(),
-    status: z.enum(['live', 'coming-soon']),
+    status: z.enum(['live', 'coming-soon', 'sandbox-demo', 'backend-development']),
     problem: z.string().optional(),
     solution: z.string().optional(),
     website: z.string().optional(),

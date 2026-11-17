@@ -1,5 +1,6 @@
 ---
 import Card from './Card.astro';
+import { productStatusLabels, type ProductStatus } from '../data/productStatus';
 import Badge from './Badge.astro';
 import styles from './ProductCard.module.css';
 import { getLangFromUrl, useTranslations } from '../i18n';
@@ -7,7 +8,7 @@ import { getLangFromUrl, useTranslations } from '../i18n';
 interface Props {
   title: string;
   tagline: string;
-  status: 'live' | 'coming-soon';
+  status: ProductStatus;
   link?: string;
   class?: string;
 }
@@ -23,16 +24,16 @@ const {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const isLive = status === 'live';
+const isLive = status === 'live' || status === 'sandbox-demo';
 const badgeVariant = isLive ? 'accent' : 'default';
-const badgeText = isLive ? t('badge.live') : t('badge.comingSoon');
+const badgeText = productStatusLabels[lang][status];
 const linkText = t('cta.viewProduct');
 ---
 
 <Card interactive={Boolean(link)} class:list={[styles.productCard, className]}>
   <div class={styles.header}>
     <h3 class={styles.title}>{title}</h3>
-    <Badge variant={badgeVariant}>{badgeText}</Badge>
+    <Badge variant={badgeVariant} class={status === 'sandbox-demo' ? styles.singleLineStatus : undefined}>{badgeText}</Badge>
   </div>
 
   <p class={styles.tagline}>{tagline}</p>

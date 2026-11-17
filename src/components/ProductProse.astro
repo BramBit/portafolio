@@ -1,0 +1,26 @@
+---
+import styles from './ProductProse.module.css';
+interface Props { lang: 'en' | 'es'; }
+const { lang } = Astro.props;
+---
+<div class={styles.prose} data-product-prose data-scroll-label={lang === 'es' ? 'Arquitectura; bloque con desplazamiento horizontal' : 'Architecture; horizontally scrollable block'}><slot /></div>
+<script>
+  function setupProductCode() {
+    document.querySelectorAll<HTMLElement>('[data-product-prose]').forEach((prose) => {
+      prose.querySelectorAll('pre').forEach((pre) => {
+        if (pre.dataset.bound) return;
+        pre.dataset.bound = 'true';
+        pre.setAttribute('role', 'region');
+        pre.setAttribute('aria-label', prose.dataset.scrollLabel!);
+        const update = () => {
+          if (pre.scrollWidth > pre.clientWidth + 1) pre.tabIndex = 0;
+          else pre.removeAttribute('tabindex');
+        };
+        new ResizeObserver(update).observe(pre);
+        update();
+      });
+    });
+  }
+  setupProductCode();
+  document.addEventListener('astro:page-load', setupProductCode);
+</script>

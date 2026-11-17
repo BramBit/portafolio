@@ -1,0 +1,39 @@
+---
+import SystemDiagram from './SystemDiagram.astro';
+import type { ExperienceGroup, ExperienceLang } from '../data/experience';
+import styles from './ExperienceGroups.module.css';
+interface Props { groups: ExperienceGroup[]; lang: ExperienceLang; mode?: 'home' | 'index'; }
+const { groups, lang, mode = 'home' } = Astro.props;
+const copy = lang === 'es' ? { problem: 'Problema', contribution: 'Mi contribución', decision: 'Decisión técnica', case: 'Explorar caso' } : { problem: 'Problem', contribution: 'My contribution', decision: 'Technical decision', case: 'Explore case' };
+const CompanyHeading = mode === 'index' ? 'h2' : 'h3';
+const ProjectHeading = mode === 'index' ? 'h3' : 'h4';
+const diagramFontSize = mode === 'index' ? 14 : 13;
+---
+<div class:list={[styles.groups, styles[mode]]}>
+  {groups.map((group, groupIndex) => <section id={mode === 'index' ? group.key : undefined} class={styles.company} aria-labelledby={`company-${mode}-${group.key}`}>
+    <div class={styles.companyIntro}>
+      <span class={styles.ordinal} aria-hidden="true">{String(groupIndex + 1).padStart(2, '0')} / 02</span>
+      <CompanyHeading id={`company-${mode}-${group.key}`}>{group.company.name}</CompanyHeading>
+      <p class={styles.period}>{group.company.period}</p>
+      <p class={styles.companyRole}>{group.company.role}</p>
+      <p class={styles.context}>{group.company.context}</p>
+      <ul class={styles.companyTech}>{group.company.capabilities.map((item) => <li>{item}</li>)}</ul>
+    </div>
+    <div class={styles.projects}>
+      {group.projects.map((project, projectIndex) => <article class:list={[styles.project, { [styles.reverse]: mode === 'index' && projectIndex % 2 === 1 }]}>
+        <div class={styles.projectCopy}>
+          <div class={styles.projectTop}><span class={styles.systemLabel}>{lang === 'es' ? 'Sistema' : 'System'} / {String(projectIndex + 1).padStart(2, '0')}</span><span class={styles.role}>{project.role}</span></div>
+          <ProjectHeading>{project.profile.name}</ProjectHeading>
+          <dl class={styles.facts}>
+            <div><dt>{copy.problem}</dt><dd>{project.profile.problem}</dd></div>
+            <div><dt>{copy.contribution}</dt><dd>{project.profile.contribution}</dd></div>
+            {mode === 'index' && <div><dt>{copy.decision}</dt><dd>{project.profile.decision}</dd></div>}
+          </dl>
+          <ul class={styles.tech}>{project.profile.tech.map((tech) => <li>{tech}</li>)}</ul>
+          <a class={styles.link} href={project.href}>{copy.case}<span aria-hidden="true">↗</span></a>
+        </div>
+        <SystemDiagram slug={project.slug} lang={lang} compact={mode === 'home'} labelReduction={2} nodeFontSize={diagramFontSize} visibleFontSize={diagramFontSize} indicatorFontSize={mode === 'index' ? diagramFontSize : undefined} />
+      </article>)}
+    </div>
+  </section>)}
+</div>

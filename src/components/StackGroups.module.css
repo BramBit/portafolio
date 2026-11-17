@@ -1,55 +1,28 @@
-.groups {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  gap: var(--space-32) var(--space-48);
-}
-
+.groups { border-bottom: 1px solid var(--color-border); }
 .group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-16);
-  padding-top: var(--space-16);
-  border-top: 1px solid var(--color-border);
-  min-width: 0;
-}
-
-.label {
-  font-weight: 500;
-}
-
-.primary,
-.secondary {
-  list-style: none;
-}
-
-.primary {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--space-12);
+  min-width: 0;
+  padding: var(--space-16) 0;
+  border-top: 1px solid var(--color-border);
+  transition: border-color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
-
-.primaryItem {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-4) var(--space-12);
-}
-
-.name {
-  font-size: var(--font-size-h3);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--color-text-primary);
-}
-
-.usage {
+.label { color: var(--color-text-primary); font-size: var(--font-size-small); font-weight: 500; line-height: 1.4; }
+.items { display: flex; flex-wrap: wrap; gap: var(--space-8); min-width: 0; list-style: none; }
+.items li {
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
-
-.secondary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
+@media (hover: hover) { .group:hover { border-color: var(--color-border-ui); background: color-mix(in srgb, var(--color-accent) 2%, transparent); } }
+@media (min-width: 48rem) {
+  .group { grid-template-columns: minmax(10rem, 2fr) minmax(0, 8fr); gap: var(--space-24); align-items: start; padding: var(--space-24) 0; }
 }
+@media (prefers-reduced-motion: reduce) { .group { transition: none; } }

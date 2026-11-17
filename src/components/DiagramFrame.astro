@@ -1,0 +1,44 @@
+---
+import styles from './DiagramFrame.module.css';
+interface Props { caption: string; parts: readonly string[]; lang: 'en' | 'es'; variant?: 'system' | 'service'; visibleFontSize?: number; proportionalText?: boolean; }
+const { caption, parts, variant = 'system', visibleFontSize, proportionalText = false } = Astro.props;
+---
+<div class:list={[styles.viewport, variant === 'service' && styles.service]} data-diagram-frame data-visible-font-size={visibleFontSize} data-proportional-text={proportionalText || undefined}>
+  <slot />
+</div>
+<figcaption class={styles.caption}>{caption}<span class="visually-hidden"> {parts.join(' · ')}.</span></figcaption>
+
+<script>
+  function normalizeDiagramText() {
+    document.querySelectorAll<HTMLElement>('[data-visible-font-size]').forEach((frame) => {
+      if (frame.dataset.textMatched) return;
+      frame.dataset.textMatched = 'true';
+      // Compensate each SVG's scale so the requested size is measured in screen pixels.
+      const update = () => {
+        for (const svg of frame.querySelectorAll<SVGSVGElement>('svg')) {
+          if (!svg.getBoundingClientRect().width) continue;
+          const matrix = svg.getScreenCTM();
+          if (!matrix) continue;
+          const size = `${Number(frame.dataset.visibleFontSize) / Math.hypot(matrix.a, matrix.b)}px`;
+          svg.style.setProperty('--diagram-node-font-size', size);
+          svg.style.setProperty('--diagram-indicator-font-size', size);
+          if (frame.hasAttribute('data-proportional-text')) {
+            for (const label of svg.querySelectorAll<SVGTextElement>('[data-label-center-y]')) {
+              const lines = [...label.querySelectorAll('tspan')];
+              const lineHeight = parseFloat(size) * 1.25;
+              label.setAttribute('y', String(Number(label.dataset.labelCenterY) - (lines.length - 1) * lineHeight / 2));
+              lines.forEach((line, index) => line.setAttribute('dy', String(index === 0 ? 0 : lineHeight)));
+              const bounds = label.getBBox();
+              const adjustment = Number(label.dataset.labelCenterY) - (bounds.y + bounds.height / 2);
+              label.setAttribute('y', String(Number(label.getAttribute('y')) + adjustment));
+            }
+          }
+        }
+      };
+      new ResizeObserver(update).observe(frame);
+      update();
+    });
+  }
+  normalizeDiagramText();
+  document.addEventListener('astro:page-load', normalizeDiagramText);
+</script>

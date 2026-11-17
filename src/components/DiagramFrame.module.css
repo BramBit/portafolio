@@ -1,0 +1,14 @@
+.viewport { width: 100%; max-width: 100%; min-width: 0; container-type: inline-size; }
+.viewport :global(svg) { display: block; width: 100%; height: auto; }
+.viewport :global(.diagram-compact) { display: none; }
+@container (max-width: 36rem) {
+  .viewport:not(.service) :global(.diagram-wide) { display: none; }
+  .viewport:not(.service) :global(.diagram-compact) { display: block; }
+}
+.caption { max-width: 64ch; margin-top: var(--space-8); color: var(--color-text-muted); font-size: var(--font-size-caption); line-height: 1.45; }
+
+@container (max-width: 28rem) {
+  .service :global(.diagram-wide) { display: none; }
+  .service :global(.diagram-compact) { display: block; }
+}
+.viewport :global(svg *) { vector-effect: non-scaling-stroke; }

@@ -1,0 +1,8 @@
+---
+interface Props { x: number; y: number; lines: string[]; size?: number; node?: boolean; }
+const { x, y, lines, size = 18, node = true } = Astro.props;
+const defaultSize = `calc(${size}px - var(--diagram-label-reduction, 0px))`;
+---
+<text data-diagram-node={node ? '' : undefined} data-label-center-y={y} x={x} y={y - (lines.length - 1) * 11} text-anchor="middle" dominant-baseline="middle" fill="var(--color-text-primary)" font-family="var(--font-family-sans)" font-size={node ? `var(--diagram-node-font-size, ${defaultSize})` : `var(--diagram-indicator-font-size, ${defaultSize})`} font-weight="500">
+  {lines.map((line, index) => <tspan x={x} dy={index === 0 ? 0 : 22}>{line}</tspan>)}
+</text>

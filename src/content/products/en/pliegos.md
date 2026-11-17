@@ -2,10 +2,9 @@
 title: "Pliegos"
 slug: "pliegos"
 tagline: "Public procurement intelligence for SECOP II featuring incremental synchronization, hybrid search, and explainable recommendations."
-status: "coming-soon"
+status: "backend-development"
 problem: "Manually monitoring thousands of public tender opportunities on SECOP II is repetitive and error-prone: non-standardized descriptions, missing fields, and constant risk of missing key deadlines or amendments."
 solution: "An intelligent system acting as a background procurement analyst: incrementally syncing SECOP II notices, filtering non-biddable contracts, combining semantic and full-text search, and scoring opportunities with transparent factors."
-website: "https://github.com/BramBit/Pliegos"
 repository: "https://github.com/BramBit/Pliegos"
 featured: true
 ---
@@ -20,17 +19,18 @@ Every day in Colombia, hundreds of public tender notices are published across th
 
 ## 2. Project Status (Implemented vs. Pending)
 
-To maintain absolute technical honesty regarding the current stage of development:
+The backend implements the capabilities below. The full MVP still requires the frontend, integration, and deployment.
 
-### Fully Implemented (Backend Core)
+### Implemented backend capabilities
 - **Incremental synchronization every 4 hours:** Connects with SECOP II open data API endpoints, identifying newly published notices and modified terms.
 - **Automated filtering & normalization:** Rules out non-competitive contract types (direct contracting, special regimes, awarded, or canceled proceedings).
 - **Asynchronous processing via BullMQ:** Distributed queue workers handle text extraction, embedding generation, and summary extraction without blocking API endpoints.
-- **Hybrid retrieval on PostgreSQL:** Multi-stage retrieval combining dense vector similarity (`pgvector`), BM25-like full-text search (`tsvector`), and unified ranking through *Reciprocal Rank Fusion* (RRF).
+- **Hybrid retrieval on PostgreSQL:** Multi-stage retrieval combining dense vector similarity (`pgvector`), PostgreSQL full-text search (`ts_rank_cd`), and unified ranking through *Reciprocal Rank Fusion* (RRF).
 - **Explainable scoring & honesty with incomplete data:** Every recommendation outputs a composite score breakdown with distinct factors (categorized across tiers 1, 2, and 3). When SECOP records contain missing metadata, Pliegos does not discard them silently—it flags them transparently in an alert tier.
 - **Automated tracking and alerts:** Background workers detect altered closing dates, budget shifts, or updated tender specifications, triggering notifications.
 
-### Pending Development
+### Remaining product work
+- **Integration and deployment:** Complete the frontend–backend integration and deployment of the full MVP.
 - **User-facing web application (Frontend):** Currently in design, UX research, and UI prototyping phase.
 - **Contractor self-service portal:** Web interface for interactive profile tuning, custom scoring thresholds, and alert preferences.
 
@@ -74,6 +74,7 @@ Relational PostgreSQL      BullMQ Worker Queue
 - **Backend Framework:** NestJS 12 (dependency injection, modular structure, REST controllers).
 - **Database & Retrieval:** PostgreSQL 16 with the `pgvector` extension for combined relational and vector storage.
 - **Queues & Background Jobs:** BullMQ backed by Redis.
+- **Local infrastructure:** Docker Compose for PostgreSQL/pgvector and Redis.
 - **Continuous Integration:** GitHub Actions automating build validation, linting, and tests.
 
 ---

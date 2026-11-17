@@ -1,0 +1,83 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Container from './Container.astro';
+import CTASection from './CTASection.astro';
+import SystemDiagram from './SystemDiagram.astro';
+import { companyOrder, companyCopy, projectOrder, projectCopy, type CaseSlug, type ExperienceLang } from '../data/experience';
+import styles from './CaseStudyLayout.module.css';
+interface Props { study: CollectionEntry<'case-studies'>; lang: ExperienceLang; }
+const { study, lang } = Astro.props;
+const { Content, headings } = await render(study);
+const slug = study.data.slug as CaseSlug;
+const companyKey = companyOrder.find((key) => projectOrder[key].includes(slug));
+if (!companyKey) throw new Error(`Unknown case study: ${slug}`);
+const company = companyCopy[lang][companyKey];
+const profile = projectCopy[lang][slug];
+const related = projectOrder[companyKey].filter((project) => project !== slug);
+const base = lang === 'es' ? '/es/casos-de-exito' : '/case-studies';
+const copy = lang === 'es' ? {
+  back: 'Toda la experiencia', context: 'Contexto profesional', role: 'Mi rol', period: 'Experiencia profesional', summary: 'Resumen ejecutivo', diagram: 'Sistema y contribución',
+  index: 'En esta página', tech: 'Tecnologías',
+  related: 'Más de esta empresa', ctaTitle: '¿Tienes un proyecto en desarrollo?', ctaDescription: 'Cuéntame qué estás construyendo y revisamos dónde puedo aportar.', ctaButton: 'Hablemos', contact: '/es/contacto',
+} : {
+  back: 'All experience', context: 'Professional context', role: 'My role', period: 'Professional experience', summary: 'Executive summary', diagram: 'System and contribution',
+  index: 'On this page', tech: 'Technologies',
+  related: 'More from this company', ctaTitle: 'Have a project in development?', ctaDescription: "Tell me what you're building and we can review where I can contribute.", ctaButton: "Let's talk", contact: '/contact',
+};
+---
+<Layout title={`${study.data.title} — ${lang === 'es' ? 'Experiencia' : 'Experience'} | Brayan Mercado`} description={study.data.impactSummary ?? study.data.summary} ogType="article">
+  <header class={styles.hero}>
+    <Container>
+      <a class={styles.back} href={base}>← {copy.back}</a>
+      <div class={styles.titleRow}>
+        <div>
+          <p class={styles.eyebrow}>{company.name} <span aria-hidden="true">/</span> {profile.name}</p>
+          <h1>{study.data.title}</h1>
+          <p class={styles.lead}>{study.data.impactSummary ?? study.data.summary}</p>
+        </div>
+        <dl class={styles.facts}>
+          <div><dt>{copy.context}</dt><dd>{company.context}</dd></div>
+          <div><dt>{copy.role}</dt><dd>{study.data.role}</dd></div>
+          <div><dt>{copy.period}</dt><dd>{study.data.timeframe}</dd></div>
+        </dl>
+      </div>
+    </Container>
+  </header>
+  <div class={styles.main}>
+    <Container>
+      <a class={styles.skipSummary} href="#case-content">{lang === 'es' ? 'Ir a la implementación ↓' : 'Go to implementation ↓'}</a>
+      <div class={styles.summaryGrid}>
+        <div class={styles.executive}>
+          <h2>{copy.summary}</h2>
+          <p>{profile.problem}</p>
+          <p>{profile.contribution}</p>
+          <p>{profile.decision}</p>
+          {study.data.storeLink && <a href={study.data.storeLink} target="_blank" rel="noopener noreferrer">{lang === 'es' ? 'Ver aplicación en Google Play ↗' : 'View application on Google Play ↗'}</a>}
+        </div>
+        <div class={styles.system}>
+          <h2>{copy.diagram}</h2>
+          <SystemDiagram slug={slug} lang={lang} detail />
+        </div>
+      </div>
+      <div class={styles.readingGrid}>
+          <nav aria-label={copy.index}>
+            <details class={styles.contents}><summary>{copy.index}</summary>
+            <ol>{headings.filter((heading) => heading.depth === 2).map((heading) => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></details>
+          </nav>
+        <article id="case-content" class={styles.prose}><Content /></article>
+          <div class={styles.stack}>
+            <h2>{copy.tech}</h2>
+            <ul>{study.data.technologies.map((tech) => <li>{tech}</li>)}</ul>
+
+          </div>
+
+      </div>
+      <nav class={styles.caseNav} aria-label={lang === 'es' ? 'Navegación entre casos' : 'Case navigation'}>
+        <a href={base}><span>{copy.back}</span><strong>← {lang === 'es' ? 'Índice de experiencia' : 'Experience index'}</strong></a>
+        {related.map((project) => <a href={`${base}/${project}`}><span>{copy.related} · {company.name}</span><strong>{projectCopy[lang][project].name} →</strong></a>)}
+      </nav>
+    </Container>
+  </div>
+  <CTASection title={copy.ctaTitle} description={copy.ctaDescription} button={{ label: copy.ctaButton, href: copy.contact, variant: 'primary' }} />
+</Layout>

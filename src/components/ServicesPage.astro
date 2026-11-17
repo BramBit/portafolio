@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from './Section.astro';
+import Container from './Container.astro';
+import Heading from './Heading.astro';
+import CTASection from './CTASection.astro';
+import ServiceDiagram from './ServiceDiagram.astro';
+import { servicesEN, servicesES } from '../data/services';
+import styles from './ServicesPage.module.css';
+
+interface Props { lang: 'en' | 'es'; }
+const { lang } = Astro.props;
+const services = lang === 'es' ? servicesES : servicesEN;
+const copy = lang === 'es' ? {
+  pageTitle: 'Servicios de Ingeniería de Software',
+  intro: 'Del problema operativo a una solución técnica concreta. Explora qué comprende cada servicio y el trabajo relacionado.',
+  jump: 'Explorar servicios', when: 'Cuándo resulta útil', problem: 'Problema que aborda', approach: 'Enfoque técnico',
+  capabilities: 'Capacidades', technologies: 'Tecnologías relevantes', related: 'Experiencia relacionada',
+  contact: 'Hablemos de este servicio', diagram: 'Esquema conceptual',
+  ctaTitle: '¿Tienes un proyecto en desarrollo?', ctaDescription: 'Cuéntame qué estás construyendo y revisamos dónde puedo aportar.', ctaButton: 'Hablemos',
+} : {
+  pageTitle: 'Software Engineering Services',
+  intro: 'From an operational problem to a concrete technical approach. Explore each service and related work.',
+  jump: 'Explore services', when: 'When it is useful', problem: 'Problem addressed', approach: 'Technical approach',
+  capabilities: 'Capabilities', technologies: 'Relevant technologies', related: 'Related experience',
+  contact: 'Discuss this service', diagram: 'Conceptual diagram',
+  ctaTitle: 'Have a project in development?', ctaDescription: "Tell me what you're building and we can review where I can contribute.", ctaButton: "Let's talk",
+};
+const contactHref = lang === 'es' ? '/es/contacto' : '/contact';
+const casePrefix = lang === 'es' ? '/es/casos-de-exito' : '/case-studies';
+---
+<Layout title={`${copy.pageTitle} — Brayan Mercado`} description={copy.intro}>
+  <Section class={styles.introSection}>
+    <Container>
+      <Heading level={1}>{copy.pageTitle}</Heading>
+      <p class={styles.lead}>{copy.intro}</p>
+      <nav class={styles.jumpNav} aria-label={copy.jump}>
+        {services.map((service, index) => <a href={`#${service.id}`}><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{service.title}</a>)}
+      </nav>
+    </Container>
+  </Section>
+  {services.map((service, index) => (
+    <Section id={service.id} class={`${styles.serviceSection} ${index % 2 === 1 ? styles.reverse : ''}`}>
+      <Container>
+        <article class={styles.detail}>
+          <div class={styles.leadGrid}>
+            <header class={styles.header}>
+              <span class={styles.number} aria-hidden="true">{String(index + 1).padStart(2, '0')} / 04</span>
+              <h2>{service.title}</h2>
+              <p>{service.summary}</p>
+            </header>
+            <div class={styles.visual}>
+              <h3 class={styles.panelLabel}>{copy.diagram}</h3>
+              <ServiceDiagram id={service.id} mode="expanded" />
+            </div>
+          </div>
+          <div class={styles.narrative}>
+            <div class={styles.prose}><h3>{copy.when}</h3><p>{service.whenUseful}</p></div>
+            <div class={styles.prose}><h3>{copy.problem}</h3><p>{service.problem}</p></div>
+            <div class={styles.prose}><h3>{copy.approach}</h3><p>{service.approach}</p></div>
+          </div>
+          <div class={styles.bottomGrid}>
+            <div class={styles.meta}>
+              <h3 class={styles.panelLabel}>{copy.capabilities}</h3>
+              <ul class={styles.capabilities}>{service.capabilities.map((item) => <li>{item}</li>)}</ul>
+            </div>
+            <div class={styles.meta}>
+              <h3 class={styles.panelLabel}>{copy.technologies}</h3>
+              <ul class={styles.technologies}>{service.technologies.map((tech) => <li>{tech}</li>)}</ul>
+            </div>
+            <div class={styles.meta}>
+              <h3 class={styles.panelLabel}>{copy.related}</h3>
+              <ul class={styles.related}>{service.relatedCases.map((study) => <li><a href={`${casePrefix}/${study.slug}`}>{study.label}<span aria-hidden="true">↗</span></a></li>)}</ul>
+              <a class={styles.contact} href={contactHref}>{copy.contact}<span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </article>
+      </Container>
+    </Section>
+  ))}
+  <CTASection title={copy.ctaTitle} description={copy.ctaDescription} button={{ label: copy.ctaButton, href: contactHref, variant: 'primary' }} />
+</Layout>

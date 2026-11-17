@@ -26,10 +26,9 @@ export function getNavItems(lang: 'en' | 'es') {
   if (lang === 'es') {
     return [
       { label: 'Inicio', href: '/es/' },
-      { label: 'Servicios', href: '/es/servicios' },
-      { label: 'Experiencia', href: '/es/casos-de-exito' },
-      { label: 'Ingeniería', href: '/es/ingenieria' },
       { label: 'Productos', href: '/es/productos' },
+      { label: 'Experiencia', href: '/es/casos-de-exito' },
+      { label: 'Servicios', href: '/es/servicios' },
       { label: 'Sobre mí', href: '/es/sobre-mi' },
       { label: 'Contacto', href: '/es/contacto' },
     ];
@@ -37,10 +36,9 @@ export function getNavItems(lang: 'en' | 'es') {
 
   return [
     { label: 'Home', href: '/' },
-    { label: 'Services', href: '/services' },
-    { label: 'Experience', href: '/case-studies' },
-    { label: 'Engineering', href: '/engineering' },
     { label: 'Products', href: '/products' },
+    { label: 'Experience', href: '/case-studies' },
+    { label: 'Services', href: '/services' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
   ];

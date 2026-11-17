@@ -1,0 +1,11 @@
+.diagram { min-width: 0; margin: 0; }
+.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+.diagram svg * { vector-effect: non-scaling-stroke; }
+.node { fill: var(--color-surface-elevated); stroke: var(--color-border-ui); stroke-width: 1; }
+.accent { fill: var(--color-surface-3); stroke: var(--color-accent); stroke-width: 1.4; }
+.rule { fill: none; stroke: var(--color-border); stroke-width: 1; }
+.accessBoundary { fill: none; stroke: var(--color-border-ui); stroke-width: 1; stroke-dasharray: 4 5; opacity: .65; }
+.flow { fill: none; stroke: var(--color-accent); stroke-width: 1.3; opacity: .8; }
+.dot { fill: var(--color-accent); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { :global(article:hover) .flow, :global(article:focus-within) .flow { animation: trace var(--dur-slow) var(--ease-out) 1 both; } @keyframes trace { from { stroke-dasharray: 900; stroke-dashoffset: 900; opacity: .4; } to { stroke-dasharray: 900; stroke-dashoffset: 0; opacity: .9; } } }
+@media (prefers-reduced-motion: reduce) { .flow { animation: none !important; } }

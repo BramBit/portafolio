@@ -1,38 +1,27 @@
 ---
 import Card from './Card.astro';
+import ServiceDiagram from './ServiceDiagram.astro';
+import type { ServiceItem } from '../data/services';
 import { getLangFromUrl } from '../i18n';
 import styles from './ServiceCard.module.css';
 
-interface Props {
-  title: string;
-  description: string;
-  technologies?: string[];
-  interactive?: boolean;
-  class?: string;
-}
-
-const {
-  title,
-  description,
-  technologies = [],
-  interactive = false,
-  class: className = '',
-} = Astro.props;
-
+interface Props { service: ServiceItem; class?: string; }
+const { service, class: className = '' } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
-const techLabel = lang === 'es' ? 'Tecnologías:' : 'Tech Stack:';
+const href = `${lang === 'es' ? '/es/servicios' : '/services'}#${service.id}`;
+const linkLabel = lang === 'es' ? 'Explorar el servicio' : 'Explore this service';
 ---
-
-<Card interactive={interactive} class:list={[styles.serviceCard, className]}>
-  <h3 class={styles.title}>{title}</h3>
-  <p class={styles.description}>{description}</p>
-
-  {
-    technologies.length > 0 && (
-      <div class={styles.techFooter}>
-        <span class={styles.techLabel}>{techLabel}</span>
-        <span class={styles.techList}>{technologies.join(' · ')}</span>
-      </div>
-    )
-  }
+<Card as="article" class:list={[styles.serviceCard, className]}>
+  <div class={styles.heading}>
+    <span class={styles.number} aria-hidden="true">{String(['custom-software', 'automation', 'applied-ai', 'modernization'].indexOf(service.id) + 1).padStart(2, '0')} /</span>
+    <h3 class={styles.title}>{service.title}</h3>
+    <p class={styles.summary}>{service.summary}</p>
+  </div>
+  <ServiceDiagram id={service.id} nodeFontSize={13} indicatorFontSize={13} />
+  <div class={styles.footer}>
+    <ul class={styles.capabilities} aria-label={lang === 'es' ? 'Capacidades' : 'Capabilities'}>
+      {service.capabilities.slice(0, 3).map((capability) => <li>{capability}</li>)}
+    </ul>
+    <a class={styles.link} href={href}>{linkLabel}<span aria-hidden="true">→</span></a>
+  </div>
 </Card>

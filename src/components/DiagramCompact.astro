@@ -1,0 +1,94 @@
+---
+import DiagramLabel from './DiagramLabel.astro';
+interface Props { kind: string; labels: string[][]; classes: Record<string, string>; lang: 'en' | 'es'; detail?: boolean; }
+const { kind, labels, classes, lang, detail = false } = Astro.props;
+type Node = [number, number, number, number, string];
+type Label = [number, number, number, number?];
+interface Layout { width?: number; height: number; nodes: Node[]; labels: Label[]; flow: string; }
+// Local reordering of the same nodes: the compact view preserves every technical stage.
+const layouts: Record<string, Layout> = {
+  'custom-software': {
+    width: 280, height: 300,
+    nodes: [[8,24,120,60,'module'],[152,24,120,60,'module'],[46,124,188,68,'core'],[70,238,140,48,'module']],
+    labels: [[68,54,0],[212,54,1],[140,158,2],[140,262,3]],
+    flow: 'M68 84V104H95V124M212 84V104H185V124M140 192V238',
+  },
+  automation: {
+    width: 280, height: 400,
+    nodes: [[8,24,124,66,'module'],[8,152,124,66,'core'],[148,154,124,62,'destination'],[148,236,124,62,'destination'],[148,318,124,62,'destination']],
+    labels: [[70,57,0],[210,116,1],[70,185,2],[210,185,3],[210,267,4],[210,349,5]],
+    flow: 'M132 57H188M232 57H278V136H70V152M132 185H148M140 185V349H148M140 267H148',
+  },
+  'applied-ai': {
+    width: 280, height: 426,
+    nodes: [[8,24,124,64,'document'],[148,24,124,64,'module'],[148,130,124,64,'indexBox'],[8,236,124,64,'query'],[148,236,124,64,'retrieval'],[148,342,124,64,'context'],[8,342,124,64,'response']],
+    labels: [[70,56,0],[210,56,1],[210,162,2],[70,268,3],[210,268,4],[210,374,5],[70,374,6]],
+    flow: 'M132 56H148M210 88V130M210 194V236M132 268H148M210 300V342M148 374H132',
+  },
+  modernization: {
+    width: 280, height: 370,
+    nodes: [[8,90,90,120,'legacy'],[116,64,74,64,'module'],[198,64,74,64,'module'],[116,164,74,64,'module'],[198,164,74,64,'module']],
+    labels: [[53,150,0],[194,28,1],[153,96,2],[235,96,3],[153,196,4],[235,196,5],[194,292,6],[194,344,7]],
+    flow: 'M98 150H110M153 128V164M235 128V164M190 96H198M190 196H198',
+  },
+  zeus: {
+    height: 444,
+    nodes: [8,174].flatMap((x) => [32,112,192,272,352].map((y, index): Node => [x,y,138,56,index === 1 || index === 4 ? 'accent' : 'node'])),
+    labels: [[77,60,0],[77,140,1],[77,220,2],[77,300,3],[77,380,4],[243,60,5],[243,140,6],[243,220,7],[243,300,8],[243,380,9]],
+    flow: 'M77 88V112M77 168V192M77 248V272M77 328V352M243 88V112M243 168V192M243 248V272M243 328V352M77 408V430H160V140H174',
+  },
+  plei: {
+    height: 354,
+    nodes: [[8,26,138,60,'node'],[8,106,138,60,'node'],[8,186,138,60,'node'],[182,250,130,60,'accent']],
+    labels: [[77,56,0],[77,136,1],[77,216,2],[247,136,3],[247,280,4],[160,332,5]],
+    flow: 'M146 56H164V70H247M146 136H182M146 216H164V202H247M247 202V250',
+  },
+  veciapp: {
+    height: 356,
+    nodes: [[8,24,138,60,'node'],[174,24,138,60,'node'],[92,142,136,70,'accent'],[8,268,138,66,'node'],[174,268,138,66,'node']],
+    labels: [[77,54,0],[243,54,1],[160,177,2],[77,301,3],[243,301,4]],
+    flow: 'M77 84V112H126V142M243 84V112H194V142M160 212V240H77V268M160 240H243V268',
+  },
+  maleua: {
+    height: 274,
+    nodes: [[8,24,138,70,'node'],[174,24,138,70,'accent'],[174,178,138,70,'node'],[8,178,138,70,'accent']],
+    labels: [[77,59,0],[243,59,1],[243,213,2],[77,213,3]],
+    flow: 'M146 59H174M243 94V178M174 213H146',
+  },
+};
+const baseLayout = layouts[kind];
+const layout: Layout = detail && kind === 'plei' ? {
+  ...baseLayout,
+  flow: 'M146 56H240M146 136H170M146 216H240M240 216V250',
+  nodes: baseLayout.nodes.map((node, index) => index === 3 ? [175,250,130,60,'accent'] : node),
+  labels: baseLayout.labels.map((label, index) => index === 3 || index === 4 ? [240,label[1],label[2]] : label),
+} : baseLayout;
+const compactLines = (index: number) => {
+  if (kind === 'applied-ai' && index === 4 && lang === 'es') return ['Recuperar'];
+  if (kind === 'modernization') {
+    if (index === 1) return lang === 'es' ? ['Arquitectura', 'modular'] : ['Modular', 'Architecture'];
+    if (index >= 2 && index <= 5) return labels[index][0].split(' ');
+    if (index === 6) return lang === 'es' ? ['Validación', 'automatizada'] : ['Automated', 'Validation'];
+    if (index === 7) return lang === 'es' ? ['Sistema', 'evolucionado'] : ['Evolved', 'System'];
+  }
+  if (kind === 'plei' && index === 5) return lang === 'es' ? ['Acceso: rol / jerarquía / marca'] : ['Access: role / hierarchy / brand'];
+  return labels[index];
+};
+---
+<svg class="diagram-compact" viewBox={`0 0 ${layout.width ?? 320} ${layout.height}`} aria-hidden="true" focusable="false" data-diagram-layout="compact">
+  {kind === 'plei' && <rect class={classes.accessBoundary} x="4" y="10" width="312" height="308" rx="8" />}
+  <path class={classes.flow} d={layout.flow} />
+  {layout.nodes.map(([x,y,width,height,style]) => <rect class={classes[style]} x={x} y={y} width={width} height={height} rx="5" />)}
+  {kind === 'automation' && <path class={classes.event} d="m210 35 22 22-22 22-22-22z" />}
+  {kind === 'plei' && <path class={classes.accent} d={detail ? 'm240 56 70 80-70 80-70-80z' : 'm247 70 65 66-65 66-65-66z'} />}
+  {kind === 'modernization' && <>
+    <path class={classes.legacyLines} d="M20 106l66 88M86 106l-66 88" opacity=".25" />
+    <path class={classes.arrow} d="m100 140 10 10-10 10" />
+    <path class={classes.validation} d="M116 254H272M130 254l8 8 15-17M222 254l8 8 15-17" />
+  </>}
+  {kind === 'zeus' && <>
+    <text x="8" y="18" fill="var(--color-accent)" font-family="var(--font-family-mono)" font-size="var(--diagram-indicator-font-size, calc(15px - var(--diagram-label-reduction, 0px)))">{lang === 'es' ? 'INGESTA ↓' : 'INGESTION ↓'}</text>
+    <text x="174" y="18" fill="var(--color-accent)" font-family="var(--font-family-mono)" font-size="var(--diagram-indicator-font-size, calc(15px - var(--diagram-label-reduction, 0px)))">{lang === 'es' ? 'CONSULTA ↓' : 'QUERY ↓'}</text>
+  </>}
+  {layout.labels.map(([x,y,index,size]) => <DiagramLabel node={!(kind === 'plei' && index === 5)} x={x} y={y} lines={compactLines(index)} size={size ?? 18} />)}
+</svg>

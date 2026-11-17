@@ -1,97 +1,76 @@
 export type StackCategory = 'backend' | 'frontend' | 'data' | 'ai' | 'infra';
-
-/** Category of every technology documented in the content collections or the services */
-const categoryOf: Record<string, StackCategory[]> = {
-  TypeScript: ['backend'],
-  'Node.js': ['backend'],
-  NestJS: ['backend'],
-  Express: ['backend'],
-  Laravel: ['backend'],
-  PHP: ['backend'],
-  'REST APIs': ['backend'],
-  'APIs REST': ['backend'],
-  DDD: ['backend'],
-  'Hexagonal Architecture': ['backend'],
-  'Arquitectura Hexagonal': ['backend'],
-  React: ['frontend'],
-  'Next.js': ['frontend'],
-  Vite: ['frontend'],
-  Astro: ['frontend'],
-  PostgreSQL: ['data'],
-  Redis: ['data'],
-  pgvector: ['data'],
-  PostGIS: ['data'],
-  MySQL: ['data'],
-  RAG: ['ai'],
-  Embeddings: ['ai'],
-  OpenAI: ['ai'],
-  'Hybrid Search': ['ai'],
-  'Búsqueda híbrida': ['ai'],
-  Ollama: ['ai'],
-  RabbitMQ: ['infra'],
-  Render: ['infra'],
-  Vercel: ['infra'],
-  Docker: ['infra'],
-  Vitest: ['infra'],
-  Jest: ['infra'],
-  Playwright: ['infra'],
-  Webhooks: ['infra'],
-  Wompi: ['infra'],
-};
-
-const ORDER: StackCategory[] = ['backend', 'frontend', 'data', 'ai', 'infra'];
+export type StackLanguage = 'en' | 'es';
 
 export interface StackItem {
+  id: string;
   name: string;
-  /** Pre-formatted evidence text, e.g. "3 projects" */
-  usage: string;
+  /** Content references that document this technology; not a proficiency score. */
+  sources: string[];
 }
+export interface StackGroup { id: StackCategory; label: string; items: StackItem[]; }
 
-export interface StackGroup {
-  label: string;
-  /** Technologies documented in more than one project */
-  primary: StackItem[];
-  secondary: string[];
-}
+interface Evidence { slug: string; technologies: string[]; }
+interface Options { lang: StackLanguage; cases: Evidence[]; services: Evidence[]; }
 
-interface Options {
-  /** Technologies of every documented project */
-  projects: string[][];
-  /** Technologies documented elsewhere (e.g. services) that are not tied to a project */
-  extra?: string[];
-  labels: Record<StackCategory, string>;
-  usage: (projects: number) => string;
-}
+const categoryOrder: StackCategory[] = ['backend', 'frontend', 'data', 'ai', 'infra'];
+const categoryLabels: Record<StackLanguage, Record<StackCategory, string>> = {
+  en: { backend: 'Backend', frontend: 'Frontend', data: 'Data & Search', ai: 'Applied AI', infra: 'Infrastructure & Quality' },
+  es: { backend: 'Backend', frontend: 'Frontend', data: 'Datos y búsqueda', ai: 'IA aplicada', infra: 'Infraestructura y calidad' },
+};
 
-/**
- * Builds the stack groups using only technologies already present in the content.
- * Hierarchy is evidence-based: a technology is highlighted when it appears in 2+ projects.
- * No proficiency levels are implied.
- */
-export function buildStackGroups({ projects, extra = [], labels, usage }: Options): StackGroup[] {
-  const counts = new Map<string, number>();
-  for (const project of projects) {
-    for (const tech of new Set(project)) counts.set(tech, (counts.get(tech) ?? 0) + 1);
-  }
-  for (const tech of extra) if (!counts.has(tech)) counts.set(tech, 0);
+/** Intentional presentation order. Entries appear only when a source below documents them. */
+const catalog: Record<StackCategory, string[]> = {
+  backend: ['TypeScript', 'Node.js', 'NestJS', 'Express', 'PHP', 'Laravel', 'REST APIs', 'Webhooks', 'Wompi', 'Hexagonal Architecture', 'DDD'],
+  frontend: ['React', 'Next.js', 'Astro', 'Vite', 'Redux Toolkit'],
+  data: ['PostgreSQL', 'MySQL', 'pgvector', 'PostGIS', 'Redis', 'TypeORM'],
+  ai: ['RAG', 'Embeddings', 'Hybrid Search', 'OpenAI', 'Ollama'],
+  infra: ['RabbitMQ', 'BullMQ', 'GitHub Actions', 'Docker', 'Vercel', 'Render', 'AWS S3', 'Sentry', 'Jest', 'Vitest', 'Playwright', 'Cucumber'],
+};
 
-  const byCategory = new Map<StackCategory, [string, number][]>();
-  for (const [tech, count] of counts) {
-    const categories = categoryOf[tech];
-    if (!categories) {
-      console.warn(`[stack] "${tech}" has no category in src/data/stack.ts; listed under tools`);
+const aliases: Record<string, string> = {
+  'APIs REST': 'REST APIs',
+  'Arquitectura Hexagonal': 'Hexagonal Architecture',
+  'Búsqueda híbrida': 'Hybrid Search',
+};
+const translatedNames: Record<StackLanguage, Record<string, string>> = {
+  en: {},
+  es: { 'REST APIs': 'APIs REST', 'Hexagonal Architecture': 'Arquitectura Hexagonal', 'Hybrid Search': 'Búsqueda híbrida' },
+};
+
+/** Explicitly documented in the English/Spanish product Markdown; products have no technology frontmatter. */
+const productEvidence: Evidence[] = [
+  { slug: 'product-checkout-platform', technologies: ['TypeScript', 'NestJS', 'React', 'Vite', 'Redux Toolkit', 'PostgreSQL', 'Jest', 'Vitest'] },
+  { slug: 'pliegos', technologies: ['TypeScript', 'Node.js', 'NestJS', 'PostgreSQL', 'pgvector', 'Redis', 'BullMQ', 'GitHub Actions', 'Docker', 'Hybrid Search'] },
+];
+/** Documented in case-study prose but omitted from technology frontmatter. */
+const caseBodyEvidence: Evidence[] = [
+  { slug: 'zeus', technologies: ['OpenAI', 'Ollama', 'Cucumber'] },
+  { slug: 'plei', technologies: ['AWS S3', 'Sentry'] },
+];
+
+export function buildStackGroups({ lang, cases, services }: Options): StackGroup[] {
+  const sources = new Map<string, Set<string>>();
+  const add = (technology: string, source: string) => {
+    const id = aliases[technology] ?? technology;
+    if (!categoryOrder.some((category) => catalog[category].includes(id))) {
+      throw new Error(`[stack] Categorize documented technology: ${technology}`);
     }
-    for (const category of categories ?? ['infra' as StackCategory]) {
-      byCategory.set(category, [...(byCategory.get(category) ?? []), [tech, count]]);
-    }
-  }
+    const references = sources.get(id) ?? new Set<string>();
+    references.add(source);
+    sources.set(id, references);
+  };
+  for (const item of cases) for (const tech of item.technologies) add(tech, `case-studies/${item.slug}`);
+  for (const item of services) for (const tech of item.technologies) add(tech, `services/${item.slug}`);
+  for (const item of productEvidence) for (const tech of item.technologies) add(tech, `products/${item.slug}`);
+  for (const item of caseBodyEvidence) for (const tech of item.technologies) add(tech, `case-studies/${item.slug}`);
 
-  return ORDER.filter((category) => byCategory.has(category)).map((category) => {
-    const items = byCategory.get(category)!.sort((a, b) => b[1] - a[1]);
-    return {
-      label: labels[category],
-      primary: items.filter(([, n]) => n >= 2).map(([name, n]) => ({ name, usage: usage(n) })),
-      secondary: items.filter(([, n]) => n < 2).map(([name]) => name),
-    };
-  });
+  return categoryOrder.map((id) => ({
+    id,
+    label: categoryLabels[lang][id],
+    items: catalog[id].filter((tech) => sources.has(tech)).map((tech) => ({
+      id: tech,
+      name: translatedNames[lang][tech] ?? tech,
+      sources: [...sources.get(tech)!],
+    })),
+  }));
 }
