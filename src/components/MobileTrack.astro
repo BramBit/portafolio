@@ -1,0 +1,27 @@
+---
+import { getLangFromUrl } from '../i18n';
+import styles from './MobileTrack.module.css';
+
+interface Props {
+  id: string;
+  label: string;
+  count: number;
+  layout: 'products' | 'experience' | 'services';
+  enabled?: boolean;
+}
+const { id, label, count, layout, enabled = true } = Astro.props;
+const es = getLangFromUrl(Astro.url) === 'es';
+const hintId = `${id}-hint`;
+---
+<div class:list={[styles.root, enabled && styles.mobile]}>
+  {enabled && <p class={styles.hint} id={hintId}>
+    <span>{es ? 'Desliza para explorar' : 'Swipe to explore'}</span>
+    <span aria-hidden="true">{count} <span class={styles.arrow}>→</span></span>
+    <span class="visually-hidden">{es ? ' Usa Tab para recorrer los enlaces o las flechas del teclado al enfocar esta región.' : ' Use Tab to reach links or arrow keys while this region is focused.'}</span>
+  </p>}
+  <div class:list={[styles.track, styles[layout]]} data-mobile-track={enabled ? layout : undefined}
+    role={enabled ? 'region' : undefined} aria-label={enabled ? label : undefined}
+    aria-describedby={enabled ? hintId : undefined} tabindex={enabled ? 0 : undefined}>
+    <slot />
+  </div>
+</div>

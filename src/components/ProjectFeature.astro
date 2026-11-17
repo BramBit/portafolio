@@ -9,6 +9,7 @@ interface Props {
   title: string;
   tagline: string;
   status: ProductStatus;
+  capabilities?: string[];
   problem?: string;
   solution?: string;
   /** Detail page of the project (internal) */
@@ -20,7 +21,7 @@ interface Props {
   class?: string;
 }
 
-const { title, tagline, status, problem, solution, href, website, reverse = false, class: className = '' } = Astro.props;
+const { title, tagline, status, capabilities = [], problem, solution, href, website, reverse = false, class: className = '' } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -34,6 +35,9 @@ const websiteLabel = lang === 'es' ? 'Ver demo sandbox' : 'View sandbox demo';
       <Badge variant={isLive ? 'accent' : 'default'}>{productStatusLabels[lang][status]}</Badge>
       <h3 class={styles.name}>{title}</h3>
       <p class={styles.tagline}>{tagline}</p>
+      {capabilities.length > 0 && <ul class={styles.capabilities} aria-label={lang === 'es' ? 'Capacidades' : 'Capabilities'}>
+        {capabilities.map((capability) => <li>{capability}</li>)}
+      </ul>}
     </div>
     <div class={styles.actions}>
       <Button variant="primary" href={href}>
@@ -42,7 +46,7 @@ const websiteLabel = lang === 'es' ? 'Ver demo sandbox' : 'View sandbox demo';
       </Button>
       {
         website && (
-          <Button variant="secondary" href={website} target="_blank" rel="noopener noreferrer">
+          <Button class={styles.demoLink} variant="secondary" href={website} target="_blank" rel="noopener noreferrer">
             {websiteLabel}
           </Button>
         )

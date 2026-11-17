@@ -75,7 +75,8 @@ const labelsByKind: Record<string, string[][]> = {
 
 ---
 <figure class:list={[styles.diagram, styles[mode]]} data-service={id} style={`${nodeFontSize === undefined ? '' : `--diagram-node-font-size: ${nodeFontSize}px;`}${indicatorFontSize === undefined ? '' : ` --diagram-indicator-font-size: ${indicatorFontSize}px;`}`}>
-  <DiagramFrame variant="service" visibleFontSize={mode === 'expanded' ? 15 : 13} proportionalText={mode === 'expanded'} caption={lang === 'es' ? diagram.es : diagram.en} parts={nodes} lang={lang}>
+  <DiagramFrame preview={mode === 'compact'} variant="service" visibleFontSize={mode === 'expanded' ? 15 : 13} proportionalText={mode === 'expanded'} caption={lang === 'es' ? diagram.es : diagram.en} parts={nodes} lang={lang}>
+  {mode === 'compact' && <DiagramCompact kind={id} labels={labelsByKind[id]} classes={styles} lang={lang} preview />}
   <DiagramCompact kind={id} labels={labelsByKind[id]} classes={styles} lang={lang} />
   {id === 'custom-software' && (
     <svg class:list={[styles.graphic, 'diagram-wide']} viewBox="0 0 600 260" aria-hidden="true" focusable="false">

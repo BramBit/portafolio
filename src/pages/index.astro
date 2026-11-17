@@ -5,6 +5,7 @@ import Hero from '../components/Hero.astro';
 import Section from '../components/Section.astro';
 import Container from '../components/Container.astro';
 import SectionHeader from '../components/SectionHeader.astro';
+import MobileTrack from '../components/MobileTrack.astro';
 import ProjectFeature from '../components/ProjectFeature.astro';
 import ExperienceGroups from '../components/ExperienceGroups.astro';
 import StackGroups from '../components/StackGroups.astro';
@@ -78,13 +79,14 @@ const contacts = [
         href="/products"
         linkLabel="View all products"
       />
-      <div class="feature-list">
+      <MobileTrack id="product-previews" label="Products" count={products.length} layout="products">
         {
           products.map((product, i) => (
             <ProjectFeature
               title={product.data.title}
               tagline={product.data.tagline}
               status={product.data.status}
+              capabilities={product.data.capabilities}
               problem={product.data.problem}
               solution={product.data.solution}
               href={`/products/${product.data.slug}`}
@@ -93,7 +95,7 @@ const contacts = [
             />
           ))
         }
-      </div>
+      </MobileTrack>
     </Container>
   </Section>
 
@@ -120,13 +122,13 @@ const contacts = [
         linkLabel="View all services"
         description="Every solution starts with the problem you need to solve. Technology is chosen based on goals, scale, and operational realities."
       />
-      <div class="grid-two-cols">
+      <MobileTrack id="service-previews" label="Services" count={servicesEN.length} layout="services">
         {
           servicesEN.map((service) => (
             <ServiceCard service={service} />
           ))
         }
-      </div>
+      </MobileTrack>
     </Container>
   </Section>
 
@@ -169,23 +171,6 @@ const contacts = [
 <style>
   :global(#stack) { padding-bottom: var(--space-64); }
   :global(#about-preview) { padding-top: var(--space-64); }
-
-  .feature-list {
-    display: grid;
-    gap: var(--space-32);
-  }
-
-  .grid-two-cols {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-24);
-  }
-
-  @media (min-width: 768px) {
-    .grid-two-cols {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
 
   .about-box {
     background-color: var(--color-surface);

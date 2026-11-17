@@ -61,7 +61,8 @@ const labelsByKind: Record<string, string[][]> = {
 
 ---
 <figure class:list={[styles.diagram, compact && styles.compact]} data-system={slug} style={`--diagram-label-reduction: ${labelReduction}px;${nodeFontSize === undefined ? '' : ` --diagram-node-font-size: ${nodeFontSize}px;`}${indicatorFontSize === undefined ? '' : ` --diagram-indicator-font-size: ${indicatorFontSize}px;`}`}>
-  <DiagramFrame visibleFontSize={detail ? detailFontSize[slug] : visibleFontSize} proportionalText={detail} caption={info.caption} parts={info.parts} lang={lang}>
+  <DiagramFrame preview={compact} visibleFontSize={detail ? detailFontSize[slug] : visibleFontSize} proportionalText={detail} caption={info.caption} parts={info.parts} lang={lang}>
+  {compact && <DiagramCompact kind={slug} labels={labelsByKind[slug]} classes={styles} lang={lang} preview />}
   <DiagramCompact kind={slug} labels={labelsByKind[slug]} classes={styles} lang={lang} detail={detail} />
   {slug === 'zeus' && <svg class="diagram-wide" viewBox="-4 0 608 320" aria-hidden="true" focusable="false">
     <text x="10" y="22" fill="var(--color-accent)" font-size="var(--diagram-indicator-font-size, calc(18px - var(--diagram-label-reduction, 0px)))">{lang === 'es' ? 'INGESTA →' : 'INGESTION →'}</text>

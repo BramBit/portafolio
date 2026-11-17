@@ -3,6 +3,7 @@ title: "Product Checkout Platform"
 slug: "product-checkout-platform"
 tagline: "Checkout and payments platform featuring hexagonal architecture, Railway-Oriented Programming, and native PostgreSQL."
 status: "sandbox-demo"
+capabilities: ["React + NestJS", "Sandbox payments", "PostgreSQL"]
 problem: "A checkout needs to connect product selection, card tokenization, payment status, and inventory updates across the interface, API, and payment gateway."
 solution: "A demonstration checkout built with React and NestJS, PostgreSQL persistence, sandbox payments, ports and adapters, and typed Result values."
 website: "https://product-checkout-platform-web.vercel.app"

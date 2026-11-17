@@ -3,6 +3,7 @@ title: "Pliegos"
 slug: "pliegos"
 tagline: "Public procurement intelligence for SECOP II featuring incremental synchronization, hybrid search, and explainable recommendations."
 status: "backend-development"
+capabilities: ["SECOP II synchronization", "Hybrid search", "Explainable recommendations"]
 problem: "Manually monitoring thousands of public tender opportunities on SECOP II is repetitive and error-prone: non-standardized descriptions, missing fields, and constant risk of missing key deadlines or amendments."
 solution: "An intelligent system acting as a background procurement analyst: incrementally syncing SECOP II notices, filtering non-biddable contracts, combining semantic and full-text search, and scoring opportunities with transparent factors."
 repository: "https://github.com/BramBit/Pliegos"

@@ -1,6 +1,6 @@
 .viewport { width: 100%; max-width: 100%; min-width: 0; container-type: inline-size; }
 .viewport :global(svg) { display: block; width: 100%; height: auto; }
-.viewport :global(.diagram-compact) { display: none; }
+.viewport :global(.diagram-compact), .viewport :global(.diagram-preview) { display: none; }
 @container (max-width: 36rem) {
   .viewport:not(.service) :global(.diagram-wide) { display: none; }
   .viewport:not(.service) :global(.diagram-compact) { display: block; }
@@ -12,3 +12,10 @@
   .service :global(.diagram-compact) { display: block; }
 }
 .viewport :global(svg *) { vector-effect: non-scaling-stroke; }
+
+@media (max-width: 47.99rem) {
+  .viewport.preview { max-width: 17.5rem; margin-inline: auto; }
+  .viewport.preview :global(.diagram-wide), .viewport.preview :global(.diagram-compact) { display: none; }
+  .viewport.preview :global(.diagram-preview) { display: block; }
+  .viewport.preview + .caption { font-size: var(--font-size-label); line-height: 1.45; }
+}

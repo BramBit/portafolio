@@ -20,3 +20,8 @@
 .link span { display: inline-block; transition: transform var(--dur-fast) var(--ease-out); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) { .serviceCard:hover { transform: translateY(-2px); } .link:hover span { transform: translateX(4px); } }
 @media (prefers-reduced-motion: reduce) { .serviceCard, .link, .link span { transition: none; } }
+
+@media (max-width: 47.99rem) {
+  article.serviceCard { padding: var(--space-16); gap: var(--space-12); }
+  .summary { line-height: 1.45; }
+}

@@ -1,0 +1,30 @@
+.root { display: contents; }
+.hint { display: none; }
+.track { display: grid; min-width: 0; gap: var(--space-24); }
+.products { gap: var(--space-32); }
+.services { grid-template-columns: 1fr; }
+@media (min-width: 48rem) {
+  .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 47.99rem) {
+  .mobile { display: block; min-width: 0; }
+  .mobile .hint {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-12); margin-bottom: var(--space-12);
+    color: var(--color-text-muted); font-size: var(--font-size-caption);
+  }
+  .arrow { margin-left: var(--space-8); color: var(--color-accent); }
+  .mobile .track {
+    position: relative;
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(88vw, calc(100% - var(--space-16)));
+    gap: var(--space-16); overflow-x: auto;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--space-4);
+    overscroll-behavior-x: contain;
+    margin-inline: calc(-1 * var(--space-4)) calc(-1 * var(--gutter));
+    padding: var(--space-4) var(--gutter) var(--space-12) var(--space-4);
+    scrollbar-width: thin; scrollbar-color: var(--color-border-ui) var(--color-surface);
+  }
+  .mobile .track > :global(*) {
+    min-width: 0; scroll-snap-align: start; scroll-margin-inline: 0;
+  }
+}

@@ -46,6 +46,8 @@ English is the default language. Spanish pages use the `/es/` prefix and transla
 
 The homepage presents Products, Experience, Services, Tech Stack, About and Contact after the hero. Engineering indexes and articles remain available under `/engineering/` and `/es/ingenieria/`, outside the homepage and primary navigation.
 
+Below 768 px, Products, each company's Experience projects and Services use native horizontal Scroll Snap tracks with a preview of the next card. The tracks work without JavaScript; detail pages retain vertical reading layouts.
+
 Experience is grouped by company: Zeus and PLEI at Belvi Digital; VeciApp and Fundación Maleua at Alaska Tech. Summaries identify the systems, problems and individual contributions; the Experience index adds technical decisions, while individual cases provide the detailed narrative.
 
 Services uses four stable identifiers shared by both languages: `custom-software`, `automation`, `applied-ai` and `modernization`. Homepage cards link to matching anchors on the Services pages.
@@ -79,6 +81,7 @@ public/               # Brand assets, profile images and public CV
 | Experience grouping and summaries | `src/data/experience.ts`, `src/components/ExperienceGroups.astro` |
 | Experience index and individual cases | `src/components/ExperienceIndex.astro`, `src/components/CaseStudyLayout.astro`, `src/content/case-studies/` |
 | Services data and presentation | `src/data/services.ts`, `src/components/ServiceCard.astro`, `src/components/ServicesPage.astro` |
+| Shared mobile card tracks | `src/components/MobileTrack.astro`, `src/components/MobileTrack.module.css` |
 | Technical diagrams | `src/components/ServiceDiagram.astro`, `src/components/SystemDiagram.astro`, `src/components/DiagramCompact.astro` |
 | Shared diagram labels and scaling | `src/components/DiagramLabel.astro`, `src/components/DiagramFrame.astro` |
 | Products and status labels | `src/content/products/`, `src/data/productStatus.ts`, `src/components/ProductCard.astro`, `src/components/ProjectFeature.astro` |

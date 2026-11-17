@@ -10,7 +10,6 @@
 .companyTech { margin-top: var(--space-24); }
 .companyTech li { display: inline-flex; gap: var(--space-8); align-items: baseline; color: var(--color-text-muted); font-family: var(--font-family-mono); font-size: var(--font-size-label); }
 .companyTech li::before { content: '·'; color: var(--color-accent); }
-.projects { display: grid; gap: var(--space-24); min-width: 0; }
 .project { display: grid; gap: var(--space-24); min-width: 0; padding: var(--space-24) 0; border-top: 1px solid var(--color-border); }
 .project:first-child { padding-top: 0; border-top: 0; }
 .projectCopy { min-width: 0; }
@@ -30,3 +29,24 @@
 @media (min-width: 58rem) { .company { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--space-48); } .project { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); align-items: center; gap: var(--space-32); } .index .project { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-48); } .reverse .projectCopy { order: 2; } .reverse figure { order: 1; } }
 @media (max-width: 57.99rem) { .project figure { max-width: 42rem; } }
 @media (prefers-reduced-motion: reduce) { .link span { transition: none; } }
+
+@media (max-width: 47.99rem) {
+  .home.groups { gap: var(--space-32); }
+  .home .company { gap: var(--space-16); padding-top: var(--space-24); }
+  .home .companyIntro :is(h2, h3) { margin-top: var(--space-8); }
+  .home .companyRole { margin-top: var(--space-8); font-size: var(--font-size-caption); }
+  .home .context { max-width: none; font-size: var(--font-size-caption); }
+  .home .companyTech { margin-top: var(--space-12); gap: var(--space-4) var(--space-12); }
+  .home .project, .home .project:first-child {
+    display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16);
+    border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface);
+  }
+  .home .projectCopy { display: contents; }
+  .home .projectTop { order: 0; gap: var(--space-4); }
+  .home .project :is(h3, h4) { order: 1; margin-top: 0; }
+  .home .facts { order: 2; margin-top: 0; gap: var(--space-12); }
+  .home .facts dd { line-height: 1.45; }
+  .home .project figure { order: 3; margin-top: var(--space-4); }
+  .home .tech { order: 4; margin-top: auto; gap: var(--space-4); }
+  .home .link { order: 5; margin-top: 0; align-self: flex-start; }
+}

@@ -1,5 +1,6 @@
 ---
 import SystemDiagram from './SystemDiagram.astro';
+import MobileTrack from './MobileTrack.astro';
 import type { ExperienceGroup, ExperienceLang } from '../data/experience';
 import styles from './ExperienceGroups.module.css';
 interface Props { groups: ExperienceGroup[]; lang: ExperienceLang; mode?: 'home' | 'index'; }
@@ -19,7 +20,7 @@ const diagramFontSize = mode === 'index' ? 14 : 13;
       <p class={styles.context}>{group.company.context}</p>
       <ul class={styles.companyTech}>{group.company.capabilities.map((item) => <li>{item}</li>)}</ul>
     </div>
-    <div class={styles.projects}>
+    <MobileTrack id={`projects-${mode}-${group.key}`} label={`${lang === 'es' ? 'Proyectos de' : 'Projects at'} ${group.company.name}`} count={group.projects.length} layout="experience" enabled={mode === 'home'}>
       {group.projects.map((project, projectIndex) => <article class:list={[styles.project, { [styles.reverse]: mode === 'index' && projectIndex % 2 === 1 }]}>
         <div class={styles.projectCopy}>
           <div class={styles.projectTop}><span class={styles.systemLabel}>{lang === 'es' ? 'Sistema' : 'System'} / {String(projectIndex + 1).padStart(2, '0')}</span><span class={styles.role}>{project.role}</span></div>
@@ -34,6 +35,6 @@ const diagramFontSize = mode === 'index' ? 14 : 13;
         </div>
         <SystemDiagram slug={project.slug} lang={lang} compact={mode === 'home'} labelReduction={2} nodeFontSize={diagramFontSize} visibleFontSize={diagramFontSize} indicatorFontSize={mode === 'index' ? diagramFontSize : undefined} />
       </article>)}
-    </div>
+    </MobileTrack>
   </section>)}
 </div>

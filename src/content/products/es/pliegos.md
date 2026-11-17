@@ -3,6 +3,7 @@ title: "Pliegos"
 slug: "pliegos"
 tagline: "Inteligencia de contratación pública sobre SECOP II con sincronización incremental, búsqueda híbrida y recomendaciones explicables."
 status: "backend-development"
+capabilities: ["Sincronización SECOP II", "Búsqueda híbrida", "Recomendaciones explicables"]
 problem: "Monitorear miles de convocatorias en SECOP II a mano es un trabajo repetitivo y propenso a errores: formatos inconsistentes, datos faltantes y riesgo continuo de perder oportunidades comerciales o cambios de plazo."
 solution: "Sistema inteligente que actúa como un analista en segundo plano: sincroniza procesos de SECOP II de forma incremental, descarta lo no licitable, combina búsqueda semántica con texto completo y puntúa oportunidades con factores transparentes."
 repository: "https://github.com/BramBit/Pliegos"
